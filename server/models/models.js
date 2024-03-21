@@ -14,7 +14,14 @@ const User = sequelize.define('user',{
     role: {type:DataTypes.STRING,defaultValue:"USER"},
 }
 )
-const Florist = sequelize.define('florist',{
+const Basket = sequelize.define('basket',{
+    email: {type:DataTypes.STRING},
+    count:{type:DataTypes.INTEGER},
+})
+const Selected = sequelize.define('selected',{
+    email: {type:DataTypes.STRING},
+})
+const Employee = sequelize.define('employee',{
     login: {type:DataTypes.STRING,primaryKey:true},
     email: {type: DataTypes.STRING,unique:true},
     password: {type:DataTypes.STRING},
@@ -22,10 +29,13 @@ const Florist = sequelize.define('florist',{
     LastName: {type: DataTypes.STRING},
     SurName: {type: DataTypes.STRING},
     phone:{type:DataTypes.STRING},
-    role: {type:DataTypes.STRING,defaultValue:"Florist"},
 }
 )
-const Courier = sequelize.define('courier',{
+const Post = sequelize.define('post', {
+    id: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING,unique:true},
+})
+/*const Courier = sequelize.define('courier',{
     login: {type:DataTypes.STRING,primaryKey:true},
     email: {type: DataTypes.STRING,unique:true},
     password: {type:DataTypes.STRING},
@@ -35,14 +45,19 @@ const Courier = sequelize.define('courier',{
     phone:{type:DataTypes.STRING},
     role: {type:DataTypes.STRING,defaultValue:"courier"},
 }
-)
+)*/
 const Discount = sequelize.define('discount',{
     id: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     sum:{type: DataTypes.INTEGER,unique:true},
     procent: {type: DataTypes.INTEGER,unique:true},
 }
 )
-const Street = sequelize.define('stree',{
+const Locality = sequelize.define('locality',{
+    id: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    name: {type: DataTypes.STRING,unique:true},
+}
+)
+const Street = sequelize.define('street',{
     id: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     name: {type: DataTypes.STRING,unique:true},
 }
@@ -52,16 +67,25 @@ const StatusOrder = sequelize.define('status_order',{
     title: {type: DataTypes.STRING,unique:true},
 }
 )
+const TypeOrder = sequelize.define('type_order',{
+    id_status_order: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING,unique:true},
+}
+)
 const Order = sequelize.define('order',{
     number: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     //id_status_order: {type: DataTypes.INTEGER},
+    // id_locality: {type: DataTypes.INTEGER},
    // id_street: {type: DataTypes.INTEGER},
     house_number: {type: DataTypes.STRING},
     adress_commnet: {type:DataTypes.TEXT},
-    //id_status_order: {type: DataTypes.INTEGER},
+    data_order: {type: DataTypes.DATE},
+    time_order: {type: DataTypes.TIME},
+    anonymized: {type: DataTypes.BOOLEAN},
+    //id_type_order: {type: DataTypes.INTEGER},
     comment:{type: DataTypes.TEXT},
     price_delivery:{type:DataTypes.INTEGER},
-   // id_courier: {type: DataTypes.INTEGER},
+    //id_courier: {type: DataTypes.INTEGER},
     //id_florist: {type: DataTypes.INTEGER},
     //id_user: {type: DataTypes.INTEGER},
 }
@@ -71,6 +95,9 @@ const Category = sequelize.define('category',{
     title: {type: DataTypes.STRING,unique:true},
 }
 )
+const BoquetCategory = sequelize.define('boquet_category',{
+
+})
 const WrapperCategory = sequelize.define('wrapper_category',{
     id_wrapper_category: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     title: {type: DataTypes.STRING,unique:true},
@@ -81,6 +108,8 @@ const Wrapper = sequelize.define('wrapper',{
     //id_wrapper_category:{type:DataTypes.INTEGER},
     title: {type: DataTypes.STRING,unique:true},
     img: {type: DataTypes.STRING, allowNull: false},
+    price: {type:DataTypes.INTEGER},
+    count: {type:DataTypes.INTEGER},
 }
 )
 const Bouquet = sequelize.define('bouquet',{
@@ -105,6 +134,8 @@ const Flower = sequelize.define('flower',{
     name: {type: DataTypes.STRING,unique:true},
     count: {type:DataTypes.INTEGER},
     price: {type:DataTypes.INTEGER},
+    sezon_start: {type:DataTypes.DATE},
+    sezon_end: {type:DataTypes.DATE},
     img: {type: DataTypes.STRING, allowNull: false},
 }
 )
@@ -120,17 +151,27 @@ User.belongsTo(Discount)
 //ORDER
 User.hasMany(Order)
 Order.belongsTo(User)
-Florist.hasMany(Order)
-Order.belongsTo(Florist)
-Courier.hasMany(Order)
-Order.belongsTo(Courier)
+Employee.hasMany(Order)
+Order.belongsTo(Employee)
+//Courier.hasMany(Order)
+//Order.belongsTo(Courier)
 StatusOrder.hasMany(Order)
 Order.belongsTo(StatusOrder)
+TypeOrder.hasMany(Order)
+Order.belongsTo(TypeOrder)
+Locality.hasMany(Order)
+Order.belongsTo(Locality)
 Street.hasMany(Order)
 Order.belongsTo(Street)
 //Wrapper
 WrapperCategory.hasMany(Wrapper)
 Wrapper.belongsTo(WrapperCategory)
+//Category
+Category.hasMany(BoquetCategory)
+BoquetCategory.belongsTo(BoquetCategory)
+//Employee
+Post.hasMany(Employee)
+Employee.belongsTo(Post)
 //Boquet
 Category.hasMany(Bouquet)
 Wrapper.hasMany(Bouquet)
@@ -142,17 +183,25 @@ Bouquet.belongsToMany(Flower,{through: CompositionBouqet})
 
 Order.belongsToMany(Bouquet,{through: CompositionOrder})
 Bouquet.belongsToMany(Order,{through: CompositionOrder})
+//User and Boquet
+User.belongsToMany(Bouquet,{through: Basket})
+Bouquet.belongsToMany(User,{through: Basket})
 
+User.belongsToMany(Bouquet,{through: Selected})
+Bouquet.belongsToMany(User,{through: Selected})
 
 module.exports={
     User,
-    Florist,
-    Courier,
+    Employee,
+    Post,
     Discount,
     Street,
     StatusOrder,
+    TypeOrder,
+    Locality,
     Order,
     Category,
+    BoquetCategory,
     WrapperCategory,
     Wrapper,
     Bouquet,

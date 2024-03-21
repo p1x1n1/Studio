@@ -1,0 +1,88 @@
+
+*{
+  font-family: 'Marmelad';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 29px;
+  color: #2F611D;
+  }
+.puple_text{
+font-weight: 400;
+font-size: 40px;
+line-height: 48px;
+color: #3F1D61;
+}
+#basket{
+  border-color: #9d4fea9c;
+  background-color: #2f611d6c;
+  color: white;
+  width: 300px;
+  height: 60px;
+  font-family: 'Marmelad';
+}
+#heart{
+  border-color: #9d4fea9c;
+  background-color: #8257ad93;
+  width: 100px;
+  height: 60px;
+}
+
+.accordion{
+  margin-top: 50px;
+}
+.accordion-item{
+  border-color: #9d4fea9c;
+}
+.accordion-header{  
+  color: #4fea7e91;
+}
+
+.carousel-item{
+  height: 400px;
+  width: 100%;
+  margin-top: 5%;
+}
+.button_carousel{
+  width: 40%;
+  height: 81.4px;
+  left: 715px;
+  top: 437.58px;
+  background: #2F611D;
+  border: none;
+
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 43px;
+  color: #ffffff;
+  box-shadow: inset 0px 4px 4px rgba(250, 8, 210, 0.25);
+  mix-blend-mode: lighten;
+
+
+}
+.p_car{
+font-family: 'Marmelad';
+font-weight: 400;
+font-size: 36px;
+line-height: 43px;
+text-align: center;
+mix-blend-mode: normal;
+color: #ffffff;
+mix-blend-mode: normal;
+text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.h_carousel{
+font-weight: 400;
+font-size: 64px;
+line-height: 76px;
+text-align: center;
+color: #FFFFFF;
+}
+
+.shop_tabs{
+  text-align: center; /* Центрируем содержимое */
+}
+.title_tabs{
+  display: block;
+  text-align: center;
+}

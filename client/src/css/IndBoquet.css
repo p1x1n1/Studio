@@ -1,0 +1,39 @@
+.banner{/* Баннер */
+position: absolute;
+width: 100%;
+height: 500px;
+top: 90px;
+background-color: #e9e6e9;
+background-image: url("../base_img/ind.jpg");
+background-repeat: no-repeat ;
+background-size: cover;/*заполнение */
+background-position: center center;
+}
+.banner .h3{
+/* Создайте уникальный подарок */
+position: absolute;
+margin-left: auto;
+padding: auto;
+font-weight: 400;
+font-size: 32px;
+line-height: 57px;
+text-align: center;
+color: #FED6FF;
+}
+
+
+.banner_text_h2{/* Индивидуальный букет */
+position: absolute;
+width: 930px;
+height: 62.95px;
+left: 389px;
+top: 227px;
+
+font-weight: 400;
+font-size: 64px;
+line-height: 76px;
+text-align: center;
+
+color: #FFFFFF;
+}
+

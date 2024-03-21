@@ -1,0 +1,10 @@
+
+.navlink{
+    color: #2F611D;
+    margin-left: auto;
+    margin-top: 3%;
+}
+
+.navlink:hover{
+    color: #3F1D61;
+}
