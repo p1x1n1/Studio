@@ -1,4 +1,4 @@
-import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE } from "./utils/consts"
+import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE,Basket_ROUTE } from "./utils/consts"
 import AdminPage from "./page/AdminPanel";
 import Shop from "./page/Shop";
 import Auth from "./page/Auth";
@@ -7,6 +7,7 @@ import Log from "./page/Log"
 import BoquetPage from "./page/BoquetPage"
 import OneBoquetPage from "./page/OneBoquetPage"
 import IndBoquetPage from "./page/IndBoquetPage"
+import Basket from "./page/Basket"
 
 export const authRoutes = [
     {
@@ -49,6 +50,10 @@ export const publicRoutes = [
     {
         path: IndBoquet_ROUTE,
         Component: <IndBoquetPage/>,
+    },
+    {
+        path: Basket_ROUTE,
+        Component: <Basket/>,
     },
 
 ]

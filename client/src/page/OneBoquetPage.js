@@ -35,7 +35,6 @@ const OneBoquetPage = () => {
                                 <Button id='basket' >
                                     <Image width={25} height={25} src={basket}/>
                                     Добавить в корзину 
-                                    
                                 </Button>
                             </Col>
                             <Col>
