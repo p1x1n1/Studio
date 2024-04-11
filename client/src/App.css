@@ -86,3 +86,16 @@ color: #FFFFFF;
   display: block;
   text-align: center;
 }
+
+.greenButton{
+box-sizing: border-box;
+background: rgba(47, 97, 29, 0.5);
+border: 2px solid rgba(47, 97, 29, 0.5);
+color: #FFFFFF;
+}
+.pupleButton{
+box-sizing: border-box;
+background: rgba(130, 87, 173, 0.2);
+border: 2px solid rgba(130, 87, 173, 0.2);
+color: #3F1D61;
+}

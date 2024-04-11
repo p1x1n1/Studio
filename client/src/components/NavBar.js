@@ -12,11 +12,15 @@ import '../css/NavBar.css';
 const NavBar = () => {
     const {user} = useContext(Context)
     const navigate = useNavigate()
+    const logOut = () => {
+      user.setUser();
+      user.setIsAuth(false);
+    }
+    console.log(user.isAuth)
     return (
         <Navbar className="Navbar" style={{height:50,fontFamily:'Marmelad'}}>
         <Container className='d-flex justife-content-between'>
           <Nav bg = "light" lassName='d-flex justife-content-between' >
-            <Button variant={"outline-success"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
             <NavLink className= "navlink" to={Boquet_ROUTE}>Каталог</NavLink>
             <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальный Букет</NavLink>
           </Nav>
@@ -26,12 +30,18 @@ const NavBar = () => {
                 <Image width={220} height={60} src={logo}/>
             </NavLink>
             </Navbar.Brand>
-
           <Nav >
             <Nav.Link href="#pricing">Доставка</Nav.Link>
             <Nav.Link href="#pricing">О нас</Nav.Link>
             <Nav.Link href="#pricing">Контакты</Nav.Link>
           </Nav>
+          {user.isAuth ?
+          <Nav>
+            <NavLink className="navlink">Кабинет</NavLink>
+            <NavLink className="navlink" onClick={logOut}>Выйти</NavLink>
+          </Nav>
+          : <Button variant={"outline-success"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
+          }
         </Container>
       </Navbar>
     );

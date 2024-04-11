@@ -1,0 +1,13 @@
+SELECT 
+	*,
+	status_orders.title as status_order_title,
+	type_orders.title as type_order_title,type_orders.price_delivery as type_orders_price_delivery,
+	users.phone as users_phone,users.name as users_name, users.surname as users_surname, users.lastname as users_lastname, 
+	streets.name as streets_name, localities.name as localities_name
+from orders
+inner join status_orders on status_orders.id = orders."statusOrderId"
+inner join type_orders on type_orders.id = orders."typeOrderId"
+inner join users on users.login = orders."userLogin"
+inner join localities on localities.id = orders."localityId"
+inner join streets on streets.id = orders."streetId"
+;

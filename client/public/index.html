@@ -9,7 +9,7 @@
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="../src/base_img/logo_title.png" /><!--%PUBLIC_URL%/logo192.png-->
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -30,11 +30,39 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <title>React App</title>
+
+    <!--select 2.0 for image-->
+    <link href="select2.css" rel="stylesheet"/>
+    <script src="select2.js"></script>
+    <script>
+        $(document).ready(function() { $("#e1").select2(); });
+    </script>
+     <script>
+      function format(state) {
+if (!state.id) return state.text; // optgroup
+return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png'/>" + state.text;
+}
+$("#e4").select2({
+formatResult: format,
+formatSelection: format,
+escapeMarkup: function(m) { return m; }
+});
+</script>
+    <!---->
+
+    <title>FlowerStudio</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!--select 2.0-->
+    <script>
+      function format(state) {
+      var originalOption = state.element;
+       
+      return "<img class='flag' src='images/flags/" + state.id.toLowerCase() + ".png' alt='" + $(originalOption).data('foo') + "' />" + state.text;
+      }   
+         </script> 
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

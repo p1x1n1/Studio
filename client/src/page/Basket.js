@@ -1,7 +1,7 @@
 import {React } from 'react';
 
 
-const OrderPage = () => {
+const Basket = () => {
     return (
         <div>
         Admin page
@@ -9,4 +9,4 @@ const OrderPage = () => {
     );
 };
 
-export default OrderPage;
+export default Basket;

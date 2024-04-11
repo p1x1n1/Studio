@@ -1,5 +1,5 @@
-import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE,Basket_ROUTE } from "./utils/consts"
-import AdminPage from "./page/AdminPanel";
+import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE,Basket_ROUTE, REG_ORDER, CABINET, ORDER } from "./utils/consts"
+import AdminPage from "./components/AdminPanel";
 import Shop from "./page/Shop";
 import Auth from "./page/Auth";
 import Reg from "./page/Reg"
@@ -8,6 +8,9 @@ import BoquetPage from "./page/BoquetPage"
 import OneBoquetPage from "./page/OneBoquetPage"
 import IndBoquetPage from "./page/IndBoquetPage"
 import Basket from "./page/Basket"
+import RegOrderPage from "./page/RegOrderPage";
+import Cabinet from "./page/Cabinet";
+import OrderPage from "./page/OrderPage";
 
 export const authRoutes = [
     {
@@ -55,5 +58,16 @@ export const publicRoutes = [
         path: Basket_ROUTE,
         Component: <Basket/>,
     },
-
+    {
+        path: REG_ORDER,
+        Component: <RegOrderPage/>,
+    },
+    {
+        path: CABINET,
+        Component: <Cabinet/>,
+    },
+    {
+        path: ORDER,
+        Component:<OrderPage/>,
+    },
 ]
