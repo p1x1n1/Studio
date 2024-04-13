@@ -13,14 +13,14 @@ const Reg = () => {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
-    const [Name, setName] = useState('')
-    const [LastName, setLastName] = useState('')
-    const [SurName,setSurName] = useState('')
+    const [name, setname] = useState('')
+    const [lastname, setlastname] = useState('')
+    const [surname,setsurname] = useState('')
     const [phone,setPhone] = useState('')
 
     const click = async () => {
         try {
-            let data = await registration(login,email,password,Name,LastName,SurName,phone);
+            let data = await registration(login,email,password,name,lastname,surname,phone);
             user.setUser(data)
             user.setIsAuth(true)
             navigate("/")
@@ -57,21 +57,21 @@ const Reg = () => {
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите вашe Имя..."
-                        value={Name}
-                        onChange={e => setName(e.target.value)}
+                        value={name}
+                        onChange={e => setname(e.target.value)}
                     />
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите вашe Фамилия..."
-                        value={LastName}
-                        onChange={e => setLastName(e.target.value)}
+                        value={lastname}
+                        onChange={e => setlastname(e.target.value)}
                         
                     />
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите вашe Отчество..."
-                        value={SurName}
-                        onChange={e => setSurName(e.target.value)}
+                        value={surname}
+                        onChange={e => setsurname(e.target.value)}
                         
                     />
                     <Form.Control

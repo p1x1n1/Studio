@@ -2,12 +2,12 @@ const db = require('../db')
 
 class FlowerController {
 	async createFlower(req, res) {
-		const { id, name, count, price, season_start, season_end, img } = req.body
+		const { id, title, count, price, season_start, season_end, img } = req.body
 		let flower
 		if (id) {
-			flower = await db.query('UPDATE flowers set name = ($1), img = ($2) where id = ($3) RETURNING *', [name, img,id])
+			flower = await db.query('UPDATE flowers set title = ($1),count = ($2), price = ($3), season_start = ($4), season_end = ($5), img = ($6) where id = ($7) RETURNING *', [title, count, price, season_start, season_end, img ,id])
 		} else {
-			flower = await db.query('INSERT INTO flowers(name, img) values ($1, $2) RETURNING *', [name, img])
+			flower = await db.query('INSERT INTO flowers(title, count, price, season_start, season_end, img ) values ($1, $2,$3,$4,$5,$6) RETURNING *', [title, count, price, season_start, season_end, img ])
 		}
 		res.json(flower.rows[0])
 	}
