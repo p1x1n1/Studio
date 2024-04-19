@@ -1,5 +1,5 @@
 const { Discount } = require("../models/models")
-
+const db = require('../db.pool')
 class DiscountController{
     async create (req,res){
         

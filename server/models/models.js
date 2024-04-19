@@ -2,140 +2,152 @@ const sequelize = require('../db')
 const {DataTypes} = require('sequelize')
 
 const User = sequelize.define('user',{
-    login: {type:DataTypes.STRING,primaryKey:true},
-    email: {type: DataTypes.STRING,unique:true},
-    password_: {type:DataTypes.STRING},
-    name_: {type: DataTypes.STRING},
-    lastname: {type: DataTypes.STRING},
-    surname: {type: DataTypes.STRING},
-    phone:{type:DataTypes.STRING},
-    order_sum:{type:DataTypes.INTEGER},//,defaultValue:0
+    login: {type: DataTypes.STRING(50),primaryKey:true},
+    email: {type: DataTypes.STRING(100),unique:true},
+    password_: {type:DataTypes.STRING()},
+    name_: {type: DataTypes.STRING(100)},
+    lastname: {type: DataTypes.STRING(100)},
+    surname: {type: DataTypes.STRING(100)},
+    phone:{type:DataTypes.STRING(12)},
+    order_sum:{type:DataTypes.DECIMAL(10, 2)},
+    avatar:{type:DataTypes.STRING()}//,defaultValue:0
     //id_discount:{type:DataTypes.INTEGER},
-    role: {type:DataTypes.STRING,defaultValue:"USER"},
-}
+    //role: {type:DataTypes.STRING(100),defaultValue:"USER"},
+},
+{ timestamps: false }
 )
 const Basket = sequelize.define('basket',{
-    email: {type:DataTypes.STRING},
-    count_:{type:DataTypes.INTEGER},
-})
+    cnt:{type:DataTypes.INTEGER},
+},{ timestamps: false })
 const Selected = sequelize.define('selected',{
-    email: {type:DataTypes.STRING},
-})
+    email: {type:DataTypes.STRING(100)},
+},{ timestamps: false })
 const Employee = sequelize.define('employee',{
-    login: {type:DataTypes.STRING,primaryKey:true},
-    email: {type: DataTypes.STRING,unique:true},
-    password_: {type:DataTypes.STRING},
-    name_: {type: DataTypes.STRING},
-    lastname: {type: DataTypes.STRING},
-    surname: {type: DataTypes.STRING},
-    phone:{type:DataTypes.STRING},
-}
+    login: {type:DataTypes.STRING(50),primaryKey:true},
+    email: {type: DataTypes.STRING(100),unique:true},
+    password_: {type:DataTypes.STRING()},
+    name_: {type: DataTypes.STRING(100)},
+    lastname: {type: DataTypes.STRING(100)},
+    surname: {type: DataTypes.STRING(100)},
+    phone:{type:DataTypes.STRING(12)},
+    avatar:{type:DataTypes.STRING()},
+},{ timestamps: false }
 )
 const Post = sequelize.define('post', {
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-})
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+},{ timestamps: false })
 
 const Discount = sequelize.define('discount',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    sum_:{type: DataTypes.INTEGER,unique:true},
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    sum:{type: DataTypes.DECIMAL(20, 2),unique:true},
     procent: {type: DataTypes.INTEGER,unique:true},
-}
+},{ timestamps: false }
 )
 const Locality = sequelize.define('locality',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-}
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+},{ timestamps: false }
 )
 const Street = sequelize.define('street',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-}
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+},{ timestamps: false }
 )
 const StatusOrder = sequelize.define('status_order',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-}
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+},{ timestamps: false }
 )
 const TypeOrder = sequelize.define('type_order',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-    price:{type:DataTypes.INTEGER},
-}
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+    price:{type:DataTypes.DECIMAL(10, 2)},
+},{ timestamps: false }
 )
 const Order = sequelize.define('order',{
-    number_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    number_order: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     //id_status_order: {type: DataTypes.INTEGER},
     // id_locality: {type: DataTypes.INTEGER},
    // id_street: {type: DataTypes.INTEGER},
-    house_number: {type: DataTypes.STRING},
-    adress_comment: {type:DataTypes.TEXT},
-    data_order: {type: DataTypes.DATE},
+    house_number: {type: DataTypes.STRING(100)},
+    adress_comment: {type:DataTypes.TEXT('tiny')},
+    data_order: {type: DataTypes.DATEONLY},
     time_order: {type: DataTypes.TIME},
     anonymized: {type: DataTypes.BOOLEAN},
     //id_type_order: {type: DataTypes.INTEGER},
-    comment_:{type: DataTypes.TEXT},
-    price:{type:DataTypes.INTEGER},
+    comment:{type: DataTypes.TEXT('tiny')},
+    price:{type:DataTypes.DECIMAL(10, 2)},
     //id_courier: {type: DataTypes.INTEGER},
     //id_florist: {type: DataTypes.INTEGER},
     //id_user: {type: DataTypes.INTEGER},
-}
+},{
+    hooks: {
+      beforeCreate: (order) => {
+        order.createdAt = new Date();
+        order.updatedAt = new Date();
+      },
+      beforeUpdate: (order) => {
+        order.updatedAt = new Date();
+      }
+    }
+  }
 )
 const Category = sequelize.define('category',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-}
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+},{ timestamps: false }
 )
 const WrapperCategory = sequelize.define('wrapper_category',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-}
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+},{ timestamps: false }
 )
 const Wrapper = sequelize.define('wrapper',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     //id_wrapper_category:{type:DataTypes.INTEGER},
-    title: {type: DataTypes.STRING,unique:true},
-    img: {type: DataTypes.STRING, allowNull: false},
-    price: {type:DataTypes.INTEGER},
-    count_: {type:DataTypes.INTEGER},
-}
+    title: {type: DataTypes.STRING(50),unique:true},
+    img: {type: DataTypes.STRING(), allowNull: false},
+    price: {type:DataTypes.DECIMAL(10, 2)},
+    cnt: {type:DataTypes.INTEGER},
+},{ timestamps: false }
 )
 const Bouquet = sequelize.define('bouquet',{
     arc: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
+    title: {type: DataTypes.STRING(50),unique:true},
     ready_made:{type:DataTypes.BOOLEAN},
-    price:{type:DataTypes.STRING},
-    description: {type:DataTypes.TEXT},
+    price:{type:DataTypes.DECIMAL(10, 2)},
+    description: {type:DataTypes.TEXT('tiny')},
     // id_category:{type:DataTypes.INTEGER},
     // id_wrapper:{type:DataTypes.INTEGER},
-    img: {type: DataTypes.STRING, allowNull: false},
-})
+    img: {type: DataTypes.STRING(), allowNull: false},
+},{ timestamps: false })
 const CompositionOrder = sequelize.define('composition_order',{
-    //number_: {type:DataTypes.INTEGER,primaryKey:true},
+    //number_order: {type:DataTypes.INTEGER,primaryKey:true},
     //id_bouquet: {type:DataTypes.INTEGER,primaryKey:true},
-    count_: {type: DataTypes.INTEGER},
+    cnt: {type: DataTypes.INTEGER},
     postcard:{type:DataTypes.BOOLEAN},
-    postcard_comment: {type: DataTypes.TEXT},
-}
+    postcard_comment: {type: DataTypes.TEXT('tiny')},
+},{ timestamps: false }
 )
 const Flower = sequelize.define('flower',{
-    id_: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING,unique:true},
-    count_: {type:DataTypes.INTEGER},
-    price: {type:DataTypes.INTEGER},
+    id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
+    title: {type: DataTypes.STRING(50),unique:true},
+    cnt: {type:DataTypes.INTEGER},
+    price: {type:DataTypes.DECIMAL(10, 2)},
     season_start: {type:DataTypes.DATE},
     season_end: {type:DataTypes.DATE},
-    img: {type: DataTypes.STRING, allowNull: false},
-}
+    img: {type: DataTypes.STRING(), allowNull: false},
+},{ timestamps: false }
 )
 const CompositionBouqet = sequelize.define('composition_bouquet',{
     //id_flower: {type:DataTypes.INTEGER,primaryKey:true},
     //id_bouquet: {type:DataTypes.INTEGER,primaryKey:true},
-    count_: {type: DataTypes.INTEGER},
-}
+    cnt: {type: DataTypes.INTEGER},
+},{ timestamps: false }
 )
 const BouquetCategory = sequelize.define('bouquet_category',{
-})
+},{ timestamps: false })
 
 //USER
 Discount.hasMany(User)

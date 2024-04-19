@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import CategoryBar from "../components/CategoryBar"
-import BoquetList from '../components/BoquetList';
+import BouquetList from '../components/BouquetList';
+import { ApiService } from '../http/api.service';
+import BoquetItem from '../components/BouquetItem';
 
-const BoquetPage = () => {
+const apiService = new ApiService();
+const BouquetPage = () => {
     return (
         <>
             <Container className="d-flex justify-content-between align-items-center mt-3" >
                 <Row className="mt-3">
                     <Col md = {3} className="mr-2">
-                        <CategoryBar style={{ width: 100,height: 100}}/>
+                        <CategoryBar width = {100}/>
                     </Col>
                     <Col md = {9}>
-                        <BoquetList/>
+                        <BouquetList/>
                     </Col>
                 </Row>
             </Container>
         </>
     );
 };
+//<BoquetList/>
 
-export default BoquetPage;
+export default BouquetPage;

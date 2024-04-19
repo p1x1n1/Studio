@@ -4,7 +4,7 @@ const WrapperController = require('../controllers/wrapper.controller')
 
 router.post('/', WrapperController.createWrapper)
 router.get('/', WrapperController.getWrappers)
-router.get('/:id_type', WrapperController.getOneWrapper)
-router.delete('/:id_type', WrapperController.deleteWrapper)
+router.get('/:id_record', WrapperController.getOneWrapper)
+router.delete('/:id_record', WrapperController.deleteWrapper)
 
 module.exports = router

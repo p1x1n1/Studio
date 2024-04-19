@@ -20,7 +20,9 @@ const Reg = () => {
 
     const click = async () => {
         try {
+            console.log (login,surname,email,phone,password)
             let data = await registration(login,email,password,name,lastname,surname,phone);
+            //console.log(data);
             user.setUser(data)
             user.setIsAuth(true)
             navigate("/")

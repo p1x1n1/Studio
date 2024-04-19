@@ -5,7 +5,6 @@ const flowerController = require('../controllers/flowerController')
 
 router.post('/',bouquetController.createBouquet)
 router.get('/',bouquetController.getBouquetsInfo)
-router.get('/:id',flowerController.getOne)//отдельный букет или цвееток
 router.get('/:arc', bouquetController.getOneBouquet)
 router.delete('/:arc', bouquetController.deleteBouquet)
 

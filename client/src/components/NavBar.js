@@ -20,7 +20,7 @@ const NavBar = () => {
     return (
         <Navbar className="Navbar" style={{height:50,fontFamily:'Marmelad'}}>
         <Container className='d-flex justife-content-between'>
-          <Nav bg = "light" lassName='d-flex justife-content-between' >
+          <Nav bg = "light" className='d-flex justife-content-between' >
             <NavLink className= "navlink" to={Boquet_ROUTE}>Каталог</NavLink>
             <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальный Букет</NavLink>
           </Nav>

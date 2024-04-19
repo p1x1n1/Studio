@@ -4,9 +4,9 @@ import Shop from "./page/Shop";
 import Auth from "./page/Auth";
 import Reg from "./page/Reg"
 import Log from "./page/Log"
-import BoquetPage from "./page/BoquetPage"
+import BouquetPage from "./page/BouquetPage"
 import OneBoquetPage from "./page/OneBoquetPage"
-import IndBoquetPage from "./page/IndBoquetPage"
+import IndBoquetPage from "./page/IndBouquetPage"
 import Basket from "./page/Basket"
 import RegOrderPage from "./page/RegOrderPage";
 import Cabinet from "./page/Cabinet";
@@ -47,7 +47,7 @@ export const publicRoutes = [
     },
     {
         path: Boquet_ROUTE,
-        Component: <BoquetPage/>,
+        Component: <BouquetPage/>,
         
     },
     {

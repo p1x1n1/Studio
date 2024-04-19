@@ -11,3 +11,11 @@ inner join users on users.login = orders."userLogin"
 inner join localities on localities.id = orders."localityId"
 inner join streets on streets.id = orders."streetId"
 ;
+INSERT INTO wrapper_categories(title) values('Бумага')
+INSERT INTO wrappers (title, price, cnt,img, "wrapperCategoryIdRecord") values ('бумага красная',44,15,'',1);
+INSERT INTO categories(title) values('Монобукеты');
+insert into discounts("sum",procent) values (5000, 5)
+INSERT INTO flowers (title, cnt, price, season_start, season_end,img ) values('Ирис', 10,70,'21-03-24','21-03-25','https://sadrium.ru/wp-content/uploads/2017/07/iris-flowers-1s.jpg');
+insert into bouquets(title,ready_made,price,img,"wrapperIdRecord") values('Букет1',true,5000,'https://cvetaevatomsk.ru/uploads/goods/2021-11/1636032945_img_5057.jpg',2);
+
+INSERT INTO flowers (title, cnt, price, season_start, season_end,img ) values('Орхидея', 10,70,'21-03-24','21-03-25','');

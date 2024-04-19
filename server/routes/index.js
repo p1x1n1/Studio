@@ -12,13 +12,13 @@ const WrappercategoryRouter = require('./WrappercategoryRouter')
 
 router.use('/user',userRouters)
 router.use('/order',orderRouters)
-router.use('/flow',flowerRouters)
+//router.use('/flow',flowerRouters)
 router.use('/flower',flowerRouter)
 router.use('/bouquet',bouquetRouters)
 router.use('/bouquetcomposition',bouquetCompositionRouter)
 router.use('/wrapper',wrapperRouter)
 router.use('/category',categoryRouter)
-router.use('/wrapper_category',WrappercategoryRouter)
+router.use('/wrapper/category',WrappercategoryRouter)
 
 
 module.exports = router

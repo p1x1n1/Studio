@@ -1,5 +1,5 @@
 const {Category } = require("../models/models")
-
+const db = require('../db.pool')
 
 class CategoryController{
     async create (req,res){

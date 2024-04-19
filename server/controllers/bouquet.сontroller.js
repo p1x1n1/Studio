@@ -2,12 +2,12 @@ const { Bouquet } = require("../models/models")
 const db = require('../db.pool')
 class BouquetController {
 	async createBouquet(req, res) {
-		const { arc, title,ready_made,price,wrapperId, description, img } = req.body
+		const { arc, title,ready_made,price,wrapperIdRecord, description, img } = req.body
 		let bouquet
 		if (arc) {
-			bouquet = await db.query('UPDATE bouquets set title = ($1),wrapperId = ($2) , description ,img = ($4) where arc = ($4) RETURNING *', [title, wrapperId,description,img,arc])
+			bouquet = await db.query('UPDATE bouquets set title = ($1),wrapperIdRecord = ($2) , description ,img = ($4) where arc = ($4) RETURNING *', [title, wrapperIdRecord,description,img,arc])
 		} else {
-			bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,wrapperId,description,img) values ($1, $2,$3,$4,$5) RETURNING *', [title, ready_made,price,wrapperId,description, img])
+			bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,wrapperIdRecord,description,img) values ($1, $2,$3,$4,$5) RETURNING *', [title, ready_made,price,wrapperIdRecord,description, img])
 		}
 		res.json(bouquet.rows[0])
 	}
@@ -16,7 +16,11 @@ class BouquetController {
 		res.json(bouquet.rows)
 	}
 	async getBouquetsInfo(req, res) {
-		const bouquet = await db.query('select *, wrappers.title as wrapper_name from bouquets inner join wrappers on bouquets."wrapperId" = wrappers.id order by arc')
+		const bouquet = await db.query(
+			`select arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,bouquets."wrapperIdRecord",
+			wrappers.title as wrapper_name from bouquets inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+		   where ready_made = true order by arc;`
+		)
 		res.json(bouquet.rows)
 	}
 	async getOneBouquet(req, res) {

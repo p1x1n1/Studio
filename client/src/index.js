@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import UserStore from './store/UserStore';
-import BoquetStore from './store/BoquetStore';
+import BouquetStore from './store/BouquetStore';
 import { BrowserRouter } from 'react-router-dom';
 
 export const Context = createContext(null)
@@ -15,7 +15,7 @@ root.render(
  <Context.Provider value={
   {
     user: new UserStore(),
-    boquet: new BoquetStore(),
+    boquet: new BouquetStore(),
   }
  }>
   <BrowserRouter>
