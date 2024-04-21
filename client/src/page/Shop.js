@@ -16,22 +16,22 @@ const Shop = () => {
                     <Carousel.Item >
                         <Image src={ExampleCarouselImage} className="d-block w-100 img-fluid" text="First slide" />
                         <Carousel.Caption>
-                            <h1 class='h_carousel'>Твой букет всё скажет за тебя</h1>
-                            <button class='button_carousel' onClick={() => navigate(Boquet_ROUTE)}> <div className='p_car'>Каталог</div> </button>
+                            <h1 className='h_carousel'>Твой букет всё скажет за тебя</h1>
+                            <button className='button_carousel' onClick={() => navigate(Boquet_ROUTE)}> <div className='p_car'>Каталог</div> </button>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
                         <Image src={ExampleCarouselImage2} className="d-block w-100 " text="Second slide" />
                         <Carousel.Caption>
                             <h1>Second slide label</h1>
-                            <button class='button_carousel'  onClick={() => navigate(REGISTRATION_ROUTE)}><h1 className='p_car'>Зарегистрироваться</h1></button>
+                            <button className='button_carousel'  onClick={() => navigate(REGISTRATION_ROUTE)}><h1 className='p_car'>Зарегистрироваться</h1></button>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
                         <Image src={ExampleCarouselImage3} className="d-block w-100 " text="Second slide" />
                         <Carousel.Caption>
-                            <h1 class='h_carousel'>Зарегистрируйся и формируй свою персональную скидку</h1>
-                            <button class='button_carousel'  onClick={() => navigate(REGISTRATION_ROUTE)}>Зарегистрироваться</button>
+                            <h1 className='h_carousel'>Зарегистрируйся и формируй свою персональную скидку</h1>
+                            <button className='button_carousel'  onClick={() => navigate(REGISTRATION_ROUTE)}>Зарегистрироваться</button>
                         </Carousel.Caption>
                     </Carousel.Item>
                 </Carousel>

@@ -25,6 +25,7 @@ const Reg = () => {
             //console.log(data);
             user.setUser(data)
             user.setIsAuth(true)
+            
             navigate("/")
         } catch (e) {
             alert(e.response.data.message)

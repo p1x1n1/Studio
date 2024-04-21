@@ -5,9 +5,7 @@ import Container from "react-bootstrap/Container";
 import CategoryBar from "../components/CategoryBar"
 import BouquetList from '../components/BouquetList';
 import { ApiService } from '../http/api.service';
-import BoquetItem from '../components/BouquetItem';
 
-const apiService = new ApiService();
 const BouquetPage = () => {
     return (
         <>

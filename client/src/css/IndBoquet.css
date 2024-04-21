@@ -11,10 +11,16 @@ justify-content: center;
 margin-top: 2%;
 background-color: #9e6986;
 background-color: #6d699e;
-/*background-image: url("../base_img/ind.jpg");
+background-image: url("../base_img/ind6.jpg");
 background-repeat: no-repeat ;
 background-size: cover;/*заполнение 
 background-position: center center;*/
+}
+.banner_back{
+    width: 90%;
+    height: 90%;
+    background: #ffffff52; 
+
 }
 .banner_h2{
     /*выравнивание по горизонтали*/
@@ -28,7 +34,8 @@ background-position: center center;*/
     text-align: center;
     
     color: #FFFFFF;
-    background: #fed6ff81;
+    
+    /* background: #fed6ff81; */
     }    
 .banner_h3{
 /*выравнивание по горизонтали*/
@@ -42,7 +49,7 @@ line-height: 57px;
 text-align: center;
 
 color: #FED6FF;
-background: #fed6ff81;
+/* background: #fed6ff81; */
 }
 
 .form {
@@ -57,7 +64,7 @@ background: #fed6ff81;
     margin-left: 2%;
     margin-right: 2%;
     margin-bottom: 5%;
-    background: #ff00c8c5;
+    background: #970778c5;
     color: #f8eded;
 }
 

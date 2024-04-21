@@ -5,24 +5,28 @@ import Auth from "./page/Auth";
 import Reg from "./page/Reg"
 import Log from "./page/Log"
 import BouquetPage from "./page/BouquetPage"
-import OneBoquetPage from "./page/OneBoquetPage"
+import OneBouquetPage from "./page/OneBouquetPage"
 import IndBoquetPage from "./page/IndBouquetPage"
 import Basket from "./page/Basket"
 import RegOrderPage from "./page/RegOrderPage";
 import Cabinet from "./page/Cabinet";
 import OrderPage from "./page/OrderPage";
 
+ 
 export const authRoutes = [
     {
         path: ADMIN_ROUTE,
         Component: <AdminPage/>,
         
     },
-    /*
     {
-        path: BASKET_ROUTE,
-        Component: basket
-    },*/
+        path: CABINET,
+        Component: <Cabinet />,
+    },
+    {
+        path: Basket_ROUTE,
+        Component: <Basket/>
+    },
 ]
 export const publicRoutes = [
     {
@@ -41,9 +45,10 @@ export const publicRoutes = [
        
     },
     {
-        path: Boquet_ROUTE+'/:id',
-        Component: <OneBoquetPage/>,
-        
+        path: Boquet_ROUTE+'/:arc',
+        Component: <OneBouquetPage/>,
+        //exact:true
+        //render: (props) => <OneBouquetPage {...props} />,
     },
     {
         path: Boquet_ROUTE,
@@ -62,10 +67,7 @@ export const publicRoutes = [
         path: REG_ORDER,
         Component: <RegOrderPage/>,
     },
-    {
-        path: CABINET,
-        Component: <Cabinet/>,
-    },
+   
     {
         path: ORDER,
         Component:<OrderPage/>,

@@ -17,8 +17,8 @@ const Indboquet = () => {
     return (
         <>
             <Container className='banner'>
-                <h2 className='banner_h2'>Индивидуальный букет</h2>
-                <h3 className='banner_h3'>Создайте уникальный подарок</h3>
+                    <h2 className='banner_h2'>Индивидуальный букет</h2>
+                    <h3 className='banner_h3'>Создайте уникальный подарок</h3>
             </Container>
             <Container>
                 {/* Отображаем нужное количество компонентов FormBoquet */}

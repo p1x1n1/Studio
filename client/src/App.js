@@ -13,7 +13,7 @@ const App = observer(()=> {
   const {user} = useContext(Context)
   const [loading, setLoading] = useState(true)
 
-  /*useEffect(() => {
+  useEffect(() => {
     check().then(data => {
       user.setUser(true);
       user.setIsAuth(true);
@@ -21,38 +21,18 @@ const App = observer(()=> {
   }, [])
   if (loading){
     return <Spinner animation={"grows"}/>
-  }*/
+  }
 
   return (
     //<BrowserRouter>
-    <div >
+    <div className='container_background'>
       <NavBar/>
       <AppRouter/>
     </div>
     
     //</BrowserRouter>
-    
-    
-   // <div>WORKING</div>
+
   );
 })
 
 export default App;
-
- /*
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>*/

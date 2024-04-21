@@ -3,21 +3,92 @@ import { Context } from '..';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import {Button, Image} from "react-bootstrap"
+import {Button, Form, Image, NavDropdown, Offcanvas} from "react-bootstrap"
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LOGIN_ROUTE, SHOP_ROUTE,Boquet_ROUTE, IndBoquet_ROUTE } from '../utils/consts';
-import logo from '../base_img/logo1.png';
+import { LOGIN_ROUTE, SHOP_ROUTE,Boquet_ROUTE, IndBoquet_ROUTE, CABINET, Basket_ROUTE, SELECTED } from '../utils/consts';
+import logo from '../base_img/icons/logo_men.png';
+import cabinet from '../base_img/icons/green_avatar.png';
+import basket from '../base_img/icons/green_basket.png';
+import heart from '../base_img/icons/green_heart.png';
 import '../css/NavBar.css';
+
 
 const NavBar = () => {
     const {user} = useContext(Context)
     const navigate = useNavigate()
     const logOut = () => {
-      user.setUser();
+      user.setUser({});
       user.setIsAuth(false);
+      navigate(LOGIN_ROUTE);
     }
-    console.log(user.isAuth)
+    
     return (
+     <>
+     <div className='navbar_background'></div>
+        <Navbar className=" mb-3 navbar">
+        <Container fluid>
+          <Navbar.Brand >
+             <NavLink to={SHOP_ROUTE}>
+                <div className='brand'>
+                  <Image width={200} height={150} src={logo}/> 
+                  <h1 className='brand'> FlowerS/Studio</h1>
+                </div>
+            </NavLink>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls={`offcanvasNavbar `} />
+          <Navbar.Offcanvas
+            id={`offcanvasNavbar `}
+            aria-labelledby={`offcanvasNavbarLabel `}
+            placement="end"
+          >
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title id={`offcanvasNavbarLabel `}>
+                
+              </Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className="justify-content-end flex-grow-1 pe-3">
+                <NavDropdown
+                  title="Букеты"
+                  id={`offcanvasNavbarDropdown `}
+                >
+                  <NavDropdown.Item href="#action4">
+                   <NavLink className= "navlink" to={Boquet_ROUTE}> Каталог</NavLink>
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item href="#action5">
+                    <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальные букеты</NavLink>
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+              <Form className="d-flex">
+                <Form.Control
+                  type="search"
+                  placeholder="Артикул/Название"
+                  className="me-2"
+                  aria-label="Артикул/Название"
+                />
+                <Button variant="outline-success">Поиск</Button>
+              </Form>
+            </Offcanvas.Body>
+            <NavLink  > </NavLink>
+            <NavLink > </NavLink>
+          </Navbar.Offcanvas>
+          <div className='ml-2'>
+            {user.isAuth ?
+            <Nav>
+              <NavLink className='navlink' to={CABINET}> <Image width={50} height={50} src={cabinet}/> </NavLink>
+              <NavLink className="navlink" to={Basket_ROUTE}> <Image width={50} height={50} src={basket}/> </NavLink>
+              <NavLink className="navlink" to={SELECTED}> <Image width={50} height={50} src={heart}/> </NavLink>
+              <Button variant={"outline-success"} onClick={logOut}>Выйти</Button>
+            </Nav>
+            : <Button variant={"outline-success"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
+            }
+          </div>
+        </Container>
+      </Navbar>
+     </>
+      /*
         <Navbar className="Navbar" style={{height:50,fontFamily:'Marmelad'}}>
         <Container className='d-flex justife-content-between'>
           <Nav bg = "light" className='d-flex justife-content-between' >
@@ -43,7 +114,7 @@ const NavBar = () => {
           : <Button variant={"outline-success"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
           }
         </Container>
-      </Navbar>
+      </Navbar>*/
     );
 };
 

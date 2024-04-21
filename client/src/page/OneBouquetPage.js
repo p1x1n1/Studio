@@ -1,45 +1,62 @@
 import { Accordion, Button, Col, Container, Image, Row } from "react-bootstrap";
-import basket from '../base_img/basket_green.png';
-import heart from '../base_img/heart.png';
+import basket from '../base_img/icons/pink_basket.png';
+import heart from '../base_img/icons/pink_heart_.png';
+import { ApiService } from "../http/api.service";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const OneBoquetPage = () => {
-    const boquet = {id_bouquet:1, name: 'Букет1',ready_made:true,price:1500,img:'https://cvetaevatomsk.ru/uploads/goods/2021-11/1636032945_img_5057.jpg'};
+const apiService = new ApiService();
+const OneBouquetPage = () => {
+    const {arc} = useParams();
+    console.log('arc',arc);
+    const [bouquet,setBouquet] = useState([]);
+    function fetchDataBouquet() {
+		apiService.get('/bouquet/'+arc).then(res => {
+            setBouquet(res);
+        })
+        console.log('bouquet',bouquet);
+	}
+    useEffect(() => {
+        console.log('bouquet',bouquet);
+        fetchDataBouquet();
+	}, [])
+    //const bouquet = {arc:1, name: 'Букет1',ready_made:true,price:1500,img:'https://cvetaevatomsk.ru/uploads/goods/2021-11/1636032945_img_5057.jpg'};
     return (
         <>
            <Container className="mt-4">
                 <Row>
                     <Col md={6}>
                         <Row className = "">
-                            <Image  width = {600} height = {600} src={boquet.img} />
+                            <Image  width = {600} height = {600} src={bouquet.img} />
                         </Row> 
                         <Row className="mt-3 mb-3 display-flex  ">
                                 <Col md={4}>
-                                   <> <Image  width = {200} height = {200} src={boquet.img} /></>
+                                   <> <Image  width = {200} height = {200} src={bouquet.img} /></>
                                 </Col>
                                 <Col md={4}>
-                                    <><Image  width = {200} height = {200} src={boquet.img} /></>
+                                    <><Image  width = {200} height = {200} src={bouquet.img} /></>
                                 </Col>
                                 <Col md={4}>
-                                    <><Image  width = {200} height = {200} src={boquet.img} /></>
+                                    <><Image  width = {200} height = {200} src={bouquet.img} /></>
                                 </Col>
                         </Row>
                     </Col>
                     <Col md={6}  >
                         <Row>
-                            <h1  style={{color:'#3f1d61'}}>{boquet.name}</h1>
-                            <h3  style={{color:'#3f1d61'}}>Арт.{boquet.id_bouquet}</h3>
-                            <h1  style={{color:'#2F611D'}}>{boquet.price} р.</h1>
+                            <h1  style={{color:'#3f1d61'}}>{bouquet.title}</h1>
+                            <h3  style={{color:'#3f1d61'}}>Арт.{bouquet.arc}</h3>
+                            <h1  style={{color:'#2F611D'}}>{bouquet.price} р.</h1>
                         </Row>
                         <Row className="d-flex row">
                             <Col>
                                 <Button id='basket' >
-                                    <Image width={25} height={25} src={basket}/>
-                                    Добавить в корзину 
+                                    <Image width={50} height={50} src={basket}/>
+                                    
                                 </Button>
                             </Col>
                             <Col>
                                 <Button id ='heart'>
-                                <Image width={25} height={25} src={heart}/>
+                                <Image width={50} height={50} src={heart}/>
                                 </Button>
                             </Col>
                         </Row>
@@ -48,8 +65,7 @@ const OneBoquetPage = () => {
                             <Accordion.Item eventKey="0" >
                                 <Accordion.Header  >Описание</Accordion.Header>
                                 <Accordion.Body >
-                                Яркий стильный букет в бело-фиолетовой цветовой гамме, выполненный из самых свежих сезонных цветов с нашего цветочного производства. Состав, цветовая гамма и стиль букета детально продуманы нашими флористами.
-                                С букетом мы отправим конвертик с открыткой с вашими тёплыми пожеланиями, а также инструкцией по уходу за букетом и специальной подкормкой для продления жизни цветов. 
+                                    {bouquet.description}
                                 </Accordion.Body>
                             </Accordion.Item>
 
@@ -75,4 +91,4 @@ const OneBoquetPage = () => {
     );
 };
 
-export default OneBoquetPage;
+export default OneBouquetPage;

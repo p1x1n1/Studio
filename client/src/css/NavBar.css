@@ -1,10 +1,32 @@
 
 .navlink{
-    color: #2F611D;
+    color: #8142C1;
     margin-left: auto;
     margin-top: 3%;
 }
 
 .navlink:hover{
-    color: #3F1D61;
+    color: #8142C1;
 }
+.navbar_background{
+    position: absolute;
+    width: 1728px;
+    height: 190px;
+}
+.navbar{
+background: rgba(217, 217, 217, 0.43);
+border-radius: 177.5px;
+
+}
+.brand{
+    color: #8142C1;
+    text-align: center; 
+    font-size:medium; 
+    font-family: "GUDINI";
+}
+@font-face {
+    font-family: "GUDINI"; 
+    src: url("./GUDINI.otf") format("truetype"); 
+    font-style: normal; 
+    font-weight: normal; 
+  }

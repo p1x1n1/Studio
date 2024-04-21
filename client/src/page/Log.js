@@ -2,7 +2,7 @@ import React, { useContext,useState } from 'react';
 import { Button,Row, Card, Container,Form } from 'react-bootstrap';
 import { LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE } from '../utils/consts';
 import { useLocation,NavLink,useNavigate } from 'react-router-dom';
-import {logins} from "../http/userApi";
+import {getUser, logins} from "../http/userApi";
 import {Context} from "../index";
 import '../css/Auth.css';
 
@@ -21,9 +21,16 @@ const Auth = () => {
     const click = async () => {
         try {
             let  data = await logins(login, password);
-            user.setUser(data)
-            user.setIsAuth(true)
-            navigate("/")
+            console.log('data',data);
+            user.setUser(data);
+            user.setIsAuth(true);
+            // let info = await getUser(login, password,user.user.post);
+            ////////////////////////////////////////////////////////////////
+            //console.log('info',info);
+            //user.setInfo(info);
+
+            ////////////////////////////////
+            navigate("/");
         } 
         catch (e) {
             alert(e.response.data.message)

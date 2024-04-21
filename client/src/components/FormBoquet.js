@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ApiService } from '../http/api.service'
 import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
-import basket from '../base_img/basket_green.png';
-import orchid from "../base_img/orchid.png";
-import img_input from "../base_img/img_input.png";
+import basket from '../base_img/icons/pink_basket.png';
+import img_input from "../base_img/icons/pink_image.png";
 
 const apiService = new ApiService()
 const FormBoquet = () => {
@@ -158,8 +157,8 @@ const FormBoquet = () => {
                         <p>Итог:{calculateTotalPrice()} рублей</p>
                         <div className='form_line'></div>
                         <Button id='basket' >
-                                <Image width={25} height={25} src={basket}/>
-                                Добавить в корзину 
+                                <Image width={50} height={50}  src={basket}/>
+                                <b style={{color:'blueviolet',marginLeft: 6}}>Добавить в корзину</b>
                          </Button>
                     </Form>
             </Container>

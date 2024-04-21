@@ -7,6 +7,15 @@
   line-height: 29px;
   color: #2F611D;
   }
+.container_background{
+  position: relative;
+  background-image: url(./base_img/background.jpg);
+  background-repeat: repeat-y;
+  background-size: cover;
+}
+.Container{
+  background-color: rgba(255, 255, 255, 0.712);
+}
 .puple_text{
 font-weight: 400;
 font-size: 40px;
@@ -15,7 +24,7 @@ color: #3F1D61;
 }
 #basket{
   border-color: #9d4fea9c;
-  background-color: #2f611d6c;
+  background-color: #c0abca49;
   color: white;
   width: 300px;
   height: 60px;
@@ -23,7 +32,7 @@ color: #3F1D61;
 }
 #heart{
   border-color: #9d4fea9c;
-  background-color: #8257ad93;
+  background-color: #c0abca49;
   width: 100px;
   height: 60px;
 }
@@ -37,6 +46,11 @@ color: #3F1D61;
 .accordion-header{  
   color: #4fea7e91;
 }
+
+
+
+
+
 
 .carousel-item{
   height: 400px;
