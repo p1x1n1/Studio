@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {Route,Routes,Navigate} from 'react-router-dom'
-import { publicRoutes} from "../routes";
+import {authRoutes, publicRoutes} from "../routes";
 import {Basket_ROUTE, CABINET, SHOP_ROUTE} from "../utils/consts";
 import {Context} from "../index";
 import { Container } from 'react-bootstrap';
@@ -13,20 +13,10 @@ const AppRouter = observer(() => {
     const {user}= useContext(Context)
     console.log('user',user.user,'userIsAuth',user.isAuth)
     //const isAuth = false
-    const authRoutes = [
-        // {
-        //     path: CABINET,
-        //     Component: <Cabinet user = {user}/>,
-        // },
-        {
-            path: Basket_ROUTE,
-            Component: <Basket user = {user}/>,
-        },
-    ]
+
     return (
        <Container className='Container'>
             <Routes>
-                <Route path={CABINET} element={<Cabinet  user = {user}/> } />
                 {user.isAuth && authRoutes.map(({path,Component}) =>
                       <Route key={path} path={path} element={Component} />
                 )} 

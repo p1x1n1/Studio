@@ -1,19 +1,66 @@
 import { Form, Button, Input, Table, Modal, Select } from 'antd'
-import { ApiService } from '../../services/api.service'
+import { ApiService } from '../http/api.service'
 import { useEffect, useState } from 'react'
 
 const apiService = new ApiService()
 
-const columns = [
+const wrapper_columns = [
 	{
 		title: 'Артикул',
-		dataIndex: 'id_type',
-		key: 'id_type'
+		dataIndex: 'id_record',
+		key: 'id_record'
 	},
 	{
 		title: 'Название',
-		dataIndex: 'name_type',
-		key: 'name_type'
+		dataIndex: 'title',
+		key: 'title'
+	},
+	{
+		title: 'Стоимость за 1 шт.',
+		dataIndex: 'price',
+		key: 'price'
+	},
+	{
+		title: 'Количество',
+		dataIndex: 'cnt',
+		key: 'cnt'
+	},
+	{
+		title: 'Изображение',
+		dataIndex: 'img',
+		key: 'img'
+	}
+]
+const flower_columns = [
+	{
+		title: 'Артикул',
+		dataIndex: 'id_record',
+		key: 'id_record'
+	},
+	{
+		title: 'Название',
+		dataIndex: 'title',
+		key: 'title'
+	},
+	{
+		title: 'Стоимость за 1 бутон',
+		dataIndex: 'price',
+		key: 'price'
+	},
+	{
+		title: 'Количество',
+		dataIndex: 'cnt',
+		key: 'cnt'
+	},
+	{
+		title: 'Начало сезона',
+		dataIndex: 'season_start',
+		key: 'cnt'
+	},
+	{
+		title: 'Конец сезона',
+		dataIndex: 'season_end',
+		key: 'cnt'
 	},
 	{
 		title: 'Изображение',
@@ -29,8 +76,8 @@ const boquet_columns = [
 	},
 	{
 		title: 'Название',
-		dataIndex: 'name_',
-		key: 'name_'
+		dataIndex: 'title',
+		key: 'title'
 	},
 	{
 		title: 'Состав',
@@ -53,7 +100,7 @@ const boquet_columns = [
 			]}
 			/*onRow={rec => {//поведение для строчки
 				return {
-					onClick: () => showBoquetItem(rec.arc_boquets,rec.id_type_flowers)
+					onClick: () => showBoquetItem(rec.arc_boquets,rec.id_record_flowers)
 				}
 			}}*/
 		  />
@@ -73,13 +120,13 @@ const boquet_columns = [
 
 
 
-function FlowerWrapperExample() {
-	const [wrapper,setWrapper] = useState([])
-	const [flower,setFlower] = useState([])
+function Inventory() {
 	const [boquets, setBoquets] = useState([])
 	//const [boquet_composition,setComposition] = useState([]);
 
-	function fetchDataWrapper() {
+	const [wrapper,setWrapper] = useState([])
+	const [flower,setFlower] = useState([])
+    function fetchDataWrapper() {
 		apiService.get('/wrapper').then(res => {
 			setWrapper(res);
 		})
@@ -236,32 +283,32 @@ function FlowerWrapperExample() {
 	return (
 		<>
 			<>
-				<Button className='mb-3' type='primary' onClick={() => showFlowerItem()}>
+				<Button className='mb-3 pupleButton' type='primary' onClick={() => showFlowerItem()}>
 					Добавить
 				</Button>
 				<Table
 					pagination={{ position: ['bottomRight'] }}
 					dataSource={flower}
-					columns={columns}
+					columns={flower_columns}
 					onRow={rec => {//поведение для строчки
 						return {
-							onClick: () => showFlowerItem(rec.id_type)
+							onClick: () => showFlowerItem(rec.id_record)
 						}
 					}}
 				></Table>
 				<Modal
-					title={FlowerRecord.id_type ? 'Изменение сущности с id=' + FlowerRecord.id_type : 'Добавление новой сущности'}
+					title={FlowerRecord.id_record ? 'Изменение сущности с id=' + FlowerRecord.id_record : 'Добавление новой сущности'}
 					open={modalVisibleFlower}
 					okText='Сохранить'
 					cancelText='Отмена'
 					onCancel={() => closeFlower()}
 					centered
 					footer={[
-						<Button className='mb-3'type='primary' onClick={() => saveFlowerItem()} disabled={!FlowerRecord.name_type}>
+						<Button className='mb-3'type='primary' onClick={() => saveFlowerItem()} disabled={!FlowerRecord.title}>
 							Сохранить
 						</Button>,
-						FlowerRecord.id_type ? (
-							<Button danger onClick={() => removeFlowerItem(FlowerRecord.id_type)}>
+						FlowerRecord.id_record ? (
+							<Button danger onClick={() => removeFlowerItem(FlowerRecord.id_record)}>
 								Удалить
 							</Button>
 						) : null,
@@ -276,10 +323,10 @@ function FlowerWrapperExample() {
 							<Input
 								onChange={v =>
 									setFlowerRecord(prevState => {
-										return { ...prevState, name_type: v.target.value }//... - operator spret - ...
+										return { ...prevState, title: v.target.value }//... - operator spret - ...
 									})
 								}
-								value={FlowerRecord.name_type}
+								value={FlowerRecord.title}
 							/>
 						</Form.Item>
 						<Form.Item label='Изображение'>
@@ -296,32 +343,33 @@ function FlowerWrapperExample() {
 				</Modal>
 			</>
 			<div className='mt-3'>
-				<Button className='mb-3' type='primary' onClick={() => showWrapperItem()}>
+				<Button className='mb-3 pupleButton' type='primary'  
+				onClick={() => showWrapperItem()}>
 					Добавить
 				</Button>
 				<Table
 					pagination={{ position: ['bottomRight'] }}
 					dataSource={wrapper}
-					columns={columns}
+					columns={wrapper_columns}
 					onRow={rec => {//поведение для строчки
 						return {
-							onClick: () => showWrapperItem(rec.id_type)
+							onClick: () => showWrapperItem(rec.id_record)
 						}
 					}}
 				></Table>
 				<Modal
-					title={WrapperRecord.id_type ? 'Изменение сущности с id=' + WrapperRecord.id_type : 'Добавление новой сущности'}
+					title={WrapperRecord.id_record ? 'Изменение сущности с id=' + WrapperRecord.id_record : 'Добавление новой сущности'}
 					open={modalVisibleWrapper}
 					okText='Сохранить'
 					cancelText='Отмена'
 					onCancel={() => closeWrapper()}
 					centered
 					footer={[
-						<Button type='primary' onClick={() => saveWrapperItem()} disabled={!WrapperRecord.name_type}>
+						<Button type='primary' onClick={() => saveWrapperItem()} disabled={!WrapperRecord.title}>
 							Сохранить
 						</Button>,
-						WrapperRecord.id_type ? (
-							<Button danger onClick={() => removeWrapperItem(WrapperRecord.id_type)}>
+						WrapperRecord.id_record ? (
+							<Button danger onClick={() => removeWrapperItem(WrapperRecord.id_record)}>
 								Удалить
 							</Button>
 						) : null,
@@ -336,10 +384,10 @@ function FlowerWrapperExample() {
 							<Input
 								onChange={v =>
 									setWrapperRecord(prevState => {
-										return { ...prevState, name_type: v.target.value }//... - operator spret - ...
+										return { ...prevState, title: v.target.value }//... - operator spret - ...
 									})
 								}
-								value={WrapperRecord.name_type}
+								value={WrapperRecord.title}
 							/>
 						</Form.Item>
 						<Form.Item label='Изображение'>
@@ -355,7 +403,8 @@ function FlowerWrapperExample() {
 					</Form>
 				</Modal>
 			</div>
-			<>
+			{
+			/* <>
 			<Button className='mb-3' type='primary' onClick={() => showItemBoquet()}>
 				Добавить
 			</Button>
@@ -378,7 +427,7 @@ function FlowerWrapperExample() {
 				centered
 				footer={[
 					
-					<Button type='primary' onClick={() => boquetRecord.arc ? saveItemBoquetandComposition() : saveItemBoquet()} disabled={!boquetRecord.name_ || !boquetRecord.wrapper_}>
+					<Button type='primary' onClick={() => boquetRecord.arc ? saveItemBoquetandComposition() : saveItemBoquet()} disabled={!boquetRecord.title || !boquetRecord.wrapper_}>
 						Сохранить
 					</Button>,
 					boquetRecord.arc ? (
@@ -397,10 +446,10 @@ function FlowerWrapperExample() {
 						<Input
 							onChange={v =>
 								setBoquetRecord(prevState => {
-									return { ...prevState, name_: v.target.value }//... - operator spret - ...
+									return { ...prevState, title: v.target.value }//... - operator spret - ...
 								})
 							}
-							value={boquetRecord.name_}
+							value={boquetRecord.title}
 						/>
 					</Form.Item>
 					<Form.Item label='Упаковка'>
@@ -412,8 +461,8 @@ function FlowerWrapperExample() {
 						}
 						value={boquetRecord.wrapper_}>
 							{wrapper.map(wrapper => (
-                                <Select.Option key={wrapper.id_type} value={wrapper.id_type}>
-                                    {wrapper.name_type}
+                                <Select.Option key={wrapper.id_record} value={wrapper.id_record}>
+                                    {wrapper.title}
                                 </Select.Option>
                             ))}
                         </Select>
@@ -426,14 +475,14 @@ function FlowerWrapperExample() {
 							key={index}
 							onChange={v => {
 								//учесть count и учесть flower одновремено сложно пиздец
-								const updatedRecords = boquetCompositionRecord.map((item, i) => i === index ? { ...item, id_type_flowers: v } : item);
+								const updatedRecords = boquetCompositionRecord.map((item, i) => i === index ? { ...item, id_record_flowers: v } : item);
 								setCompositionRecord(updatedRecords);
 							  }}
-							value={composition.id_type_flowers}
+							value={composition.id_record_flowers}
 						  >
 							{flower.map(fw => (
-							  <Select.Option key={fw.id_type} value={fw.id_type}>
-								{fw.name_type}
+							  <Select.Option key={fw.id_record} value={fw.id_record}>
+								{fw.title}
 							  </Select.Option>
 							))}
 						  </Select>
@@ -444,9 +493,10 @@ function FlowerWrapperExample() {
 					}
 				</Form>
 			</Modal>
-		</>
+			</> */
+			}
 		</>
 	)
 }
-export default FlowerWrapperExample;
+export default Inventory;
 

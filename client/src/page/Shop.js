@@ -6,6 +6,7 @@ import ExampleCarouselImage2 from '../base_img/car2.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Boquet_ROUTE, REGISTRATION_ROUTE } from '../utils/consts';
 import '../css/Tabs.css';
+import BouquetList from '../components/BouquetList';
 
 const Shop = () => {
     const navigate = useNavigate()
@@ -35,7 +36,7 @@ const Shop = () => {
                         </Carousel.Caption>
                     </Carousel.Item>
                 </Carousel>
-               
+               <BouquetList/>
             </Container>
         </>
     );

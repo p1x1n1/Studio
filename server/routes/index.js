@@ -3,14 +3,17 @@ const router = new Router
 
 const orderRouters=require('./orderRoutes')
 const bouquetRouters=require('./bouquet.router')
-const flowerRouters=require('./flowerRouter')
+const flowerRouter=require('./flower.routes.js')
 const bouquetCompositionRouter = require('./bouquet.composition.routes.js')
-const flowerRouter = require('./flower.routes.js')
+const userRouter = require('./user.router.js')
+const employeeRouter = require('./employee.router.js')
 const wrapperRouter = require('./wrapper.routes.js')
-const categoryRouter=require('./categoryRouter')
+const postRouter=require('./post.router.js')
+const categoryRouter=require('./categoryRouter.js')
 const WrappercategoryRouter = require('./WrappercategoryRouter')
 
-
+router.use('/user',userRouter)
+router.use('/employee',employeeRouter)
 router.use('/order',orderRouters)
 //router.use('/flow',flowerRouters)
 router.use('/flower',flowerRouter)
@@ -18,6 +21,7 @@ router.use('/bouquet',bouquetRouters)
 router.use('/bouquetcomposition',bouquetCompositionRouter)
 router.use('/wrapper',wrapperRouter)
 router.use('/category',categoryRouter)
+router.use('/post',postRouter)
 router.use('/wrapper/category',WrappercategoryRouter)
 
 

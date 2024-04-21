@@ -1,17 +1,17 @@
-const { Discount } = require("../models/models")
+const { Post } = require("../models/models")
 const db = require('../db.pool')
-class DiscountController{
+class PostController{
     async create (req,res){
         
     }
 
     async getALL (req,res){
-        const discounts = await Discount.findAll()
-        return res.json(discounts)
+        const post = await Post.findAll()
+        return res.json(post)
     }
     async getOne (req,res){
         
     }
 }
 
-module.exports = new DiscountController()
+module.exports = new PostController()

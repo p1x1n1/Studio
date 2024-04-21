@@ -36,13 +36,23 @@ class AuthController{
             if (!user){
                 return next(ApiError.internal('Пользователь с таким логином не существует'))
             }
-        }
-        let comparePassword = bcrypt.compareSync(password_, user.password_)
-        if (!comparePassword) {
-            return next(ApiError.internal('Указан неверный пароль'))
-        }
+        }      
         user.setDataValue('post', post); // Добавляем поле post к объекту user.dataValues
         user.set('post', post, { raw: true }); // Устанавливаем поле post как атрибут
+
+        if(user.password_===null||''||undefined){
+            const hashPassword = await bcrypt.hash(password_,5);//хэшируемый пароль
+            (user.post ==='user') ? await User.update({ password_: hashPassword }, { where: { login } })
+            : await Employee.update({ password_: hashPassword }, { where: { login } });
+            console.log('user', user);
+        }
+        else{
+            let comparePassword = bcrypt.compareSync(password_, user.password_)
+            if (!comparePassword) {
+                return next(ApiError.internal('Указан неверный пароль'))
+            }
+        }
+
         const token = generateJwt(user.login, user.email, user.phone, post);
         user.password_ = undefined; // Удаляем поле password_ из user.dataValues
         // Выводим объект user с добавленным полем post и без поля password_

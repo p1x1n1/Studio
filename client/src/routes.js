@@ -1,4 +1,4 @@
-import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE,Basket_ROUTE, REG_ORDER, CABINET, ORDER } from "./utils/consts"
+import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE,Basket_ROUTE, REG_ORDER, CABINET, ORDER, INVENTORY, USER } from "./utils/consts"
 import AdminPage from "./components/AdminPanel";
 import Shop from "./page/Shop";
 import Auth from "./page/Auth";
@@ -11,14 +11,11 @@ import Basket from "./page/Basket"
 import RegOrderPage from "./page/RegOrderPage";
 import Cabinet from "./page/Cabinet";
 import OrderPage from "./page/OrderPage";
+import Inventory from "./page/Inventory";
+import Users from "./page/Users";
 
  
 export const authRoutes = [
-    {
-        path: ADMIN_ROUTE,
-        Component: <AdminPage/>,
-        
-    },
     {
         path: CABINET,
         Component: <Cabinet />,
@@ -26,6 +23,22 @@ export const authRoutes = [
     {
         path: Basket_ROUTE,
         Component: <Basket/>
+    },
+    {
+        path: ORDER,
+        Component:<OrderPage/>,
+    },
+    {
+        path: REG_ORDER,
+        Component: <RegOrderPage/>,
+    },
+    {
+        path: INVENTORY,
+        Component: <Inventory/>,
+    },
+    {
+        path: USER,
+        Component: <Users/>,
     },
 ]
 export const publicRoutes = [
@@ -59,17 +72,6 @@ export const publicRoutes = [
         path: IndBoquet_ROUTE,
         Component: <IndBoquetPage/>,
     },
-    {
-        path: Basket_ROUTE,
-        Component: <Basket/>,
-    },
-    {
-        path: REG_ORDER,
-        Component: <RegOrderPage/>,
-    },
-   
-    {
-        path: ORDER,
-        Component:<OrderPage/>,
-    },
+
+
 ]

@@ -20,6 +20,7 @@ const NavBar = () => {
       user.setUser({});
       user.setIsAuth(false);
       navigate(LOGIN_ROUTE);
+      console.log(user.user.post)
     }
     
     return (
@@ -78,8 +79,12 @@ const NavBar = () => {
             {user.isAuth ?
             <Nav>
               <NavLink className='navlink' to={CABINET}> <Image width={50} height={50} src={cabinet}/> </NavLink>
-              <NavLink className="navlink" to={Basket_ROUTE}> <Image width={50} height={50} src={basket}/> </NavLink>
-              <NavLink className="navlink" to={SELECTED}> <Image width={50} height={50} src={heart}/> </NavLink>
+             { (user.user.post === 'user') ?
+                <Nav>
+                  <NavLink className="navlink" to={Basket_ROUTE}> <Image width={50} height={50} src={basket}/> </NavLink>
+                  <NavLink className="navlink" to={SELECTED}> <Image width={50} height={50} src={heart}/> </NavLink>
+                </Nav> 
+                : <></>}
               <Button variant={"outline-success"} onClick={logOut}>Выйти</Button>
             </Nav>
             : <Button variant={"outline-success"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>

@@ -19,14 +19,14 @@ const Cabinet = (props) => {
                     <FormControl type='image' src={avatar}/>
                 </Col>
                 <Col md={7}>
-                    <h1 style={{fontFamily:'Marck Script'}}>Добрый день {user.user.name_ ? ','+ user.user.name_ : <></>} !</h1>
+                    <h1 style={{fontFamily:'Marck Script'}}>Добрый день{user.user.name_ ? ', '+ user.user.name_ : <></>} !</h1>
                     <div style={{ display: 'flex', flexDirection:' column'}}>
                         <h1> Email: {user.user.email}</h1>
                         <h1> Имя: {user.user.name_ ?  user.user.name_ : <></>}</h1>
                         <h1> Фамилия: {user.user.surname ?  user.user.surname : <></>}</h1>
                         <h1> Отчество:{user.user.lastname ?  user.user.lastname : <></>}</h1>
                     </div>
-                    <Button className='pupleButton' variant='outline-light'> Редактировать информация </Button>
+                    <Button className='pupleButton mb-3' variant='outline-light'> Редактировать информация </Button>
                     {console.log('role',user.user.post)}
                     {(user.user.post==='user')? <h1>Сумма заказов: {user.sumOrder} {' руб.'}</h1> : <EmployerPanel post={user.user.post}/> }
                 </Col>

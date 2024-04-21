@@ -4,7 +4,6 @@ import CourierOrder from '../components/CourierOrder';
 
 
 const OrderPage = () => {
-    const order = {number:34};
     return (
         <Container>
             <CourierOrder/>

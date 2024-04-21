@@ -1,22 +1,24 @@
 import React, { useContext } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import Admin from './AdminPanel';
 import { useNavigate } from 'react-router-dom';
-import { ORDER } from '../utils/consts';
+import { INVENTORY, ORDER } from '../utils/consts';
 import { Context } from '../index';
 
 
 const EmployerPanel = () => {
     const {user} = useContext(Context);
     const post = user.user.post;
-    console.log(post);
+    // console.log(post);
     const navigate = useNavigate();
     return (
         <Container className='mb-3'>
-             { (post=== 'Администратор') ?
-                <Admin/> 
-                : (post=== 'Флорист') ? <Button className='pupleButton' variant='outline-light' >Инвентаризация</Button> :<></> }
-            <Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(ORDER) } >Текущие заказы</Button>
+            <Row>
+                 { (post === 'Администратор') ?
+                    <Admin/> 
+                    : (post=== 'Флорист') ? <Col md={6} ><Button className='pupleButton mb-3' variant='outline-light' onClick={()=>navigate(INVENTORY)} >Инвентаризация</Button></Col> :<></> }
+               <Col md={6}><Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(ORDER) } >Текущие заказы</Button></Col>
+            </Row>
         </Container>
         
     );

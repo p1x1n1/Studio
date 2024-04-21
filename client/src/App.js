@@ -7,6 +7,7 @@ import { Context } from '.';
 import { useContext, useEffect, useState } from 'react';
 import { check } from './http/userApi';
 import { Spinner } from 'react-bootstrap';
+import Footer from './page/Footer';
 
 
 const App = observer(()=> {
@@ -25,10 +26,13 @@ const App = observer(()=> {
 
   return (
     //<BrowserRouter>
-    <div className='container_background'>
-      <NavBar/>
-      <AppRouter/>
-    </div>
+    <>
+      <div className='container_background'>
+        <NavBar/>
+        <AppRouter/>
+      </div>
+      <Footer/>
+    </>
     
     //</BrowserRouter>
 
