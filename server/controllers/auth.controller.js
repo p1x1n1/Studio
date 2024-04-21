@@ -69,8 +69,20 @@ class AuthController{
         res.json(id)
        // res.json('dsdwe')
        */
-       const token = generateJwt(req.user.login, req.user.email,req.user.phone)
-       return res.json({token})
+       console.log("CHECK")
+       console.log('USER',req.user)
+       let user ;
+       if (req.user.post === ' user'){
+        user = await User.findOne({where:{login:req.user.login}})
+       }
+       else{
+        user = await Employee.findOne({where:{login:req.user.login}})
+       }
+       user.setDataValue('post', req.user.post); // Добавляем поле post к объекту user.dataValues
+       user.set('post', req.user.post, { raw: true }); // Устанавливаем поле post как атрибут
+
+       const token = generateJwt(req.user.login, req.user.email,req.user.phone,req.user.post)
+       return res.json({token,user})
     }
     // async getUser(req, res) {
     //     const {login,password_,post} = req.body
