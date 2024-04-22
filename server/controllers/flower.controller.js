@@ -3,7 +3,7 @@ const { Flower } = require('../models/models')
 
 class FlowerController {
 	async createFlower(req, res) {
-		const { id_record, title, cnt, price, season_start, season_end, img } = req.body
+		const { id_record, title,  price, cnt, season_start, season_end, img } = req.body
 		let flower
 		if (id_record) {
 			flower = await db.query('UPDATE flowers set title = ($1),cnt = ($2), price = ($3), season_start = ($4), season_end = ($5), img = ($6) where id_record = ($7) RETURNING *', [title, cnt, price, season_start, season_end, img ,id_record])

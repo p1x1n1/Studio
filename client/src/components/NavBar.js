@@ -81,7 +81,7 @@ const NavBar = () => {
               <NavLink className='navlink' to={CABINET}> <Image width={50} height={50} src={cabinet}/> </NavLink>
              { (user.user.post === 'user') ?
                 <Nav>
-                  <NavLink className="navlink" to={Basket_ROUTE}> <Image width={50} height={50} src={basket}/> </NavLink>
+                  <NavLink className="navlink" to={Basket_ROUTE +'/'+ user.user.login}> <Image width={50} height={50} src={basket}/> </NavLink>
                   <NavLink className="navlink" to={SELECTED}> <Image width={50} height={50} src={heart}/> </NavLink>
                 </Nav> 
                 : <></>}

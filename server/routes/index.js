@@ -11,6 +11,7 @@ const wrapperRouter = require('./wrapper.routes.js')
 const postRouter=require('./post.router.js')
 const categoryRouter=require('./categoryRouter.js')
 const WrappercategoryRouter = require('./WrappercategoryRouter')
+const basketRouter=require('./basket.router.js')
 
 router.use('/user',userRouter)
 router.use('/employee',employeeRouter)
@@ -23,6 +24,6 @@ router.use('/wrapper',wrapperRouter)
 router.use('/category',categoryRouter)
 router.use('/post',postRouter)
 router.use('/wrapper/category',WrappercategoryRouter)
-
+router.use('/basket',basketRouter)
 
 module.exports = router

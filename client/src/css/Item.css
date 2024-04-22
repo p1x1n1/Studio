@@ -1,0 +1,27 @@
+.green_line{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    border: 2px solid #2F611D;
+    transform: rotate(-0.06deg);
+}
+.puple_text{
+    font-family: 'Marmelad';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 29px;
+    color: #3F1D61;
+}
+.puple_border{
+    border: 2px solid #3F1D61;
+}
+.puple_border_box{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.86);
+    border: 2px solid rgba(130, 87, 173, 0.58);
+
+}

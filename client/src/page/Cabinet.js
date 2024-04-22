@@ -64,7 +64,7 @@ const Cabinet = () => {
                     <Button className='pupleButton mb-3' variant='outline-light' 
                     onClick={() => {setModalVisible(true); setUserRecord(user.user)}}> Редактировать информация </Button>
                     {console.log('role',user.user.post)}
-                    {(user.user.post==='user')? <h1>Сумма заказов: {user.sumOrder} {' руб.'}</h1> : <EmployerPanel post={user.user.post}/> }
+                    {(user.user.post==='user')? <h1>Сумма заказов: {user.user.order_sum} {' руб.'}</h1> : <EmployerPanel post={user.user.post}/> }
                 </Col>
             </Row>
             <Modal

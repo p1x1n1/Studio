@@ -121,24 +121,96 @@ const boquet_columns = [
 
 
 function Inventory() {
-	const [boquets, setBoquets] = useState([])
-	//const [boquet_composition,setComposition] = useState([]);
-
-	const [wrapper,setWrapper] = useState([])
+	useEffect(() => {
+		fetchDataFlower();
+		fetchDataWrapper();
+		fetchDataBoquet();
+	}, [])
+	//FLOWER
 	const [flower,setFlower] = useState([])
-    function fetchDataWrapper() {
-		apiService.get('/wrapper').then(res => {
-			setWrapper(res);
-		})
-		console.log('wrapper',wrapper)
-	}
+
 	function fetchDataFlower() {
 		apiService.get('/flower').then(res => {
 			setFlower(res)
 		})
 		console.log('flower',flower)
 	}
-	/*
+
+	const [modalVisibleFlower, setModalVisibleFlower] = useState(false)
+	const [FlowerRecord, setFlowerRecord] = useState({})
+
+
+	function showFlowerItem(recId) {
+		recId
+			? apiService.get('/flower/' + recId).then(res => {//promise - then catch
+					setFlowerRecord(res)
+					setModalVisibleFlower(true)
+			  })
+			: setModalVisibleFlower(true)
+	}
+
+	function saveFlowerItem() {
+		apiService.post('/flower', FlowerRecord).then(() => {
+			closeFlower()
+			fetchDataFlower()
+		})
+	}
+
+	function removeFlowerItem(recId) {
+		apiService.delete('/flower/' + recId).then(() => {
+			closeFlower()
+			fetchDataFlower()
+		})
+	}
+	function closeFlower() {
+		setFlowerRecord({})
+		setModalVisibleFlower(false)
+	}
+
+	//WRAPPER
+	const [wrapper,setWrapper] = useState([])
+
+	function fetchDataWrapper() {
+		apiService.get('/wrapper').then(res => {
+			setWrapper(res);
+		})
+		console.log('wrapper',wrapper)
+	}
+
+	const [modalVisibleWrapper, setModalVisibleWrapper] = useState(false)
+	const [WrapperRecord, setWrapperRecord] = useState({})
+
+	function showWrapperItem(recId) {
+		recId
+			? apiService.get('/wrapper/' + recId).then(res => {//promise - then catch
+					setFlowerRecord(res)
+					setModalVisibleWrapper(true)
+			  })
+			: setModalVisibleWrapper(true)
+	}
+	function saveWrapperItem() {
+		apiService.post('/wrapper', WrapperRecord).then(() => {
+			closeWrapper()
+			fetchDataWrapper()
+		})
+	}
+	function removeWrapperItem(recId) {
+		apiService.delete('/wrapper/' + recId).then(() => {
+			closeWrapper()
+			fetchDataWrapper()
+		})
+	}
+
+
+	function closeWrapper() {
+		setWrapperRecord({})
+		setModalVisibleWrapper(false)
+	}
+
+	//Boquets
+	const [boquets, setBoquets] = useState([])
+	//const [boquet_composition,setComposition] = useState([]);
+		/*
 	function fetchDataBoquet() {
 		apiService.get('/boquet/info').then(res => {
 			const updatedBoquets = res.map(boquet => {
@@ -174,72 +246,11 @@ function Inventory() {
 		}
 	  }
 	  
-	useEffect(() => {
-		fetchDataFlower();
-		fetchDataWrapper();
-		fetchDataBoquet();
-	}, [])
-
-
-	const [modalVisibleFlower, setModalVisibleFlower] = useState(false)
-	const [modalVisibleWrapper, setModalVisibleWrapper] = useState(false)
-	const [modalVisibleBoquet, setModalVisibleBoquet] = useState(false)
-	const [FlowerRecord, setFlowerRecord] = useState({})
-	const [WrapperRecord, setWrapperRecord] = useState({})
 	const [boquetRecord, setBoquetRecord] = useState({})
 	const [boquetCompositionRecord, setCompositionRecord] = useState([{}])
 	const [flowerInCompositionRecord, setFlowerInCompositionRecord] = useState({})
-	function showFlowerItem(recId) {
-		recId
-			? apiService.get('/flower/' + recId).then(res => {//promise - then catch
-					setFlowerRecord(res)
-					setModalVisibleFlower(true)
-			  })
-			: setModalVisibleFlower(true)
-	}
-
-	function showWrapperItem(recId) {
-		recId
-			? apiService.get('/wrapper/' + recId).then(res => {//promise - then catch
-					setFlowerRecord(res)
-					setModalVisibleWrapper(true)
-			  })
-			: setModalVisibleWrapper(true)
-	}
-	function saveWrapperItem() {
-		apiService.post('/wrapper', WrapperRecord).then(() => {
-			closeWrapper()
-			fetchDataWrapper()
-		})
-	}
-	function saveFlowerItem() {
-		apiService.post('/flower', FlowerRecord).then(() => {
-			closeFlower()
-			fetchDataFlower()
-		})
-	}
-
-	function removeFlowerItem(recId) {
-		apiService.delete('/flower/' + recId).then(() => {
-			closeFlower()
-			fetchDataFlower()
-		})
-	}
-	function removeWrapperItem(recId) {
-		apiService.delete('/wrapper/' + recId).then(() => {
-			closeWrapper()
-			fetchDataWrapper()
-		})
-	}
-
-	function closeFlower() {
-		setFlowerRecord({})
-		setModalVisibleFlower(false)
-	}
-	function closeWrapper() {
-		setWrapperRecord({})
-		setModalVisibleWrapper(false)
-	}
+	const [modalVisibleBoquet, setModalVisibleBoquet] = useState(false)
+	
 	function showItemBoquet(recId) {
 		recId
 			? apiService.get('/boquet/' + recId).then(res => {//promise - then catch
@@ -304,7 +315,7 @@ function Inventory() {
 					onCancel={() => closeFlower()}
 					centered
 					footer={[
-						<Button className='mb-3'type='primary' onClick={() => saveFlowerItem()} disabled={!FlowerRecord.title}>
+						<Button className='mb-3 pupleButton' type='primary' onClick={() => saveFlowerItem()} disabled={!FlowerRecord.title}>
 							Сохранить
 						</Button>,
 						FlowerRecord.id_record ? (
@@ -312,7 +323,7 @@ function Inventory() {
 								Удалить
 							</Button>
 						) : null,
-						<Button onClick={() => closeFlower()}>Отмена</Button>
+						<Button className='mb-3 pupleButton' onClick={() => closeFlower()}>Отмена</Button>
 					]
 				}
 				>
@@ -327,6 +338,46 @@ function Inventory() {
 									})
 								}
 								value={FlowerRecord.title}
+							/>
+						</Form.Item>
+						<Form.Item label='Стоимость за 1 буттон'>
+							<Input
+								onChange={v =>
+									setFlowerRecord(prevState => {
+										return { ...prevState, price: v.target.value }//... - operator spret - ...
+									})
+								}
+								value={FlowerRecord.price}
+							/>
+						</Form.Item>
+						<Form.Item label='Количество'>
+							<Input
+								onChange={v =>
+									setFlowerRecord(prevState => {
+										return { ...prevState, cnt: v.target.value }//... - operator spret - ...
+									})
+								}
+								value={FlowerRecord.cnt}
+							/>
+						</Form.Item>
+						<Form.Item label='Начало сезона'>
+							<Input type='date'
+								onChange={v =>
+									setFlowerRecord(prevState => {
+										return { ...prevState, season_start: v.target.value }//... - operator spret - ...
+									})
+								}
+								value={FlowerRecord.season_start}
+							/>
+						</Form.Item>
+						<Form.Item label='Конец сезона'>
+							<Input type='date'
+								onChange={v =>
+									setFlowerRecord(prevState => {
+										return { ...prevState, season_end: v.target.value }//... - operator spret - ...
+									})
+								}
+								value={FlowerRecord.season_end}
 							/>
 						</Form.Item>
 						<Form.Item label='Изображение'>

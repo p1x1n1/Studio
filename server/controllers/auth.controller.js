@@ -1,7 +1,7 @@
 const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {User, Order, Employee, Post} = require('../models/models')
+const {User, Order, Employee, Post, Discount} = require('../models/models')
 const generateJwt = (login, email,phone,post) => {
     return jwt.sign(
         {login, email, phone,post},
@@ -37,6 +37,12 @@ class AuthController{
                 return next(ApiError.internal('Пользователь с таким логином не существует'))
             }
         }      
+        if (post==='user'){
+             //procent = await Discount.findOne({where:{id_record: user.discountIdRecord}})
+             //console.log(procent)
+             //user.setDataValue('procent', procent.procent);
+             //user.set('procent', procent.procent, { raw: true });
+        }
         user.setDataValue('post', post); // Добавляем поле post к объекту user.dataValues
         user.set('post', post, { raw: true }); // Устанавливаем поле post как атрибут
 

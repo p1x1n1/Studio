@@ -21,7 +21,7 @@ export const authRoutes = [
         Component: <Cabinet />,
     },
     {
-        path: Basket_ROUTE,
+        path: Basket_ROUTE+'/:login',
         Component: <Basket/>
     },
     {
@@ -29,7 +29,7 @@ export const authRoutes = [
         Component:<OrderPage/>,
     },
     {
-        path: REG_ORDER,
+        path: REG_ORDER+'/:login',
         Component: <RegOrderPage/>,
     },
     {
