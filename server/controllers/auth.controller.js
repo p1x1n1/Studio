@@ -77,13 +77,14 @@ class AuthController{
        */
        console.log("CHECK")
        console.log('USER',req.user)
-       let user ;
-       if (req.user.post === ' user'){
-        user = await User.findOne({where:{login:req.user.login}})
-       }
-       else{
-        user = await Employee.findOne({where:{login:req.user.login}})
-       }
+       let user = {} ;
+       console.log('post',req.user.post)
+        if (req.user.post == 'user'){
+         user = await User.findOne({where:{login:req.user.login}})
+        }
+        else{
+         user = await Employee.findOne({where:{login:req.user.login}})
+        }
        user.setDataValue('post', req.user.post); // Добавляем поле post к объекту user.dataValues
        user.set('post', req.user.post, { raw: true }); // Устанавливаем поле post как атрибут
 

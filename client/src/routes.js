@@ -1,4 +1,4 @@
-import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE,Basket_ROUTE, REG_ORDER, CABINET, ORDER, INVENTORY, USER } from "./utils/consts"
+import { ADMIN_ROUTE, Boquet_ROUTE, IndBoquet_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,SHOP_ROUTE,Basket_ROUTE, REG_ORDER, CABINET, ORDER, INVENTORY, USER, SELECTED } from "./utils/consts"
 import AdminPage from "./components/AdminPanel";
 import Shop from "./page/Shop";
 import Auth from "./page/Auth";
@@ -13,6 +13,7 @@ import Cabinet from "./page/Cabinet";
 import OrderPage from "./page/OrderPage";
 import Inventory from "./page/Inventory";
 import Users from "./page/Users";
+import Selected from "./page/Selected";
 
  
 export const authRoutes = [
@@ -23,6 +24,10 @@ export const authRoutes = [
     {
         path: Basket_ROUTE+'/:login',
         Component: <Basket/>
+    },
+    {
+        path: SELECTED+'/:login',
+        Component: <Selected/>
     },
     {
         path: ORDER,

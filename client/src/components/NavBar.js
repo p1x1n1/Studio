@@ -82,7 +82,7 @@ const NavBar = () => {
              { (user.user.post === 'user') ?
                 <Nav>
                   <NavLink className="navlink" to={Basket_ROUTE +'/'+ user.user.login}> <Image width={50} height={50} src={basket}/> </NavLink>
-                  <NavLink className="navlink" to={SELECTED}> <Image width={50} height={50} src={heart}/> </NavLink>
+                  <NavLink className="navlink" to={SELECTED+'/'+ user.user.login}> <Image width={50} height={50} src={heart}/> </NavLink>
                 </Nav> 
                 : <></>}
               <Button variant={"outline-success"} onClick={logOut}>Выйти</Button>

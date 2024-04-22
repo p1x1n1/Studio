@@ -10,7 +10,6 @@ const BouquetBasketItem = ({bouquet}) => {
     //const  arc = bouquet.arc;
     // bouquet = 
     //     {arc:2, title: 'Букет1',ready_made:true,price:1500,cnt:15,img:'https://cvetaevatomsk.ru/uploads/goods/2021-11/1636032945_img_5057.jpg'}
-    
     return (
          <>
         <Row className='d-flex   mt-3'>

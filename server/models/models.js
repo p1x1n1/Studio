@@ -20,7 +20,6 @@ const Basket = sequelize.define('basket',{
     cnt:{type:DataTypes.INTEGER},
 },{ timestamps: false })
 const Selected = sequelize.define('selected',{
-    email: {type:DataTypes.STRING(100)},
 },{ timestamps: false })
 const Employee = sequelize.define('employee',{
     login: {type:DataTypes.STRING(50),primaryKey:true},

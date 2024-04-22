@@ -8,7 +8,7 @@ import { Boquet_ROUTE } from '../utils/consts';
 import { ApiService } from '../http/api.service';
 import { Context } from '../index';
 //1.41
-const BoquetItem = ({bouquet}) => {
+const BoquetSelectedItem = ({bouquet}) => {
     const navigate = useNavigate();
     const {user} = useContext(Context)
     const login = user.user.login;
@@ -22,9 +22,9 @@ const BoquetItem = ({bouquet}) => {
             alert(err.message);
         })
 	}
-    function addSelected(arc) {
-		apiService.post('/selected',{login,arc}).then(() => {
-            alert('Добавлено в избранное');
+    function deleteSelected(arc) {
+		apiService.delete('/selected/'+login+'/'+arc).then(() => {
+            alert('Удаленно из избранного');
 		})
 	}
     const apiService = new ApiService()
@@ -47,8 +47,9 @@ const BoquetItem = ({bouquet}) => {
                             </Button>
                         </Col>
                         <Col md={6}>
-                            <Button variant='light' onClick={()=>{addSelected(bouquet.arc)}}> 
+                            <Button variant='light' onClick={()=>{deleteSelected(bouquet.arc)}} > 
                                 <Image width={50} height={50} src={heart} />
+                                <p> В избранном</p>
                             </Button>
                         </Col>
                     </Row>
@@ -59,4 +60,4 @@ const BoquetItem = ({bouquet}) => {
     );
 };
 
-export default BoquetItem;
+export default BoquetSelectedItem;
