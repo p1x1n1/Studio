@@ -12,6 +12,8 @@ const apiService = new ApiService()
 const Basket = observer (() => {  
     const [bouquet,setBouquet] = useState([]);
     const {user} = useContext(Context)
+    // user.user.basket = bouquet;
+    // console.log('user+basket', user.user);
     const navigate = useNavigate()
     function fetchDataBouquet() {
 		apiService.get('/basket/'+user.user.login).then(res => {
@@ -55,7 +57,8 @@ const Basket = observer (() => {
                     </div>
                 </div>
                 <div className='d-flex justife-content-center align-items-center mt-3'>
-                    <Button className='pupleButton' variant='outline-light' onClick={() => navigate(REG_ORDER+'/'+user.user.login)}>Оформить заказ</Button>
+                    
+                    <Button className='pupleButton' variant='outline-light' onClick={() => { navigate(REG_ORDER+'/'+user.user.login)}}>Оформить заказ</Button>
                 </div>
                
             </Col>

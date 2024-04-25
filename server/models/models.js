@@ -58,7 +58,7 @@ const StatusOrder = sequelize.define('status_order',{
     title: {type: DataTypes.STRING(50),unique:true},
 },{ timestamps: false }
 )
-const TypeOrder = sequelize.define('type_order',{
+const Delivery = sequelize.define('delivery',{
     id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     title: {type: DataTypes.STRING(50),unique:true},
     price:{type:DataTypes.DECIMAL(10, 2)},
@@ -70,12 +70,12 @@ const Order = sequelize.define('order',{
     // id_locality: {type: DataTypes.INTEGER},
    // id_street: {type: DataTypes.INTEGER},
     house_number: {type: DataTypes.STRING(100)},
-    adress_comment: {type:DataTypes.TEXT('tiny')},
-    data_order: {type: DataTypes.DATEONLY},
+    adress_comment: {type:DataTypes.TEXT( )},
+    date_order: {type: DataTypes.DATEONLY},
     time_order: {type: DataTypes.TIME},
-    anonymized: {type: DataTypes.BOOLEAN},
+    anonymized: {type: DataTypes.BOOLEAN,defaultValue: false},
     //id_type_order: {type: DataTypes.INTEGER},
-    comment:{type: DataTypes.TEXT('tiny')},
+    comment:{type: DataTypes.TEXT( )},
     price:{type:DataTypes.DECIMAL(10, 2)},
     //id_courier: {type: DataTypes.INTEGER},
     //id_florist: {type: DataTypes.INTEGER},
@@ -114,9 +114,9 @@ const Wrapper = sequelize.define('wrapper',{
 const Bouquet = sequelize.define('bouquet',{
     arc: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
     title: {type: DataTypes.STRING(50),unique:true},
-    ready_made:{type:DataTypes.BOOLEAN},
+    ready_made:{type:DataTypes.BOOLEAN,defaultValue:true},
     price:{type:DataTypes.DECIMAL(10, 2)},
-    description: {type:DataTypes.TEXT('tiny')},
+    description: {type:DataTypes.TEXT( )},
     // id_category:{type:DataTypes.INTEGER},
     // id_wrapper:{type:DataTypes.INTEGER},
     img: {type: DataTypes.STRING(), allowNull: false},
@@ -126,7 +126,7 @@ const CompositionOrder = sequelize.define('composition_order',{
     //id_bouquet: {type:DataTypes.INTEGER,primaryKey:true},
     cnt: {type: DataTypes.INTEGER},
     postcard:{type:DataTypes.BOOLEAN},
-    postcard_comment: {type: DataTypes.TEXT('tiny')},
+    postcard_comment: {type: DataTypes.TEXT( )},
 },{ timestamps: false }
 )
 const Flower = sequelize.define('flower',{
@@ -162,8 +162,8 @@ Order.belongsTo(Employee, { as: 'florist', foreignKey: 'floristLogin' });
 //Order.belongsTo(Courier)
 StatusOrder.hasMany(Order)
 Order.belongsTo(StatusOrder)
-TypeOrder.hasMany(Order)
-Order.belongsTo(TypeOrder)
+Delivery.hasMany(Order)
+Order.belongsTo(Delivery)
 Locality.hasMany(Order)
 Order.belongsTo(Locality)
 Street.hasMany(Order)
@@ -203,7 +203,7 @@ module.exports={
     Discount,
     Street,
     StatusOrder,
-    TypeOrder,
+    Delivery,
     Locality,
     Order,
     Category,

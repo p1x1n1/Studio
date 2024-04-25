@@ -23,7 +23,7 @@ export const authRoutes = [
     },
     {
         path: Basket_ROUTE+'/:login',
-        Component: <Basket/>
+        Component: <Basket />
     },
     {
         path: SELECTED+'/:login',
