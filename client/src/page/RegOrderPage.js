@@ -5,6 +5,7 @@ import { ApiService } from '../http/api.service';
 import { useNavigate} from 'react-router-dom';
 import { Context } from '../index';
 import BouquetBasketOrder from '../components/BouquetBasketOrder';
+import BouquetBasketItem from '../components/BouquetBasketItem';
 const { TextArea } = Input;
 
 
@@ -68,8 +69,8 @@ const RegOrderPage = () => {
 
     });
 
-    function onSubmit(){
-        console.log(formData);
+    const SubmitOrder = () => {
+        console.log('formDara submit',formData);
     }
 
     const filterOption = (input, option) =>
@@ -157,7 +158,7 @@ const RegOrderPage = () => {
                                     }}
                                 />
                             </Form.Item>
-                            {!isRecepient && (
+                            {!isRecepient ?
                             <>
                                 <h3>Получатель</h3>
                                 <Form.Item className='form_text' style={{fontSize: 24}} label='Номер телефона получателя:'>
@@ -179,20 +180,19 @@ const RegOrderPage = () => {
                                     </Switch>
                                 </Form.Item>
                             </>
-                            )} 
+                            :<></>} 
                         </Form.Item>
                         <Form.Item className="mb-3" label='Дополнительная информация'>                           
                             <TextArea showCount maxLength={100} 
                             onChange={(value) => setFormData(formData => { return { ...formData, comment: value.target.value}})}
                               />
                         </Form.Item>
-
                     </Form>
                 </Col>
                 <Col md={4}>
                     <div className='frame'>
                         <h4>Ваш заказ:</h4>
-                        {basket.map(bouquet => {
+                        {/* {basket.map(bouquet => {
                             console.log('bouquet',bouquet);
                             <>
                             <BouquetBasketOrder key={bouquet.arc} bouquet={bouquet}/>
@@ -235,11 +235,49 @@ const RegOrderPage = () => {
                                     })}
                                 /> : null}
                         </>
-                        })}         
-                        {basket.map(bouquet => {
+                        })}          */}
+                        {basket.map(bouquet =>  
+                            <>
                             <BouquetBasketOrder key={bouquet.arc} bouquet={bouquet}/>
-                        })}               
-                        <Button id='basket' type='submit' onClick={onSubmit()}>
+                            <Switch className='form_text mb-1' 
+                                checkedChildren='Открытка'
+                                unCheckedChildren='Без открытки'
+                                defaultChecked 
+                                checked={NeedPostCard}
+                                style={{width:'50%', fontSize:'24'}}
+                                size='large'
+                                onChange={() => {                                           
+                                    setNeedPostCard(!NeedPostCard);           
+                                    setBasket(prevBasket => prevBasket.map(item => {
+                                        if (item.arc === bouquet.arc) {
+                                            return {
+                                                ...item,
+                                                need_postcard: NeedPostCard,
+                                                postcard_comment: ''
+                                            };
+                                        }
+                                        return item;
+                                    }));   
+                                    console.log('basket',basket)                  
+                                }}
+                            />
+                            {NeedPostCard ? 
+                                <TextArea showCount maxLength={100}  className='mt-3 mb-3'
+                                    onChange={(value) => 
+                                        setBasket(prevBasket => prevBasket.map(item => {
+                                            if (item.arc === bouquet.arc) {
+                                                return {
+                                                    ...item,
+                                                    postcard_comment: value
+                                                };
+                                            }
+                                            return item;
+                                        }))                                     
+                                    }
+                                /> : null}
+                            </>
+                        )}              
+                        <Button type='submit' id='basket' onClick={SubmitOrder}>
                             Оформить заказ
                          </Button>
                     </div>
