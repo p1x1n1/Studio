@@ -1,7 +1,7 @@
 const Router = require('express')
 const router = new Router
 
-const orderRouter=require('./orderRoutes')
+const orderRouter=require('./order.router.js')
 const localityRouter=require('./locality.router.js')
 const streetRouter=require('./street.router.js')
 const deliveryRouter=require('./delivery.router.js')

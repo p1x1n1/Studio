@@ -42,14 +42,6 @@ const RegOrderPage = () => {
     // const deliveries = [{id_record:1, title: "Самовывозом", price:0}, {id_record:2, title: "Курьером", price:1}, {id_record:3, title: "Экспресс-доставка",price:500}]
     
     const [selectedDelivery,setSelectedDelivery] = useState('');//Создаем массив для хранения выбранного типа доставки
-    const handleDeliveryChange = (id) => {
-        console.log(id);
-        const delivery = deliveries.find(delivery => delivery.id_record === id);
-        setSelectedDelivery(delivery); // Обновляем выбранный тип доставки
-        setFormData(prevState => { return { ...prevState, deliveryIdRecord: id }});
-        console.log(formData);
-    };
-
     const [isRecepient, setIsRecepient] = useState(false); // Состояние для отслеживания кто получатель
     const [RecepientPhone, setRecepientPhone] = useState(''); // Состояние для хранения номера телефона получателя
     const [Anonim, setAnonim] = useState(false); // Состояние для отслеживания нужна ли анонимная доставка
@@ -62,14 +54,56 @@ const RegOrderPage = () => {
         adress_comment: '',
         comment: '',
         deliveryIdRecord: 0,
-        date_order: '',
-        time_order: '',
-        status: 0,
-        price:0,
-
+        date_order: null,
+        time_order: null,
+        statusOrderIdRecord: 1,
+        price: '',
+        userLogin: user.user.login,
     });
+    const handleDeliveryChange = (id) => {
+        console.log(id);
+        const delivery = deliveries.find(delivery => delivery.id_record === id);
+        setSelectedDelivery(delivery); // Обновляем выбранный тип доставки
+        setFormData(prevState => { return { ...prevState, deliveryIdRecord: id }});
+        console.log(formData);
+    };
+    const handleTimeChange = (time) => {
+        const timeString = new Date(time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+        setFormData({
+          ...formData,
+          time_order: timeString,
+        });
+      };
+    const handleDateChange = (date) => {
+        const dateString = new Date(date).toLocaleDateString();
+        setFormData({
+        ...formData,
+        date_order: dateString
+        });
+    };
+    
 
     const SubmitOrder = () => {
+        if(!isRecepient){
+            console.log('Recepient')
+            setFormData({
+                ...formData,
+                comment: "Номер телефона получателя:"+RecepientPhone+'\n'+formData.comment 
+                });
+        }
+        let priceBouquet = 0;//сделать в корзине
+        basket.map(bouquet =>{
+            priceBouquet = priceBouquet + parseFloat(bouquet.price);
+        });
+        console.log('priceBouquet',(priceBouquet+parseFloat(selectedDelivery.price)).toString());
+        setFormData({
+            ...formData,
+            price: (priceBouquet + parseFloat(selectedDelivery.price)).toString()//подумать ещё
+        });
+        apiService.post('/order',formData).then((res) => {
+            console.log(res,'success');
+            basket.map(bouquet =>{});
+        });
         console.log('formDara submit',formData);
     }
 
@@ -110,6 +144,11 @@ const RegOrderPage = () => {
                             <Form.Item label='Дом' className='form_text'>
                                 <Input placeholder="11a"  onChange={(value) => setFormData(formData => { return { ...formData, house_number: value.target.value}})}></Input>
                             </Form.Item>
+                            <Form.Item className="mb-3" label='Комментарий к адресу'>                           
+                                <TextArea showCount maxLength={100} 
+                                onChange={(value) => setFormData(formData => { return { ...formData, adress_comment: value.target.value}})}
+                                />
+                            </Form.Item>
                         </Form.Item>                            
                         <Form.Item>
                             <Row>
@@ -127,7 +166,7 @@ const RegOrderPage = () => {
                                                 format: 'YYYY-MM-DD',
                                                 type: 'mask',
                                             }}
-                                            
+                                            onChange={handleDateChange}
                                             />
                                     </Form.Item>
                                 </Col>
@@ -135,12 +174,13 @@ const RegOrderPage = () => {
                                     <Form.Item label='Стоимость доставки:'>
                                     <Input disabled placeholder = {selectedDelivery? selectedDelivery.price+" руб.":''}/>
                                     </Form.Item>
-                                    <Form.Item name="time-picker" label='Время доставки:'>
+                                    <Form.Item name="time-picker" value={formData.time_order} label='Время доставки:'>
                                         <TimePicker                                        
                                          format='HH:00' 
-                                         onChange={(value) => setFormData(formData => { return { ...formData, date_order: value.target.value}})}
+                                         onChange={handleTimeChange}
                                          />
-                                        {/* <Input type='time'/> */}
+                                        {/* <Input type='time' 
+                                        onChange={(value) => setFormData(formData => { return { ...formData, time_order: value.target.value}})}/> */}
                                     </Form.Item>
                                     <NavLink>Условия доставки</NavLink>
                                     
@@ -192,50 +232,6 @@ const RegOrderPage = () => {
                 <Col md={4}>
                     <div className='frame'>
                         <h4>Ваш заказ:</h4>
-                        {/* {basket.map(bouquet => {
-                            console.log('bouquet',bouquet);
-                            <>
-                            <BouquetBasketOrder key={bouquet.arc} bouquet={bouquet}/>
-                            <Switch className='form_text'
-                                checked={NeedPostCard}
-                                onChange={() => {                                           
-                                    setNeedPostCard(!NeedPostCard);           
-                                    setFormData(formData => { 
-                                        return { 
-                                            ...formData, 
-                                            basket: formData.basket.map(item => {
-                                                if (item.arc === bouquet.arc) {
-                                                    return {
-                                                        ...item,
-                                                        need_postcard: NeedPostCard,
-                                                        postcard_comment: item.postcard_comment || ''
-                                                    };
-                                                }
-                                                return item;
-                                            })
-                                        }
-                                    });                             
-                                }}
-                            />
-                            {NeedPostCard ? 
-                                <TextArea showCount maxLength={100} 
-                                    onChange={(value) => setFormData(formData => { 
-                                        return { 
-                                            ...formData, 
-                                            basket: formData.basket.map(item => {
-                                                if (item.arc === bouquet.arc) {
-                                                    return {
-                                                        ...item,
-                                                        postcard_comment: value.target.value
-                                                    };
-                                                }
-                                                return item;
-                                            })
-                                        }
-                                    })}
-                                /> : null}
-                        </>
-                        })}          */}
                         {basket.map(bouquet =>  
                             <>
                             <BouquetBasketOrder key={bouquet.arc} bouquet={bouquet}/>

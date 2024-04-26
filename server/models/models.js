@@ -73,6 +73,7 @@ const Order = sequelize.define('order',{
     adress_comment: {type:DataTypes.TEXT( )},
     date_order: {type: DataTypes.DATEONLY},
     time_order: {type: DataTypes.TIME},
+    created_date : {type: DataTypes.DATE,defaultValue: DataTypes.NOW},
     anonymized: {type: DataTypes.BOOLEAN,defaultValue: false},
     //id_type_order: {type: DataTypes.INTEGER},
     comment:{type: DataTypes.TEXT( )},
@@ -80,17 +81,7 @@ const Order = sequelize.define('order',{
     //id_courier: {type: DataTypes.INTEGER},
     //id_florist: {type: DataTypes.INTEGER},
     //id_user: {type: DataTypes.INTEGER},
-},{
-    hooks: {
-      beforeCreate: (order) => {
-        order.createdAt = new Date();
-        order.updatedAt = new Date();
-      },
-      beforeUpdate: (order) => {
-        order.updatedAt = new Date();
-      }
-    }
-  }
+},{ timestamps: false }
 )
 const Category = sequelize.define('category',{
     id_record: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
