@@ -102,7 +102,19 @@ const RegOrderPage = () => {
         });
         apiService.post('/order',formData).then((res) => {
             console.log(res,'success');
-            basket.map(bouquet =>{});
+            basket.map(bouquet =>{
+                apiService.post('/ordercomposition/create',{
+                    bouquetArc: bouquet.arc,
+                    orderNumberOrder: res.number_order,
+                    postcard_comment: bouquet.postcard_comment,
+                    postcard: bouquet.need_postcard,
+                    cnt: bouquet.cnt
+                }).then((res) => {
+                    console.log(res,'success');
+                }).catch((err) => {
+                    console.log(err,'error');
+                });
+            });
         });
         console.log('formDara submit',formData);
     }
