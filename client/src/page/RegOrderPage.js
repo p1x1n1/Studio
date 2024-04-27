@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Col, Container, NavLink, Row } from 'react-bootstrap';
-import { DatePicker, Form, Input, Select, Switch, TimePicker } from 'antd';
+import { DatePicker, Form, Input, Progress, Select, Switch, TimePicker } from 'antd';
 import { ApiService } from '../http/api.service';
 import { useNavigate} from 'react-router-dom';
 import { Context } from '../index';
@@ -46,6 +46,7 @@ const RegOrderPage = () => {
     const [RecepientPhone, setRecepientPhone] = useState(''); // Состояние для хранения номера телефона получателя
     const [Anonim, setAnonim] = useState(false); // Состояние для отслеживания нужна ли анонимная доставка
     const [NeedPostCard, setNeedPostCard] = useState(false);
+    const [OrderSubmit, setOrderSubmit] = useState(false);
     const [formData,setFormData] = useState({
         anonymized: false,
         localityIdRecord:0,
@@ -57,7 +58,7 @@ const RegOrderPage = () => {
         date_order: null,
         time_order: null,
         statusOrderIdRecord: 1,
-        price: '',
+        price: 0,
         userLogin: user.user.login,
     });
     const handleDeliveryChange = (id) => {
@@ -84,7 +85,8 @@ const RegOrderPage = () => {
     
 
     const SubmitOrder = () => {
-        if(!isRecepient){
+        form.validateFields()
+        .then (async () =>   {if(!isRecepient){
             console.log('Recepient')
             setFormData({
                 ...formData,
@@ -98,7 +100,8 @@ const RegOrderPage = () => {
         console.log('priceBouquet',(priceBouquet+parseFloat(selectedDelivery.price)).toString());
         setFormData({
             ...formData,
-            price: (priceBouquet + parseFloat(selectedDelivery.price)).toString()//подумать ещё
+            price: (priceBouquet + parseFloat(selectedDelivery.price))
+            //price: (priceBouquet + parseFloat(selectedDelivery.price)).toString()//подумать ещё
         });
         apiService.post('/order',formData).then((res) => {
             console.log(res,'success');
@@ -115,21 +118,47 @@ const RegOrderPage = () => {
                     console.log(err,'error');
                 });
             });
+            apiService.delete('/basket/'+user.user.login)
+            .catch((err) => {
+                console.log(err,'error');
+            });
+            setOrderSubmit(true);
+        })
+        .catch((err) => {
+            console.log(err,'error');
         });
         console.log('formDara submit',formData);
+        })
     }
 
     const filterOption = (input, option) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+    const validateMessages = {
+        required: 'Обязательное поле!',
+        
+    }
+    const [form] = Form.useForm()
+
     return (
        <Container>
             <h1 className='form_text'>Оформление заказа</h1>
+            { !OrderSubmit ?
             <Row>
                 <Col md={8}>
-                    <Form layout="vertical" className='form_text'>
+                    <Form layout="vertical" className='form_text'
+                    validateMessages={validateMessages}
+                    form={form}
+                    >
                         <Form.Item label='Адрес' >
                             {/* <h3>Адрес:</h3> */}
-                            <Form.Item label='Населённый пункт' className='form_text'>
+                            <Form.Item label='Населённый пункт' className='form_text' 
+                            name='locality'
+                            rules={[
+								{
+									required: true,
+								}
+							]}>
                                 <Select 
                                 showSearch
                                 placeholder="Самара"
@@ -141,7 +170,12 @@ const RegOrderPage = () => {
                                 labelInValue className='form_text'>
                                 </Select>
                             </Form.Item>
-                            <Form.Item label='Улица' className='form_text'>
+                            <Form.Item label='Улица' className='form_text' name='street'
+                            rules={[
+								{
+									required: true,
+								}
+							]}>
                                 <Select 
                                 showSearch
                                 placeholder="Краснодонская"
@@ -153,7 +187,12 @@ const RegOrderPage = () => {
                                 labelInValue className='form_text'>
                                 </Select>
                             </Form.Item>
-                            <Form.Item label='Дом' className='form_text'>
+                            <Form.Item label='Дом' className='form_text' name='house'
+                            rules={[
+								{
+									required: true,
+								}
+							]}>
                                 <Input placeholder="11a"  onChange={(value) => setFormData(formData => { return { ...formData, house_number: value.target.value}})}></Input>
                             </Form.Item>
                             <Form.Item className="mb-3" label='Комментарий к адресу'>                           
@@ -165,14 +204,24 @@ const RegOrderPage = () => {
                         <Form.Item>
                             <Row>
                                 <Col md={6}>
-                                    <Form.Item label='Способ доставки:'>
+                                    <Form.Item label='Способ доставки:' name='delivery'
+                                    rules={[
+                                        {
+                                            required: true,
+                                        }
+                                    ]}>
                                         <Select
                                         onChange={handleDeliveryChange}
                                         options={deliveries.map(localities => ({ value: localities.id_record, label: localities.title }))}
                                         >
                                         </Select>
                                     </Form.Item>
-                                    <Form.Item label='Дата доставки:'>
+                                    <Form.Item label='Дата доставки:'  name='date-picker'
+                                    rules={[
+                                        {
+                                            required: true,
+                                        }
+                                    ]}>
                                         <DatePicker
                                             format={{
                                                 format: 'YYYY-MM-DD',
@@ -186,7 +235,13 @@ const RegOrderPage = () => {
                                     <Form.Item label='Стоимость доставки:'>
                                     <Input disabled placeholder = {selectedDelivery? selectedDelivery.price+" руб.":''}/>
                                     </Form.Item>
-                                    <Form.Item name="time-picker" value={formData.time_order} label='Время доставки:'>
+                                    <Form.Item name="time-picker" 
+                                    value={formData.time_order} label='Время доставки:'
+                                    rules={[
+                                        {
+                                            required: true,
+                                        }
+                                    ]}>
                                         <TimePicker                                        
                                          format='HH:00' 
                                          onChange={handleTimeChange}
@@ -213,7 +268,13 @@ const RegOrderPage = () => {
                             {!isRecepient ?
                             <>
                                 <h3>Получатель</h3>
-                                <Form.Item className='form_text' style={{fontSize: 24}} label='Номер телефона получателя:'>
+                                <Form.Item className='form_text' style={{fontSize: 24}} 
+                                label='Номер телефона получателя:' name='phoneRecepient'
+                                rules={[
+								{
+									required: true,
+								}
+							    ]}>
                                 <Input  
                                     className='form_text'
                                     type="phone"
@@ -250,7 +311,7 @@ const RegOrderPage = () => {
                             <Switch className='form_text mb-1' 
                                 checkedChildren='Открытка'
                                 unCheckedChildren='Без открытки'
-                                defaultChecked 
+                                
                                 checked={NeedPostCard}
                                 style={{width:'50%', fontSize:'24'}}
                                 size='large'
@@ -261,26 +322,28 @@ const RegOrderPage = () => {
                                             return {
                                                 ...item,
                                                 need_postcard: NeedPostCard,
-                                                postcard_comment: ''
+                                                postcard_comment:'',
                                             };
                                         }
                                         return item;
                                     }));   
-                                    console.log('basket',basket)                  
+                                    console.log('basket',basket,NeedPostCard);                  
                                 }}
                             />
                             {NeedPostCard ? 
-                                <TextArea showCount maxLength={100}  className='mt-3 mb-3'
-                                    onChange={(value) => 
+                                <TextArea showCount maxLength={100} rows={4} className='mt-3 mb-3'
+                                    onChange={(value) => {                                        
                                         setBasket(prevBasket => prevBasket.map(item => {
                                             if (item.arc === bouquet.arc) {
                                                 return {
                                                     ...item,
-                                                    postcard_comment: value
+                                                    postcard_comment: value.target.value
                                                 };
                                             }
                                             return item;
-                                        }))                                     
+                                        })) 
+                                        console.log('basket',basket,value.target.value);
+                                        }                                                                            
                                     }
                                 /> : null}
                             </>
@@ -291,6 +354,13 @@ const RegOrderPage = () => {
                     </div>
                 </Col>
             </Row>
+            : 
+            <div className='d-glex justify-content-center'>
+                <h1>Заявка на заказ отправлена</h1>
+                <Progress type="circle" percent={100} />
+                <h3>Ваш заказ будет обработан в ближайшее время</h3>
+            </div>
+           }
        </Container>
     );
 };
