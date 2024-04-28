@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Accordion, Button, Stack } from 'react-bootstrap';
 import { ApiService } from '../http/api.service';
 import BoquetItemOrder from './BouquetItemOrder';
-import { Modal, Table } from 'antd';
+import { Modal, Table, message } from 'antd';
 import { Context } from '../index';
 
 const employee_columns = [
@@ -36,6 +36,7 @@ const employee_columns = [
 const apiService = new ApiService ();
 
 const AdminOrder = () => {
+    //Добавить разделы текущие заказы/ готовы к доставке / завершены
     const {user} = useContext(Context)
     const [orders,setOrders] = useState([])
     const [composition, setComposition] = useState([]);
@@ -93,13 +94,23 @@ const AdminOrder = () => {
         fetchDataCourier();
 	}, [])
 
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const success = (number_order) => {
+        messageApi.open({
+        type: 'success',
+        content: 'Статус заказа '+number_order+' изменён на "Принят"',
+        duration: 5,
+        });
+    };
+
     function saveStatus(number_order){//добавить отменён
         apiService.post('/order',{
             number_order: number_order,
             statusOrderIdRecord: 2,
             employeeLogin: user.user.login,
         }).then(() =>
-            alert('Статус заказа '+number_order+' изменён на "Принят"') 
+            success(number_order)
         )
         fetchDataOrder();
         setVisibleStatusChange(false);
@@ -133,6 +144,7 @@ const AdminOrder = () => {
     }
     return(
         <div className='mt-2'>
+            {contextHolder}
          {orders.map((order)=>
            <>
                 <Accordion className='mb-0 mt-0'>
