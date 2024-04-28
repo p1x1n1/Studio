@@ -12,14 +12,14 @@ const EmployerPanel = () => {
     // console.log(post);
     const navigate = useNavigate();
     return (
-        <Container className='mb-3'>
+        <div className='mb-3'>
             <Row>
                  { (post === 'Администратор') ?
                     <Admin/> 
                     : (post=== 'Флорист') ? <Col md={6} ><Button className='pupleButton mb-3' variant='outline-light' onClick={()=>navigate(INVENTORY)} >Инвентаризация</Button></Col> :<></> }
                <Col md={6}><Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(ORDER) } >Текущие заказы</Button></Col>
             </Row>
-        </Container>
+        </div>
         
     );
 };

@@ -23,7 +23,7 @@ class employeeController {
         employee.password_=undefined;
 		res.json(employee.rows)
 	}
-	async getFlorist(req, res) {
+	async getFlorist(req, res) {//переписать без ps
 		const employee = await db.query(`
         SELECT * FROM employees
 		where employees."postIdRecord" = 2;
@@ -31,10 +31,10 @@ class employeeController {
         employee.password_=undefined;
 		res.json(employee.rows)
 	}
-	async getCourier(req, res) {
+	async getCourier(req, res) {//переписать без ps
 		const employee = await db.query(`
         SELECT * FROM employees
-		where employees."postIdRecord" = 2;
+		where employees."postIdRecord" = 3;
         `)
         employee.password_=undefined;
 		res.json(employee.rows)

@@ -5,7 +5,7 @@ import "../css/Order.css"
 const CourierOrder = () => {
     const order =  {number:34, idStatusOrder:3};
     return(
-    <Container>
+    <div>
         <Accordion defaultActiveKey="0">
     <Accordion.Item eventKey="0" className='pupleAccordion'>
         <Accordion.Header title={'Номер заказа:' + order.number}></Accordion.Header>
@@ -24,7 +24,7 @@ const CourierOrder = () => {
         </Accordion.Body>
         </Accordion.Item>
     </Accordion>
-    </Container>
+    </div>
         )
 };
  

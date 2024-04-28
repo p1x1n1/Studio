@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Admin = () => {
     const navigate = useNavigate();
     return (
-        <Container className='mt-3'>
+        <div className='mt-3'>
             <Row className='mb-3'>
                 {/* <Col md={3}><Button className='pupleButton' variant='outline-light' > Букеты</Button></Col> */}
                 <Col md={4}><Button className='pupleButton' variant='outline-light' onClick={()=>navigate(USER)} > Пользователи</Button></Col>
@@ -15,7 +15,7 @@ const Admin = () => {
                 <Col md={3}><Button className='greenButton'> Удалить:</Button></Col> */}
                 <Col md={5}><Button className='pupleButton' variant='outline-light' onClick={()=>navigate(INVENTORY)} >Инвентаризация</Button></Col>
             </Row>
-        </Container>
+        </div>
     );
 };
 

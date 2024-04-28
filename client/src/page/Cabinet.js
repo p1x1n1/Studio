@@ -48,7 +48,7 @@ const Cabinet = () => {
     // const postId = Employer.postId ;
     // console.log(postId);
     return (
-        <Container className='mt-4'>
+        <div className='mt-4'>
             <Row>
                 <Col md={5}>
                     <FormControl type='image' src={avatar}/>
@@ -59,7 +59,7 @@ const Cabinet = () => {
                         <h1> Email: {user.user.email}</h1>
                         <h1> Имя: {user.user.name_ ?  user.user.name_ : <></>}</h1>
                         <h1> Фамилия: {user.user.surname ?  user.user.surname : <></>}</h1>
-                        <h1> Отчество:{user.user.lastname ?  user.user.lastname : <></>}</h1>
+                        <h1> Отчество: {user.user.lastname ?  user.user.lastname : <></>}</h1>
                     </div>
                     <Button className='pupleButton mb-3' variant='outline-light' 
                     onClick={() => {setModalVisible(true); setUserRecord(user.user)}}> Редактировать информация </Button>
@@ -139,7 +139,7 @@ const Cabinet = () => {
 						
 					</Form>
 				</Modal>
-        </Container>
+        </div>
         
     );
 };

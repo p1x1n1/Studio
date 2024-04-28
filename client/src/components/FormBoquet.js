@@ -72,7 +72,7 @@ const FormBoquet = () => {
  
     
     return (
-        <Container className='form'>
+        <div className='form'>
                     <Form >
                         <Row>
                             <Col md = {6} >
@@ -161,7 +161,7 @@ const FormBoquet = () => {
                                 <b style={{color:'blueviolet',marginLeft: 6}}>Добавить в корзину</b>
                          </Button>
                     </Form>
-            </Container>
+            </div>
     );
 };
 

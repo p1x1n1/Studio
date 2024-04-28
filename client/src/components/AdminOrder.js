@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Accordion, Button, Stack } from 'react-bootstrap';
 import { ApiService } from '../http/api.service';
 import BoquetItemOrder from './BouquetItemOrder';
 import { Modal, Table } from 'antd';
+import { Context } from '../index';
+
 const employee_columns = [
 	{
 		title: 'Логин',
@@ -30,20 +32,27 @@ const employee_columns = [
 		key: 'lastname'
 	},
 ]
+
 const apiService = new ApiService ();
+
 const AdminOrder = () => {
+    const {user} = useContext(Context)
     const [orders,setOrders] = useState([])
     const [composition, setComposition] = useState([]);
 
-    const [selectOrder,setSelectOrder] = useState('');
+    const [selectOrder,setSelectOrder] = useState({});
+
+    const [visibleStatusChange, setVisibleStatusChange] = useState(false);
+
     const [visibleFloristSelect, setVisibleFloristSelect] = useState(false);
-    //const [visibleCourierSelect, setVisibleCourierSelect] = useState(false);
-    //const [visibleStatusChange, setVisibleStatusChange] = useState(false);
+    const [visibleCourierSelect, setVisibleCourierSelect] = useState(false);
+    
     const [florists, setFlorists] = useState([]);
-    //const [couriers, setCouriers] = useState([]);
     const [selectFlorist, setFlorist] = useState('');
     const [VisibleConfirmFlorist, setVisibleConfirmFlorist] = useState(false);
-    //const [selectCourier, setCourier] = useState('')
+    const [couriers, setCouriers] = useState([]);
+    const [selectCourier, setCourier] = useState('')
+    const [VisibleConfirmCourier, setVisibleConfirmCourier] = useState(false);
 
     function fetchDataOrder(){
         apiService.get('/order/admin')
@@ -53,7 +62,6 @@ const AdminOrder = () => {
             {
                 apiService.get('/ordercomposition/'+order.number_order).then((res) => {
                     setComposition(res);
-                    //console.log(res,'composition');
                 }).catch((err) => {
                     console.log(err,'error');
                 });
@@ -63,20 +71,40 @@ const AdminOrder = () => {
 				};
 			});
 			setOrders(updatedOrders);
-            //console.log(updatedOrders,'updatedOrders');
         }) 
     }
     function fetchDataFlorist(){
         apiService.get('/employee/florist')
         .then( (response) => 
            { setFlorists(response);
-            console.log(florists,'florists');}
+            //console.log(florists,'florists');
+        })
+    }
+    function fetchDataCourier(){
+        apiService.get('/employee/courier')
+        .then( (response) => 
+           { setCouriers(response);
+            console.log(couriers,'couriers');}
         )
     }
     useEffect(() => {
 		fetchDataOrder();
 		fetchDataFlorist();
+        fetchDataCourier();
 	}, [])
+
+    function saveStatus(number_order){//добавить отменён
+        apiService.post('/order',{
+            number_order: number_order,
+            statusOrderIdRecord: 2,
+            employeeLogin: user.user.login,
+        }).then(() =>
+            alert('Статус заказа '+number_order+' изменён на "Принят"') 
+        )
+        fetchDataOrder();
+        setVisibleStatusChange(false);
+    }
+
     function closeFloristSelect() {
 		setFlorist({})
         setVisibleConfirmFlorist(false)
@@ -90,12 +118,25 @@ const AdminOrder = () => {
         fetchDataOrder();//можно убрать чтобы меньше нагрузки было
         closeFloristSelect();
     }
+    function closeCourierSelect() {
+		setCourier({})
+        setVisibleConfirmCourier(false)
+		setVisibleCourierSelect(false)
+	}
+    function saveCourierSelect(number_order){
+        apiService.post('/order',{
+            number_order: number_order,
+            courierLogin: selectCourier,
+        })
+        fetchDataOrder();//можно убрать чтобы меньше нагрузки было
+        closeCourierSelect();
+    }
     return(
-        <>
+        <div className='mt-2'>
          {orders.map((order)=>
            <>
-                <Accordion>
-                    <Accordion.Item onClick={() => setSelectOrder(order.number_order)}>
+                <Accordion className='mb-0 mt-0'>
+                    <Accordion.Item onClick={() => setSelectOrder({number_order: order.number_order,floristLogin:order.floristLogin,courierLogin:order.courierLogin})}>
                         <Accordion.Header>
                             <div className='d-flex justify-content-between'>
                                 <h5>Номер заказа: {order.number_order} </h5>
@@ -126,27 +167,24 @@ const AdminOrder = () => {
                                 <p>Флорист: {order.floristLogin}</p>
                                 <p>Курьер: {order.courierLogin}</p>
                             <Stack direction='horizontal' gap={3} className='mt-3 mb-2'>
-                                <Button type='submit' className='pupleButton ' variant='outlined-light'  
+                                <Button type='submit' className='pupleButton ' variant='outline-light' onClick={()=>{  setVisibleStatusChange(true);}}
                                     > Сменить статус заказа на 'Принят'</Button>
-                                <Button type='submit' className='greenButton' variant='outlined-light'  onClick={()=>{  setVisibleFloristSelect(true);}}
+                                <Button type='submit' className='greenButton' variant='outline-success'  onClick={()=>{  setVisibleFloristSelect(true);}}
                                     > Назначить Флориста</Button>
-                                <Button type='submit' className='greenButton' variant='outlined-light'  //onClick={setVisibleCourierSelect(true)}
+                                <Button type='submit' className='greenButton' variant='outline-success'  onClick={()=>setVisibleCourierSelect(true)}
                                     > Назначить Курьера</Button>
                             </Stack>
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>
             <Modal
-    		title= {'Назначить флориста для заказа номер: ' + selectOrder}
+    		title= {'Назначить флориста для заказа номер: ' + selectOrder.number_order}
     		open={visibleFloristSelect}
     		cancelText='Отмена'
     		onCancel={() => closeFloristSelect()}
     		centered
             width={1200}
     		footer={[
-                // <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => saveFloristSelect()} disabled={!FlowerRecord.title}>
-                //                     Сохранить
-                // </Button>,
                 <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => closeFloristSelect()}
                 >Отмена</Button>
     		]
@@ -167,23 +205,80 @@ const AdminOrder = () => {
                 </Table>
             </Modal>
             <Modal
-                title= {'Подтвердить назначения флориста ' + selectFlorist + ' на заказ ' + selectOrder + '?'}
+                title= {'Подтвердить назначения флориста ' + selectFlorist + ' на заказ ' + selectOrder.number_order + '?'}
                 open={VisibleConfirmFlorist}
     		    okText='Сохранить'
     		    cancelText='Отмена'
     		    onCancel={() => closeFloristSelect()}
     		    centered
                 footer={[
-                    <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => saveFloristSelect(selectOrder)}>
+                    <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => saveFloristSelect(selectOrder.number_order)}>
                                         Сохранить
                     </Button>,
                     <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => closeFloristSelect()}
                     >Отмена</Button>
                 ]
                 }></Modal>
+            <Modal
+    		title= {'Назначить курьера для заказа номер: ' + selectOrder.number_order}
+    		open={visibleCourierSelect}
+    		cancelText='Отмена'
+    		onCancel={() => closeCourierSelect()}
+    		centered
+            width={1200}
+    		footer={[
+                <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => closeCourierSelect()}
+                >Отмена</Button>
+    		]
+    		}
+            >
+                <Table
+                    dataSource={couriers}
+                    columns={employee_columns}
+                    onRow={rec => {//поведение для строчки
+                        return {
+                            onClick: () =>{ 
+                                setCourier(rec.login);
+                                setVisibleConfirmCourier(true);
+                            }
+                        }
+                    }}
+                >
+                </Table>
+            </Modal>
+            <Modal
+                title= {'Подтвердить назначения курьера ' + selectCourier + ' на заказ ' + selectOrder.number_order + '?'}
+                open={VisibleConfirmCourier}
+    		    okText='Сохранить'
+    		    cancelText='Отмена'
+    		    onCancel={() => closeCourierSelect()}
+    		    centered
+                footer={[
+                    <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => saveCourierSelect(selectOrder.number_order)}>
+                                        Сохранить
+                    </Button>,
+                    <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => closeCourierSelect()}
+                    >Отмена</Button>
+                ]
+                }></Modal>
+            <Modal
+                title= {'Подтвердить смену статуса заказа '  + selectOrder.number_order + ' на "Принят"?'}
+                open={visibleStatusChange}
+    		    okText='Да'
+    		    cancelText='Нет'
+    		    onCancel={() => setVisibleStatusChange(false)}
+    		    centered
+                footer={[
+                    <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => saveStatus(selectOrder.number_order)} disabled={!selectOrder.floristLogin && !selectOrder.courierLogin}>
+                     Да
+                    </Button>,
+                    <Button className='mb-3 greenButton' variant='outlined-light' onClick={() => setVisibleStatusChange(false)}
+                    >Нет</Button>
+                ]
+                }></Modal>
            </>
         )}
-        </>
+        </div>
     );
 }
  

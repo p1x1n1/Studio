@@ -15,7 +15,7 @@ const AppRouter = observer(() => {
     //const isAuth = false
 
     return (
-       <Container className='Container'>
+       <div className='Container'>
             <Routes>
                 {user.isAuth && authRoutes.map(({path,Component}) =>
                       <Route key={path} path={path} element={Component} />
@@ -27,7 +27,7 @@ const AppRouter = observer(() => {
                 
                 <Route path="*" element={ <Navigate to={SHOP_ROUTE} replace={true} /> } />
             </Routes>
-       </Container>
+       </div>
     );
 });
 
