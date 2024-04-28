@@ -7,7 +7,9 @@ class OrderController{
 		console.log(JSON.stringify(req.body));
         let order
 		if (number_order) {
-			order = await db.query('UPDATE orders set "statusOrderIdRecord" = ($1),"employeeLogin"  = ($2), "courierLogin"  = ($3), "floristLogin"  = ($4) where number_order = ($5) RETURNING *', [,statusOrderIdRecordRecord,employeeLogin, courierLogin, floristLogin,number_order])
+            if (floristLogin){ order = await db.query('UPDATE orders set "floristLogin"  = ($1) where number_order = ($2) RETURNING *', [floristLogin,number_order])}
+
+			    //order = await db.query('UPDATE orders set "statusOrderIdRecord" = ($1),"employeeLogin"  = ($2), "courierLogin"  = ($3), "floristLogin"  = ($4) where number_order = ($5) RETURNING *', [statusOrderIdRecordRecord,employeeLogin, courierLogin, floristLogin,number_order])
 		} else {
 			order = await db.query('INSERT INTO orders ("statusOrderIdRecord", "deliveryIdRecord", "localityIdRecord", "streetIdRecord", "house_number", adress_comment, date_order, time_order, anonymized, comment, price, "userLogin") values ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *', [statusOrderIdRecord, deliveryIdRecord, localityIdRecord, streetIdRecord, house_number, adress_comment, date_order, time_order, anonymized, comment, price, userLogin])
 		}
