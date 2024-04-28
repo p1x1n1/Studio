@@ -45,7 +45,7 @@ const options = [
     },
     {
         label: 'Завершены',
-        value: 6
+        value: 7
     },
     {
         label: 'Все',
