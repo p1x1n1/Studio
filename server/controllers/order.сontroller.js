@@ -31,34 +31,15 @@ class OrderController{
         inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
         inner join users on users.login = orders."userLogin"
         inner join localities on localities.id_record = orders."localityIdRecord"
-        inner join streets on streets.id_record = orders."streetIdRecord
+        inner join streets on streets.id_record = orders."streetIdRecord"
         ;`
         const orders = await db.query(s)
         //const orders = await Order.findAll()
         return res.json(orders.rows)
     }
     async getAdmin(req,res){
-        const s  = `SELECT 
-        *,
-        status_orders.title as status_order_title,
-        deliveries.title as type_order_title,deliveries.price as delivery_price_delivery,
-        users.phone as users_phone,users.name_ as users_name, users.surname as users_surname, users.lastname as users_lastname, 
-        streets.title as streets_name, localities.title as localities_name
-        from orders
-        inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
-        inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
-        inner join users on users.login = orders."userLogin"
-        inner join localities on localities.id_record = orders."localityIdRecord"
-        inner join streets on streets.id_record = orders."streetIdRecord"
-        where "statusOrderIdRecord" = 1
-        Order by "createdAt" asc;
-        ;`
-        const orders = await db.query(s)
-        //const orders = await Order.findAll()
-        return res.json(orders.rows)
-    }
-    async getFlorist(req,res){
-        const status = 2;
+        const status = req.params.status;
+        //console.log(req.params,'req')
         const s  = `SELECT 
         *,
         status_orders.title as status_order_title,
@@ -75,6 +56,29 @@ class OrderController{
         Order by "createdAt" asc;
         ;`
         const orders = await db.query(s,[status])
+        //const orders = await Order.findAll()
+        return res.json(orders.rows)
+    }
+    async getFlorist(req,res){
+        const status = req.params.status;
+        const login = req.params.login;
+        // console.log(req.params,'params')
+        const s  = `SELECT 
+        *,
+        status_orders.title as status_order_title,
+        deliveries.title as type_order_title,deliveries.price as delivery_price_delivery,
+        users.phone as users_phone,users.name_ as users_name, users.surname as users_surname, users.lastname as users_lastname, 
+        streets.title as streets_name, localities.title as localities_name
+        from orders
+        inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
+        inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
+        inner join users on users.login = orders."userLogin"
+        inner join localities on localities.id_record = orders."localityIdRecord"
+        inner join streets on streets.id_record = orders."streetIdRecord"
+        where "statusOrderIdRecord" = ($1) and "floristLogin" = ($2)
+        Order by "createdAt" asc;
+        ;`
+        const orders = await db.query(s,[status,login])
         //const orders = await Order.findAll()
         return res.json(orders.rows)
     }
