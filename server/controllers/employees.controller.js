@@ -23,6 +23,22 @@ class employeeController {
         employee.password_=undefined;
 		res.json(employee.rows)
 	}
+	async getFlorist(req, res) {
+		const employee = await db.query(`
+        SELECT * FROM employees
+		where employees."postIdRecord" = 2;
+        `)
+        employee.password_=undefined;
+		res.json(employee.rows)
+	}
+	async getCourier(req, res) {
+		const employee = await db.query(`
+        SELECT * FROM employees
+		where employees."postIdRecord" = 2;
+        `)
+        employee.password_=undefined;
+		res.json(employee.rows)
+	}
 	async getOneEmployee(req, res) {
 		const login = req.params.login
 		const employee = await db.query('SELECT * FROM employees WHERE login = ($1)',[login])

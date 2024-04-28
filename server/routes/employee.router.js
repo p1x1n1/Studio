@@ -5,6 +5,8 @@ const employeeController = require('../controllers/employees.controller')
 router.post('/',employeeController.createEmployee)
 router.post('/:login',employeeController.updateEmployee)
 router.get('/',employeeController.getEmployee)
+router.get('/florist',employeeController.getFlorist)
+router.get('/courier',employeeController.getCourier)
 router.get('/:login', employeeController.getOneEmployee)
 router.delete('/:login', employeeController.deleteEmployee)
 

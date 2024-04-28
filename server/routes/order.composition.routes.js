@@ -4,8 +4,7 @@ const orderCompositionController = require('../controllers/order.composition.con
 
 router.post('/create', orderCompositionController.createOrderComposition)
 router.get('/update/', orderCompositionController.getOrderCompositions)
-router.get('/:arc_orders', orderCompositionController.getOneOrderComposition)
-router.get('/:arc_orders/:id_type_flowers', orderCompositionController.getOneOrderComposition)
+router.get('/:orderNumberOrder', orderCompositionController.getOrderComposition)
 router.delete('/:arc_orders', orderCompositionController.deleteOrderComposition)
 router.delete('/:arc_orders/:id_type_flowers', orderCompositionController.deleteOrderFlowerComposition)
 

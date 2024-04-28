@@ -17,9 +17,17 @@ class OrderCompositionController {
 		const order = await db.query('SELECT "orderNumberOrder","bouquetArc", flowers.name_type as flower_name FROM composition_orders INNER JOIN flowers on flowers.id_type=composition_orders.bouquetArc ORDER BY orderNumberOrder,bouquetArc ')
 		res.json(order.rows)
 	}
-	async getOneOrderComposition(req, res) {
+	async getOrderComposition(req, res) {
 		const orderNumberOrder = req.params.orderNumberOrder
-		const order = await db.query('SELECT "orderNumberOrder","bouquetArc", flowers.name_type as flower_name FROM composition_orders INNER JOIN flowers on flowers.id_type=composition_orders.bouquetArc WHERE orderNumberOrder = ($1)',[orderNumberOrder])
+		const order = await db.query(`
+		SELECT arc,composition_orders.cnt,postcard_comment,postcard,bouquets.title as title, ready_made,bouquets.img as img,
+		wrappers.title as wrapper_name
+		FROM composition_orders 
+		INNER JOIN bouquets on bouquets.arc = composition_orders."bouquetArc" 
+		Inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record
+		WHERE "orderNumberOrder" =($1)				
+		`
+		,[orderNumberOrder])
 		res.json(order.rows)
 	}
 	async getOneOrderFlowerComposition(req, res) {

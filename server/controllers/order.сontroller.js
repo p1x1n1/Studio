@@ -19,37 +19,57 @@ class OrderController{
         const s  = `SELECT 
         *,
         status_orders.title as status_order_title,
-        delivery.title as type_order_title,delivery.price as delivery_price_delivery,
+        deliveries.title as type_order_title,deliveries.price as deliveries_price_deliveries,
         users.phone as users_phone,users.name_ as users_name, users.surname as users_surname, users.lastname as users_lastname, 
         streets.title as streets_name, localities.title as localities_name
-    from orders
-    inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
-    inner join delivery on delivery.id_record = orders."deliveryIdRecord"
-    inner join users on users.login = orders."userLogin"
-    inner join localities on localities.id_record = orders."localityIdRecord"
-    inner join streets on streets.id_record = orders."streetIdRecord"
-    ;`
-        const order = await db.query(s)
+        from orders
+        inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
+        inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
+        inner join users on users.login = orders."userLogin"
+        inner join localities on localities.id_record = orders."localityIdRecord"
+        inner join streets on streets.id_record = orders."streetIdRecord
+        ;`
+        const orders = await db.query(s)
         //const orders = await Order.findAll()
-        return res.json(orders)
+        return res.json(orders.rows)
     }
-    async getOne (req,res){
-        const number_order = req.params.number_order;
+    async getAdmin(req,res){
         const s  = `SELECT 
         *,
         status_orders.title as status_order_title,
-        delivery.title as type_order_title,delivery.price as delivery_price_delivery,
+        deliveries.title as type_order_title,deliveries.price as delivery_price_delivery,
         users.phone as users_phone,users.name_ as users_name, users.surname as users_surname, users.lastname as users_lastname, 
         streets.title as streets_name, localities.title as localities_name
-    from orders
-    inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
-    inner join delivery on delivery.id_record = orders."deliveryIdRecord"
-    inner join users on users.login = orders."userLogin"
-    inner join localities on localities.id_record = orders."localityIdRecord"
-    inner join streets on streets.id_record = orders."streetIdRecord"
-    where number_orders = ($1)
-    ;`;
-    const order = await db.query(s,[number_order])
+        from orders
+        inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
+        inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
+        inner join users on users.login = orders."userLogin"
+        inner join localities on localities.id_record = orders."localityIdRecord"
+        inner join streets on streets.id_record = orders."streetIdRecord"
+        where "statusOrderIdRecord" = 1
+        ;`
+        const orders = await db.query(s)
+        //const orders = await Order.findAll()
+        return res.json(orders.rows)
+    }
+    
+    async getOne (req,res){
+        const number_order = req.params.number_order;
+        const order = await db.query(`
+        SELECT
+        *,
+        status_orders.title as status_order_title,
+        deliveries.title as type_order_title,deliveries.price as deliveries_price_deliveries,
+        users.phone as users_phone,users.name_ as users_name, users.surname as users_surname, users.lastname as users_lastname, 
+        streets.title as streets_name, localities.title as localities_name
+        from orders
+        inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
+        inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
+        inner join users on users.login = orders."userLogin"
+        inner join localities on localities.id_record = orders."localityIdRecord"
+        inner join streets on streets.id_record = orders."streetIdRecord"
+        where number_order = ($1)
+        ;` ,[number_order])
     }
 }
 
