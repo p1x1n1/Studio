@@ -12,8 +12,8 @@ const Shop = () => {
     const navigate = useNavigate()
     return (
         <>
-            <Container >
-                <Carousel >
+            <div className='d-flex flex-column justify-content-center' >
+                <Carousel style={{width:'98%'}} >
                     <Carousel.Item >
                         <Image src={ExampleCarouselImage} className="d-block w-100 img-fluid" text="First slide" />
                         <Carousel.Caption>
@@ -37,7 +37,7 @@ const Shop = () => {
                     </Carousel.Item>
                 </Carousel>
                <BouquetList/>
-            </Container>
+            </div>
         </>
     );
 };

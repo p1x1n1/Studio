@@ -1,4 +1,4 @@
-import { Form, Button, Input, Table, Modal, Select } from 'antd'
+import { Form, Button, Input, Table, Modal, Select, Segmented } from 'antd'
 import { ApiService } from '../http/api.service'
 import { useEffect, useState } from 'react'
 
@@ -30,6 +30,18 @@ const wrapper_columns = [
 		dataIndex: 'img',
 		key: 'img'
 	}
+]
+const category_columns = [
+	{
+		title: '№',
+		dataIndex: 'id_record',
+		key: 'id_record'
+	},
+	{
+		title: 'Название',
+		dataIndex: 'title',
+		key: 'title'
+	},
 ]
 const flower_columns = [
 	{
@@ -118,14 +130,34 @@ const boquet_columns = [
 	}
 ]
 
-
+const options = [
+    {
+        label: 'Букеты',
+        value: 1
+    },
+    {
+        label: 'Цветы',
+        value: 2
+    },
+    {
+        label: 'Упаковки',
+        value: 3
+    },
+    {
+        label: 'Категории',
+        value: 4
+    },
+]
 
 function Inventory() {
 	useEffect(() => {
 		fetchDataFlower();
 		fetchDataWrapper();
 		fetchDataBoquet();
+		fetchDataCategory();
 	}, [])
+	// let status = 1;
+	const [status,setStatus] = useState(1);
 	//FLOWER
 	const [flower,setFlower] = useState([])
 
@@ -183,7 +215,7 @@ function Inventory() {
 	function showWrapperItem(recId) {
 		recId
 			? apiService.get('/wrapper/' + recId).then(res => {//promise - then catch
-					setFlowerRecord(res)
+					setWrapperRecord(res)
 					setModalVisibleWrapper(true)
 			  })
 			: setModalVisibleWrapper(true)
@@ -205,6 +237,46 @@ function Inventory() {
 	function closeWrapper() {
 		setWrapperRecord({})
 		setModalVisibleWrapper(false)
+	}
+
+	//Category
+	const [category,setCategory] = useState([])
+
+	function fetchDataCategory() {
+		apiService.get('/category').then(res => {
+			setCategory(res);
+		})
+		console.log('category',category)
+	}
+
+	const [modalVisibleCategory, setModalVisibleCategory] = useState(false)
+	const [CategoryRecord, setCategoryRecord] = useState({})
+
+	function showCategoryItem(recId) {
+		recId
+			? apiService.get('/category/' + recId).then(res => {//promise - then catch
+					setCategoryRecord(res)
+					setModalVisibleCategory(true)
+			  })
+			: setModalVisibleCategory(true)
+	}
+	function saveCategoryItem() {
+		apiService.post('/category', CategoryRecord).then(() => {
+			closeCategory()
+			fetchDataCategory()
+		})
+	}
+	function removeCategoryItem(recId) {
+		apiService.delete('/category/' + recId).then(() => {
+			closeCategory()
+			fetchDataCategory()
+		})
+	}
+
+
+	function closeCategory() {
+		setCategoryRecord({})
+		setModalVisibleCategory(false)
 	}
 
 	//Boquets
@@ -293,7 +365,14 @@ function Inventory() {
 	}
 	return (
 		<>
-			<>
+			<Segmented options={options} className='mb-3'
+            onChange={(value) => {
+                // status = value; 
+				setStatus(value);
+				console.log('status',status,value)
+            }}/>
+			{(status === 2) ?
+			<div className='mt-3'>
 				<Button className='mb-3 pupleButton' type='primary' onClick={() => showFlowerItem()}>
 					Добавить
 				</Button>
@@ -392,7 +471,10 @@ function Inventory() {
 						</Form.Item>
 					</Form>
 				</Modal>
-			</>
+			</div> 
+			:<></>
+			}
+			{(status===3) ?
 			<div className='mt-3'>
 				<Button className='mb-3 pupleButton' type='primary'  
 				onClick={() => showWrapperItem()}>
@@ -454,6 +536,62 @@ function Inventory() {
 					</Form>
 				</Modal>
 			</div>
+			:<></>
+			}
+			{(status===4) ?
+			<div className='mt-3'>
+				<Button className='mb-3 pupleButton' type='primary'  
+				onClick={() => showCategoryItem()}>
+					Добавить
+				</Button>
+				<Table
+					pagination={{ position: ['bottomRight'] }}
+					dataSource={category}
+					columns={category_columns}
+					onRow={rec => {//поведение для строчки
+						return {
+							onClick: () => showCategoryItem(rec.id_record)
+						}
+					}}
+				></Table>
+				<Modal
+					title={CategoryRecord.id_record ? 'Изменение сущности с id=' + CategoryRecord.id_record : 'Добавление новой сущности'}
+					open={modalVisibleCategory}
+					okText='Сохранить'
+					cancelText='Отмена'
+					onCancel={() => closeCategory()}
+					centered
+					footer={[
+						<Button type='primary' onClick={() => saveCategoryItem()} disabled={!CategoryRecord.title}>
+							Сохранить
+						</Button>,
+						CategoryRecord.id_record ? (
+							<Button danger onClick={() => removeCategoryItem(CategoryRecord.id_record)}>
+								Удалить
+							</Button>
+						) : null,
+						<Button onClick={() => closeCategory()}>Отмена</Button>
+					]
+				}
+				>
+					{console.log('CategoryRec',CategoryRecord)}
+					
+					<Form labelAlign='left' labelCol={{ span: 4 }} categoryCol={{ span: 18 }}>
+						<Form.Item label='Название'>
+							<Input
+								onChange={v =>
+									setCategoryRecord(prevState => {
+										return { ...prevState, title: v.target.value }//... - operator spret - ...
+									})
+								}
+								value={CategoryRecord.title}
+							/>
+						</Form.Item>
+					</Form>
+				</Modal>
+			</div>
+			:<></>
+			}
 			{
 			/* <>
 			<Button className='mb-3' type='primary' onClick={() => showItemBoquet()}>

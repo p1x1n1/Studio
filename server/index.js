@@ -8,6 +8,7 @@ const authRoutes=require('./routes/auth.routes')
 const fileUpload=require('express-fileupload')
 const errorHandler = require('./middleware/ErrorHandingMiddleWare')
 const path = require('path')
+// const pdfTemplate = require('./documents');
 
 const PORT = process.env.PORT || 5000
 
