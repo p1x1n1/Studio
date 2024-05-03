@@ -26,17 +26,52 @@ class BouquetController {
 	}
 	async getBouquetsCategory(req, res) {
 		const category = req.params.id_category
-		const bouquet = await db.query(
-		`select arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
-		bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
-		"categoryIdRecord"
-		from bouquets 
-		inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
-		inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
-		where ready_made = true and "categoryIdRecord"=($1) 
-		order by arc;`,
-		[category]
-		)
+		const flowers = '('+req.params.flowers+')'
+		//const f = req.params.flowers.split(',').map(Number);
+		//const flowers =  (${f.join(',')});
+		let bouquet;
+		console.log(req.params,flowers)
+		if (category !='undefined'  && flowers!='(undefined)') {
+			 bouquet = await db.query(
+				`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+				bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+				"categoryIdRecord", "flowerIdRecord", composition_bouquets.cnt
+				from bouquets 
+				inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
+				inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
+				inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+				where ready_made = true and "categoryIdRecord"=($1) 
+				and "flowerIdRecord" in ${flowers}
+				order by arc;`,
+				[category]
+		)}
+		else {
+			if (category !='undefined'){
+				 bouquet = await db.query(
+					`select  arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+					bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+					"categoryIdRecord"
+					from bouquets 
+					inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
+					inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+					where ready_made = true and "categoryIdRecord"=($1) 
+					order by arc;`,
+					[category]
+					)
+			}
+			if ( flowers!='(undefined)') {
+				 bouquet = await db.query(
+					`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+					bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+					 "flowerIdRecord", composition_bouquets.cnt
+					from bouquets 
+					inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
+					inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+					where ready_made = true 
+					and "flowerIdRecord" in ${flowers}
+					order by arc;`
+			)}
+		}
 		res.json(bouquet.rows)
 	}
 	async getOneBouquet(req, res) {

@@ -18,6 +18,7 @@ const EmployerPanel = () => {
                     <Admin/> 
                     : (post=== 'Флорист') ? <Col md={6} ><Button className='pupleButton mb-3' variant='outline-light' onClick={()=>navigate(INVENTORY)} >Инвентаризация</Button></Col> :<></> }
                <Col md={6}><Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(ORDER) } >Текущие заказы</Button></Col>
+               <Col md={6}><Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(ORDER) } >Отчёты</Button></Col>
             </Row>
         </div>
         

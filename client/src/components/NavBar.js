@@ -61,6 +61,8 @@ const NavBar = () => {
                     <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальные букеты</NavLink>
                   </NavDropdown.Item>
                 </NavDropdown>
+                <Nav.Link  > Доставка </Nav.Link>
+                <Nav.Link > Контакты </Nav.Link>
               </Nav>
               <Form className="d-flex">
                 <Form.Control
@@ -69,11 +71,10 @@ const NavBar = () => {
                   className="me-2"
                   aria-label="Артикул/Название"
                 />
-                <Button variant="outline-success">Поиск</Button>
+                <Button variant="outline-success" onClick={()=>navigate(Boquet_ROUTE)}>Поиск</Button>
               </Form>
             </Offcanvas.Body>
-            <NavLink  > </NavLink>
-            <NavLink > </NavLink>
+            
           </Navbar.Offcanvas>
           <div className='ml-2'>
             {user.isAuth ?

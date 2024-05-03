@@ -13,7 +13,7 @@ const Shop = () => {
     return (
         <>
             <div className='d-flex flex-column justify-content-center' >
-                <Carousel style={{width:'98%'}} >
+                <Carousel style={{width:'100%'}} >
                     <Carousel.Item >
                         <Image src={ExampleCarouselImage} className="d-block w-100 img-fluid" text="First slide" />
                         <Carousel.Caption>
@@ -36,7 +36,6 @@ const Shop = () => {
                         </Carousel.Caption>
                     </Carousel.Item>
                 </Carousel>
-               <BouquetList/>
             </div>
         </>
     );

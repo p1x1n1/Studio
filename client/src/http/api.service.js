@@ -6,7 +6,9 @@ export class ApiService {
 	}
 
 	get(url) {
-		return this.#makeRequest(url, { method: 'GET' })
+		return this.#makeRequest(url, { 
+			method: 'GET' 
+		})
 	}
 
 	delete(url) {

@@ -7,16 +7,16 @@ import { Col, Row } from 'antd';
 
 const BouquetPage = () => {
     const [choosenCategory,setchoosenCategory] = useState() ;
-    const [choosenFlower,setchoosenFlower] = useState() ;
+    const [choosenFlower,setchoosenFlower] = useState([]) ;
     
     
     function chooseCategory (category){
         setchoosenCategory(category) ;
-        console.log(category)
+        // console.log(category)
     }
     function chooseFlowers (flowers){
         setchoosenFlower(flowers) ;
-        console.log(flowers)
+        // console.log(flowers)
     }
     
 

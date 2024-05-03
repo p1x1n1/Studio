@@ -9,15 +9,18 @@ const apiService = new ApiService()
 const BouquetList = observer ((props) => {  
     const [bouquet,setBouquet] = useState([]);
     function fetchDataBouquet() {
-        if (props.category)
-		apiService.get('/bouquet/category/'+props.category).then(res => {
-            setBouquet(res);
-        })
+        if (props.category || props.flowers.length !== 0 ){
+            const flowers = (props.flowers.length !== 0)? props.flowers : undefined;
+            // console.log('flowers',flowers);
+            apiService.get('/bouquet/category/'+props.category+'/'+flowers+'/').then(res => {
+                setBouquet(res);
+            })
+        }
         else 
         apiService.get('/bouquet').then(res => {
             setBouquet(res);
         })
-        console.log('bouquet',bouquet,'category',props.category);
+        // console.log('bouquet',bouquet,'category',props.category,props.flowers);
 	}
     useEffect(() => {
         fetchDataBouquet();
