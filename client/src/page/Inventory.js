@@ -1,4 +1,4 @@
-import { Form, Button, Input, Table, Modal, Select, Segmented } from 'antd'
+import { Form, Button, Input, Table, Modal, Select, Segmented, Image, Row, Col, InputNumber, Tag } from 'antd'
 import { ApiService } from '../http/api.service'
 import { useEffect, useState } from 'react'
 
@@ -16,6 +16,11 @@ const wrapper_columns = [
 		key: 'title'
 	},
 	{
+		title: 'Категория',
+		dataIndex: 'category_title',
+		key: 'category_title'
+	},
+	{
 		title: 'Стоимость за 1 шт.',
 		dataIndex: 'price',
 		key: 'price'
@@ -29,7 +34,15 @@ const wrapper_columns = [
 		title: 'Изображение',
 		dataIndex: 'img',
 		key: 'img'
-	}
+	},
+	{
+		title: 'Изображение',
+		dataIndex: 'img',
+		key: 'img',
+		render: (_,{img})=>(
+			<img src={img} alt={img} />
+		)
+	},
 ]
 const category_columns = [
 	{
@@ -77,10 +90,13 @@ const flower_columns = [
 	{
 		title: 'Изображение',
 		dataIndex: 'img',
-		key: 'img'
-	}
+		key: 'img',
+		render: (_,{img})=>(
+			<img src={img} alt={img} />
+		)
+	},
 ]
-const boquet_columns = [
+const bouquet_columns = [
 	{
 		title: 'Артикул',
 		dataIndex: 'arc',
@@ -98,6 +114,8 @@ const boquet_columns = [
 		render: (composition, record) => (
 		  <Table
 			dataSource={composition}
+			style={{width: '100%'}}
+			centered
 			columns={[
 			  {
 				title: 'Название цветка',
@@ -106,17 +124,34 @@ const boquet_columns = [
 			  },
 			  {
 				title: 'Количество',
-				dataIndex: 'count_',
-				key: 'count_'
+				dataIndex: 'cnt',
+				key: 'cnt'
 			  }
 			]}
-			/*onRow={rec => {//поведение для строчки
-				return {
-					onClick: () => showBoquetItem(rec.arc_boquets,rec.id_record_flowers)
-				}
-			}}*/
 		  />
 		)
+	  },
+	  {
+		title: 'Категории',
+		dataIndex: 'category',
+		key: 'category',
+		render:
+			(_, { category }) => (
+				<>
+				  { category ? category.map((tag) => {
+					let color = tag.categories_name.length > 5 ? 'geekblue' : 'green';
+					if (tag.categories_name === 'Монобукеты') {
+					  color = 'volcano';
+					}
+					return (
+					  <Tag color={color} key={tag}>
+						{tag.categories_name}
+					  </Tag>
+					);
+				  })
+				:<></>}
+				</>
+			  ),
 	  },
 	{
 		title: 'Упаковка',
@@ -124,9 +159,25 @@ const boquet_columns = [
 		key: 'wrapper_name'
 	},
 	{
+		title: 'Цена',
+		dataIndex: 'price',
+		key: 'price'
+	},
+	{
 			title: 'Изображение',
 			dataIndex: 'img',
-			key: 'img'
+			key: 'img',
+			render: (_,{img})=>(
+				<Image src={img} alt={img} width={100}/>
+			)
+	},
+	{
+		title: 'Описание',
+		dataIndex: 'description',
+		key: 'description',
+		render: (_,{description}) =>(
+			<p style={{fontSize:10}}>{description}</p>
+		)
 	}
 ]
 
@@ -153,10 +204,10 @@ function Inventory() {
 	useEffect(() => {
 		fetchDataFlower();
 		fetchDataWrapper();
-		fetchDataBoquet();
+		fetchDataBouquet();
+		fetchDataWrapper_category();
 		fetchDataCategory();
 	}, [])
-	// let status = 1;
 	const [status,setStatus] = useState(1);
 	//FLOWER
 	const [flower,setFlower] = useState([])
@@ -238,6 +289,45 @@ function Inventory() {
 		setWrapperRecord({})
 		setModalVisibleWrapper(false)
 	}
+	//WRAPPER_CATEGORY
+	const [wrapper_category,setWrapper_category] = useState([])
+
+	function fetchDataWrapper_category() {
+		apiService.get('/wrapper_category').then(res => {
+			setWrapper_category(res);
+		})
+		console.log('wrapper_category',wrapper_category)
+	}
+
+	const [modalVisibleWrapper_category, setModalVisibleWrapper_category] = useState(false)
+	const [Wrapper_categoryRecord, setWrapper_categoryRecord] = useState({})
+
+	function showWrapper_categoryItem(recId) {
+		recId
+			? apiService.get('/wrapper_category/' + recId).then(res => {//promise - then catch
+					setWrapper_categoryRecord(res)
+					setModalVisibleWrapper_category(true)
+			  })
+			: setModalVisibleWrapper_category(true)
+	}
+	function saveWrapper_categoryItem() {
+		apiService.post('/wrapper_category', Wrapper_categoryRecord).then(() => {
+			closeWrapper_category()
+			fetchDataWrapper_category()
+		})
+	}
+	function removeWrapper_categoryItem(recId) {
+		apiService.delete('/wrapper_category/' + recId).then(() => {
+			closeWrapper_category()
+			fetchDataWrapper_category()
+		})
+	}
+
+
+	function closeWrapper_category() {
+		setWrapper_categoryRecord({})
+		setModalVisibleWrapper_category(false)
+	}
 
 	//Category
 	const [category,setCategory] = useState([])
@@ -279,98 +369,313 @@ function Inventory() {
 		setModalVisibleCategory(false)
 	}
 
-	//Boquets
-	const [boquets, setBoquets] = useState([])
-	//const [boquet_composition,setComposition] = useState([]);
-		/*
-	function fetchDataBoquet() {
-		apiService.get('/boquet/info').then(res => {
-			const updatedBoquets = res.map(boquet => {
-				apiService.get('/boquetcomposition/'+boquet.arc).then(res1 => {
-					setComposition(res1)
-				})
-				return {
-					...boquet,
-					boquet_composition: boquet_composition
-				};
-			});
-			setBoquets(updatedBoquets);
-		})
-		console.log('boquet',boquets)
-	}
-	*/
-	async function fetchDataBoquet() {
+	//Bouquets
+	const [bouquets, setBouquets] = useState([{}])
+	// const [bouquet_composition,setBouquetComposition] = useState([{}]);
+
+	// function fetchDataBouquet() {
+	// 	apiService.get('/bouquet').then(res => {
+	// 		setBouquets(res);
+	// 		const updatedBouquets = res.map(bouquet => {
+	// 			apiService.get('/bouquetcomposition/'+bouquet.arc).
+	// 			then(res1 => {
+	// 				setBouquetComposition(res1)
+	// 			})
+	// 			return {
+	// 				...bouquet,
+	// 				composition: bouquet_composition
+	// 			};
+	// 		});
+	// 		setBouquets(updatedBouquets);
+	// 	})
+	// 	console.log('bouquet',bouquets);
+	// }
+
+	async function fetchDataBouquet() {
 		try {
-		  const boquetRes = await apiService.get('/boquet/info');
-		  console.log('boquets',boquetRes)
-		  const updatedBoquets = await Promise.all(boquetRes.map(async (boquet) => {
-			const compositionRes = await apiService.get('/boquetcomposition/'+boquet.arc);
-			console.log('boquetsComposition',compositionRes)
+		  const bouquetRes = await apiService.get('/bouquet');
+		  setBouquets(bouquetRes);
+		  const updatedBouquets = await Promise.all(bouquetRes.map(async (bouquet) => {
+			const compositionRes = await apiService.get('/bouquetcomposition/'+bouquet.arc);
+			const categoryRes = await apiService.get('/bouquetcategory/'+bouquet.arc);
+			// console.log('bouquetsComposition',compositionRes)
 			return {
-			  ...boquet,
-			  composition: compositionRes
+			  ...bouquet,
+			  composition: compositionRes,
+			  category: categoryRes,
 			};
 		  }));
-		  setBoquets(updatedBoquets);
-		  console.log('boquets', updatedBoquets);
+		  setBouquets(updatedBouquets);
+		//   console.log('bouquets', updatedBouquets);
 		} catch (error) {
 		  console.error('Error fetching data:', error);
 		}
 	  }
 	  
-	const [boquetRecord, setBoquetRecord] = useState({})
-	const [boquetCompositionRecord, setCompositionRecord] = useState([{}])
-	const [flowerInCompositionRecord, setFlowerInCompositionRecord] = useState({})
-	const [modalVisibleBoquet, setModalVisibleBoquet] = useState(false)
+	const [bouquetRecord, setBouquetRecord] = useState({})
+	const [OldbouquetCompositionRecord, setOldCompositionRecord] = useState([{}])
+	const [OldbouquetCategoryRecord, setOldBouquetCategoryRecord] = useState([{}])
+	const [bouquetCompositionRecord, setCompositionRecord] = useState([{}])
+	const [bouquetCategoryRecord, setBouquetCategoryRecord] = useState([{}])
+
+	const filteredFlowers = flower.filter(fw => !bouquetCompositionRecord.some(composition => composition.flowerIdRecord === fw.id_record));
+	const filteredCategory = category.filter(c => !bouquetCategoryRecord.some(categories => categories.categoryIdRecord === c.id_record));
+
+
+	const addFlower = () => {
+		const newCompositionRecord = [...bouquetCompositionRecord];
+		newCompositionRecord.push({ flowerIdRecord: null, cnt: 1 });
+		setCompositionRecord(newCompositionRecord);
+	  };
+
+	  const addCategory = () => {
+		const newCategoryRecord = [...bouquetCategoryRecord];
+		newCategoryRecord.push({ categoryIdRecord: null });
+		setBouquetCategoryRecord(newCategoryRecord);
+	  };
+	// const [flowerInCompositionRecord, setFlowerInCompositionRecord] = useState({})
+	const [modalVisibleBouquet, setModalVisibleBouquet] = useState(false)
 	
-	function showItemBoquet(recId) {
+	function showItemBouquet(recId) {
 		recId
-			? apiService.get('/boquet/' + recId).then(res => {//promise - then catch
-					setBoquetRecord(res)
-					apiService.get('/boquetcomposition/' + recId).then(res1 => {
-						setCompositionRecord(res1)
+			? apiService.get('/bouquet/' + recId).then(res => {//promise - then catch
+					setBouquetRecord(res)
+					apiService.get('/bouquetcomposition/' + recId).then(res1 => {
+						setCompositionRecord(res1);
+						setOldCompositionRecord(res1);
 					});
-					setModalVisibleBoquet(true)
+					apiService.get('/bouquetcategory/' + recId).then(res1 => {
+						setBouquetCategoryRecord(res1);
+						setOldBouquetCategoryRecord(res1);
+					});
+					setModalVisibleBouquet(true)
 			  })
-			: setModalVisibleBoquet(true)
+			: setModalVisibleBouquet(true)
 	}
-	function saveItemBoquet() {
-		apiService.post('/boquet', boquetRecord).then(() => {
-			closeBoquet()
-			fetchDataBoquet()
+	function saveItemBouquet() {
+		apiService.post('/bouquet', bouquetRecord).then((res) => {
+			console.log(res);
+			closeBouquet()
+			fetchDataBouquet()
 		})
 	}
-	function saveItemBoquetandComposition() {
-		console.log('saveItemBoquetandComposition');
-		apiService.post('/boquet/', boquetRecord).then(() => {
-			boquetCompositionRecord.map(record =>
-				apiService.post('/boquetcomposition/update', record).then(() => {
+	function saveItemBouquetandComposition() {
+		console.log('saveItemBouquetandComposition');
+		let arc = bouquetRecord.arc;
+		if (arc) {
+			if (OldbouquetCompositionRecord !== bouquetCompositionRecord) apiService.delete('/bouquetcomposition/'+arc);
+			if (OldbouquetCategoryRecord !== bouquetCategoryRecord) apiService.delete('/bouquetcategory/'+arc);
+		}
+		apiService.post('/bouquet', bouquetRecord).then((res) => {
+	        console.log('res',res);
+			if (!arc) arc = res.arc
+			if (OldbouquetCompositionRecord !== bouquetCompositionRecord) 
+			{bouquetCompositionRecord.map(record =>
+				apiService.post('/bouquetcomposition/'+arc, record).then(() => {
                 })
-			)
-			closeBoquet()
-			fetchDataBoquet()
+			)}
+			if (OldbouquetCategoryRecord !== bouquetCategoryRecord) {
+				bouquetCategoryRecord.map(record =>
+				apiService.post('/bouquetcategory/'+arc, record).then(() => {
+                })
+			)}
+			closeBouquet()
+			fetchDataBouquet()
 		})
 	}
-	function removeItemBoquet(recId) {
-		apiService.delete('/boquet/' + recId).then(() => {
-			closeBoquet()
-			fetchDataBoquet()
+	function removeItemBouquet(recId) {
+		apiService.delete('/bouquet/' + recId).then(() => {
+			closeBouquet()
+			fetchDataBouquet()
 		})
 	}
 
-	function closeBoquet() {
-		setBoquetRecord({})
+	function closeBouquet() {
+		setBouquetRecord({})
 		setCompositionRecord([{}])
-		setModalVisibleBoquet(false)
+		setModalVisibleBouquet(false)
 	}
 	return (
 		<>
 			<Segmented options={options} className='mb-3'
-            onChange={(value) => {
-                // status = value; 
+            onChange={(value) => { 
 				setStatus(value);
-				console.log('status',status,value)
             }}/>
+			{ (status===1) ?
+			<div className='mt-3'>
+			{console.log('bouquets',bouquets)}
+			<Button className='mb-3 pupleButton'  onClick={() => showItemBouquet()}>
+				Добавить
+			</Button>
+			<Table
+				pagination={{ position: ['bottomRight'] }}
+				dataSource={bouquets}
+				columns={bouquet_columns}
+				onRow={rec => {//поведение для строчки
+					return {
+						onClick: () => showItemBouquet(rec.arc)
+					}
+				}}
+			></Table>
+			<Modal
+				title={bouquetRecord.arc ? 'Изменение сущности с артикулом =' + bouquetRecord.arc : 'Добавление новой сущности'}
+				open={modalVisibleBouquet}
+				okText='Сохранить'
+				cancelText='Отмена'
+				onCancel={() => closeBouquet()}
+				centered
+				footer={[
+					<Button type='primary' onClick={() =>  saveItemBouquetandComposition()} disabled={!bouquetRecord.title || !bouquetRecord.wrapperIdRecord}>
+						Сохранить
+					</Button>,
+					bouquetRecord.arc ? (
+						<Button danger onClick={() => removeItemBouquet(bouquetRecord.arc)}>
+							Удалить
+						</Button>
+					) : null,
+					<Button onClick={() => closeBouquet()}>Отмена</Button>
+				]
+			}
+			>
+				{console.log('bouquetRec',bouquetRecord)}
+				{console.log('bouquetCompositionRecord',bouquetCompositionRecord)}
+				<Form layout='vertical' labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+					<Form.Item label='Название'>
+						<Input
+							onChange={v =>
+								setBouquetRecord(prevState => {
+									return { ...prevState, title: v.target.value }//... - operator spret - ...
+								})
+							}
+							value={bouquetRecord.title}
+						/>
+					</Form.Item>
+					<Form.Item label='Упаковка'>
+						<Select 
+						onChange={v =>
+							setBouquetRecord(prevState => {
+								return { ...prevState, wrapperIdRecord: v}
+							})
+						}
+						value={bouquetRecord.wrapperIdRecord}>
+							{wrapper.map(wrapper => (
+                                <Select.Option key={wrapper.id_record} value={wrapper.id_record}>
+                                    {wrapper.title}
+                                </Select.Option>
+                            ))}
+                        </Select>
+					</Form.Item>
+					{/* {bouquetRecord.arc ?  
+					<> */}
+					<Form.Item label='Состав'>  
+						{bouquetCompositionRecord.map((composition, index) => (
+						<Row>
+							<Col md={15}>
+								<Select 
+									key={index}
+									onChange={v => {
+											//учесть count и учесть flower одновремено тк flower pk потому стоит просто удалить предыдущий состав и заменить на новый
+											const updatedRecords = bouquetCompositionRecord.map((item, i) => 
+											i === index ? { ...item, flowerIdRecord: v } : item);
+											setCompositionRecord(updatedRecords);
+									}}
+									value={composition.flower_name}
+								>
+								{filteredFlowers.map(fw => (
+									<Select.Option key={fw.id_record} value={fw.id_record}>
+										{fw.title}
+									</Select.Option>
+								))}
+								{console.log('filteredFlowers',filteredFlowers,flower)}
+								</Select>
+							</Col>
+						<Col md={6}>
+							<InputNumber min={1} defaultValue={1} onChange={v => {
+									const updatedRecords = bouquetCompositionRecord.map((item, i) => 
+									i === index ? { ...item, cnt: v } : item);
+									setCompositionRecord(updatedRecords);
+									}} />
+						</Col>
+						<Col md={3}>
+							<Button onClick={() => {
+								const updatedRecords = bouquetCompositionRecord.filter((item, i) => i !== index);
+								setCompositionRecord(updatedRecords);
+							}}>Удалить</Button>
+						</Col>
+						</Row>
+						))}
+						<Button onClick={addFlower}>Добавить цветок</Button>
+					</Form.Item>
+					<Form.Item label='Категории'>	
+						{bouquetCategoryRecord.map((categories, index) => (
+							<Row>
+								<Col>
+						  		<Select 
+									key={index}
+									onChange={v => {
+										//учесть count и учесть flower одновремено тк flower pk потому стоит просто удалить предыдущий состав и заменить на новый
+										const updatedRecords = bouquetCategoryRecord.map((item, i) => 
+										i === index ? { ...item, categoryIdRecord: v } : item);
+										setBouquetCategoryRecord(updatedRecords);
+									  }}
+									value={categories.categories_name}
+								  >
+									{filteredCategory.map(c => (
+									  <Select.Option key={c.id_record} value={c.id_record}>
+										{c.title}
+									  </Select.Option>
+									))}
+								  </Select>
+								</Col>
+								<Col>
+								<Button onClick={() => {
+									const updatedRecords = bouquetCategoryRecord.filter((item, i) => i !== index);
+									setBouquetCategoryRecord(updatedRecords);
+								}}>Удалить</Button>
+								</Col>
+							</Row>
+						))}
+						<Button onClick={addCategory}>Добавить категорию</Button>
+					</Form.Item>
+					<Form.Item label='Цена'>
+						<Input type='number'
+							onChange={v =>
+								setBouquetRecord(prevState => {
+									return { ...prevState, price: v.target.value }//... - operator spret - ...
+								})
+							}
+							value={bouquetRecord.price}
+						/>
+					</Form.Item>
+					<Form.Item label='Изображение'>
+							<Input
+								onChange={v =>
+									setBouquetRecord(prevState => {
+										return { ...prevState, img: v.target.value }
+									})
+								}
+								value={bouquetRecord.img}
+							/>
+							<Image src={bouquetRecord.img} />
+					</Form.Item>
+					<Form.Item label='Описание'>
+						<Input 
+							onChange={v =>
+								setBouquetRecord(prevState => {
+									return { ...prevState, description: v.target.value }//... - operator spret - ...
+								})
+							}
+							value={bouquetRecord.description}
+						/>
+					</Form.Item>
+					{/* </>
+					:<></>
+					} */}
+				</Form>
+			</Modal>
+			</div> 
+			:<></>
+			}
 			{(status === 2) ?
 			<div className='mt-3'>
 				<Button className='mb-3 pupleButton' type='primary' onClick={() => showFlowerItem()}>
@@ -468,6 +773,7 @@ function Inventory() {
 								}
 								value={FlowerRecord.img}
 							/>
+							<Image src={FlowerRecord.img} />
 						</Form.Item>
 					</Form>
 				</Modal>
@@ -475,67 +781,157 @@ function Inventory() {
 			:<></>
 			}
 			{(status===3) ?
-			<div className='mt-3'>
-				<Button className='mb-3 pupleButton' type='primary'  
-				onClick={() => showWrapperItem()}>
-					Добавить
-				</Button>
-				<Table
-					pagination={{ position: ['bottomRight'] }}
-					dataSource={wrapper}
-					columns={wrapper_columns}
-					onRow={rec => {//поведение для строчки
-						return {
-							onClick: () => showWrapperItem(rec.id_record)
-						}
-					}}
-				></Table>
-				<Modal
-					title={WrapperRecord.id_record ? 'Изменение сущности с id=' + WrapperRecord.id_record : 'Добавление новой сущности'}
-					open={modalVisibleWrapper}
-					okText='Сохранить'
-					cancelText='Отмена'
-					onCancel={() => closeWrapper()}
-					centered
-					footer={[
-						<Button type='primary' onClick={() => saveWrapperItem()} disabled={!WrapperRecord.title}>
-							Сохранить
-						</Button>,
-						WrapperRecord.id_record ? (
-							<Button danger onClick={() => removeWrapperItem(WrapperRecord.id_record)}>
-								Удалить
-							</Button>
-						) : null,
-						<Button onClick={() => closeWrapper()}>Отмена</Button>
-					]
-				}
-				>
-					{console.log('WrapperRec',WrapperRecord)}
-					
-					<Form labelAlign='left' labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-						<Form.Item label='Название'>
-							<Input
+			<>
+				<h2>Упаковки</h2>
+				<div className='mt-3'>
+					<Button className='mb-3 pupleButton' type='primary'  
+					onClick={() => showWrapperItem()}>
+						Добавить
+					</Button>
+					<Table
+						pagination={{ position: ['bottomRight'] }}
+						dataSource={wrapper}
+						columns={wrapper_columns}
+						onRow={rec => {//поведение для строчки
+							return {
+								onClick: () => showWrapperItem(rec.id_record)
+							}
+						}}
+					></Table>
+					<Modal
+						title={WrapperRecord.id_record ? 'Изменение сущности с id=' + WrapperRecord.id_record : 'Добавление новой сущности'}
+						open={modalVisibleWrapper}
+						okText='Сохранить'
+						cancelText='Отмена'
+						onCancel={() => closeWrapper()}
+						centered
+						footer={[
+							<Button type='primary' onClick={() => saveWrapperItem()} disabled={!WrapperRecord.title}>
+								Сохранить
+							</Button>,
+							WrapperRecord.id_record ? (
+								<Button danger onClick={() => removeWrapperItem(WrapperRecord.id_record)}>
+									Удалить
+								</Button>
+							) : null,
+							<Button onClick={() => closeWrapper()}>Отмена</Button>
+						]
+					}
+					>
+						{console.log('WrapperRec',WrapperRecord)}
+						
+						<Form labelAlign='left' labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
+							<Form.Item label='Название'>
+								<Input
+									onChange={v =>
+										setWrapperRecord(prevState => {
+											return { ...prevState, title: v.target.value }//... - operator spret - ...
+										})
+									}
+									value={WrapperRecord.title}
+								/>
+							</Form.Item>
+							<Form.Item label='Категория'>
+								<Select 
 								onChange={v =>
 									setWrapperRecord(prevState => {
-										return { ...prevState, title: v.target.value }//... - operator spret - ...
+										return { ...prevState, wrapperCategoryIdRecord: v}
 									})
 								}
-								value={WrapperRecord.title}
-							/>
-						</Form.Item>
-						<Form.Item label='Изображение'>
-							<Input
-								onChange={v =>
-									setWrapperRecord(prevState => {
-										return { ...prevState, img: v.target.value }//... - operator spret - ...
-									})
-								}
-								value={WrapperRecord.img}
-							/>
-						</Form.Item>
-					</Form>
-				</Modal>
-			</div>
+								value={WrapperRecord.wrapperCategoryIdRecord}>
+									{wrapper_category.map(wrapper => (
+										<Select.Option key={wrapper.id_record} value={wrapper.id_record}>
+											{wrapper.title}
+										</Select.Option>
+									))}
+								</Select>
+							</Form.Item>
+							<Form.Item label='Стоимость за 1 шт.'>
+								<Input
+									onChange={v =>
+										setWrapperRecord(prevState => {
+											return { ...prevState, price: v.target.value }//... - operator spret - ...
+										})
+									}
+									value={WrapperRecord.price}
+								/>
+							</Form.Item>
+							<Form.Item label='Количество'>
+								<Input
+									onChange={v =>
+										setWrapperRecord(prevState => {
+											return { ...prevState, cnt: v.target.value }//... - operator spret - ...
+										})
+									}
+									value={WrapperRecord.cnt}
+								/>
+							</Form.Item>
+							<Form.Item label='Изображение'>
+								<Input
+									onChange={v =>
+										setWrapperRecord(prevState => {
+											return { ...prevState, img: v.target.value }//... - operator spret - ...
+										})
+									}
+									value={WrapperRecord.img}
+								/>
+							</Form.Item>
+						</Form>
+					</Modal>
+				</div>
+				<h2>Категории упаковки</h2>
+				<div className='mt-3'>
+					<Button className='mb-3 pupleButton' type='primary'  
+					onClick={() => showWrapper_categoryItem()}>
+						Добавить
+					</Button>
+					<Table
+						pagination={{ position: ['bottomRight'] }}
+						dataSource={wrapper_category}
+						columns={category_columns}
+						onRow={rec => {//поведение для строчки
+							return {
+								onClick: () => showWrapper_categoryItem(rec.id_record)
+							}
+						}}
+					></Table>
+					<Modal
+						title={Wrapper_categoryRecord.id_record ? 'Изменение сущности с id=' + Wrapper_categoryRecord.id_record : 'Добавление новой сущности'}
+						open={modalVisibleWrapper_category}
+						okText='Сохранить'
+						cancelText='Отмена'
+						onCancel={() => closeWrapper_category()}
+						centered
+						footer={[
+							<Button type='primary' onClick={() => saveWrapper_categoryItem()} disabled={!Wrapper_categoryRecord.title}>
+								Сохранить
+							</Button>,
+							Wrapper_categoryRecord.id_record ? (
+								<Button danger onClick={() => removeWrapper_categoryItem(Wrapper_categoryRecord.id_record)}>
+									Удалить
+								</Button>
+							) : null,
+							<Button onClick={() => closeWrapper_category()}>Отмена</Button>
+						]
+					}
+					>
+						{console.log('Wrapper_categoryRec',Wrapper_categoryRecord)}
+						
+						<Form labelAlign='left' labelCol={{ span: 4 }} wrapper_categoryCol={{ span: 18 }}>
+							<Form.Item label='Название'>
+								<Input
+									onChange={v =>
+										setWrapper_categoryRecord(prevState => {
+											return { ...prevState, title: v.target.value }//... - operator spret - ...
+										})
+									}
+									value={Wrapper_categoryRecord.title}
+								/>
+							</Form.Item>
+						</Form>
+					</Modal>
+				</div>
+			</>
 			:<></>
 			}
 			{(status===4) ?
@@ -591,98 +987,6 @@ function Inventory() {
 				</Modal>
 			</div>
 			:<></>
-			}
-			{
-			/* <>
-			<Button className='mb-3' type='primary' onClick={() => showItemBoquet()}>
-				Добавить
-			</Button>
-			<Table
-				pagination={{ position: ['bottomRight'] }}
-				dataSource={boquets}
-				columns={boquet_columns}
-				onRow={rec => {//поведение для строчки
-					return {
-						onClick: () => showItemBoquet(rec.arc)
-					}
-				}}
-			></Table>
-			<Modal
-				title={boquetRecord.arc ? 'Изменение сущности с arc=' + boquetRecord.arc : 'Добавление новой сущности'}
-				open={modalVisibleBoquet}
-				okText='Сохранить'
-				cancelText='Отмена'
-				onCancel={() => closeBoquet()}
-				centered
-				footer={[
-					
-					<Button type='primary' onClick={() => boquetRecord.arc ? saveItemBoquetandComposition() : saveItemBoquet()} disabled={!boquetRecord.title || !boquetRecord.wrapper_}>
-						Сохранить
-					</Button>,
-					boquetRecord.arc ? (
-						<Button danger onClick={() => removeItemBoquet(boquetRecord.arc)}>
-							Удалить
-						</Button>
-					) : null,
-					<Button onClick={() => closeBoquet()}>Отмена</Button>
-				]
-			}
-			>
-				{console.log('boquetRec',boquetRecord)}
-				{console.log('boquetCompositionRecord',boquetCompositionRecord)}
-				<Form labelAlign='left' labelCol={{ span: 4 }} wrapperCol={{ span: 18 }}>
-					<Form.Item label='Название'>
-						<Input
-							onChange={v =>
-								setBoquetRecord(prevState => {
-									return { ...prevState, title: v.target.value }//... - operator spret - ...
-								})
-							}
-							value={boquetRecord.title}
-						/>
-					</Form.Item>
-					<Form.Item label='Упаковка'>
-						<Select 
-						onChange={v =>
-							setBoquetRecord(prevState => {
-								return { ...prevState, wrapper_: v}
-							})
-						}
-						value={boquetRecord.wrapper_}>
-							{wrapper.map(wrapper => (
-                                <Select.Option key={wrapper.id_record} value={wrapper.id_record}>
-                                    {wrapper.title}
-                                </Select.Option>
-                            ))}
-                        </Select>
-					</Form.Item>
-					{boquetRecord.arc ?  
-					<>
-						<Form.Item label='Состав'>
-						{boquetCompositionRecord.map((composition, index) => (
-						  <Select 
-							key={index}
-							onChange={v => {
-								//учесть count и учесть flower одновремено сложно пиздец
-								const updatedRecords = boquetCompositionRecord.map((item, i) => i === index ? { ...item, id_record_flowers: v } : item);
-								setCompositionRecord(updatedRecords);
-							  }}
-							value={composition.id_record_flowers}
-						  >
-							{flower.map(fw => (
-							  <Select.Option key={fw.id_record} value={fw.id_record}>
-								{fw.title}
-							  </Select.Option>
-							))}
-						  </Select>
-						))}
-					  </Form.Item>
-					</>
-					:<></>
-					}
-				</Form>
-			</Modal>
-			</> */
 			}
 		</>
 	)

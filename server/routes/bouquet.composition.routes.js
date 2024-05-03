@@ -2,11 +2,11 @@ const Router = require('express')
 const router = new Router()
 const bouquetCompositionController = require('../controllers/bouquet.composition.controller')
 
-router.post('/create', bouquetCompositionController.createBouquetComposition)
-router.get('/update/', bouquetCompositionController.getBouquetCompositions)
-router.get('/:arc_bouquets', bouquetCompositionController.getOneBouquetComposition)
-router.get('/:arc_bouquets/:id_type_flowers', bouquetCompositionController.getOneBouquetComposition)
-router.delete('/:arc_bouquets', bouquetCompositionController.deleteBouquetComposition)
-router.delete('/:arc_bouquets/:id_type_flowers', bouquetCompositionController.deleteBouquetFlowerComposition)
+router.post('/:bouquetArc', bouquetCompositionController.createBouquetComposition)
+router.get('/update/', bouquetCompositionController.getBouquetComposition)
+router.get('/:bouquetArc', bouquetCompositionController.getBouquetComposition)
+router.get('/:bouquetArc/:flowerIdRecord', bouquetCompositionController.getOneBouquetComposition)
+router.delete('/:bouquetArc', bouquetCompositionController.deleteBouquetComposition)
+router.delete('/:bouquetArc/:flowerIdRecord', bouquetCompositionController.deleteBouquetFlowerComposition)
 
 module.exports = router

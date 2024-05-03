@@ -5,9 +5,10 @@ class BouquetController {
 		const { arc, title,ready_made,price,wrapperIdRecord, description, img } = req.body
 		let bouquet
 		if (arc) {
-			bouquet = await db.query('UPDATE bouquets set title = ($1),wrapperIdRecord = ($2) , description ,img = ($4) where arc = ($4) RETURNING *', [title, wrapperIdRecord,description,img,arc])
+			bouquet = await db.query('UPDATE bouquets set title = ($1),"wrapperIdRecord" = ($2) , description = ($3),img = ($4), price = ($5) where arc = ($6) RETURNING *', [title, wrapperIdRecord,description,img,price,arc])
 		} else {
-			bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,wrapperIdRecord,description,img) values ($1, $2,$3,$4,$5) RETURNING *', [title, ready_made,price,wrapperIdRecord,description, img])
+			if( ready_made) bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,"wrapperIdRecord",description,img) values ($1, $2,$3,$4,$5,$6) RETURNING *', [title, ready_made,price,wrapperIdRecord,description, img])
+			else bouquet = await db.query('INSERT INTO bouquets (title,price,"wrapperIdRecord",description,img) values ($1, $2,$3,$4,$5) RETURNING *', [title, price,wrapperIdRecord,description, img])
 		}
 		res.json(bouquet.rows[0])
 	}

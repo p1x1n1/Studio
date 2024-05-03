@@ -3,7 +3,7 @@ const router = new Router()
 const WrapperController = require('../controllers/wrapper.controller')
 
 router.post('/', WrapperController.createWrapper)
-router.get('/', WrapperController.getWrappers)
+router.get('/', WrapperController.getWrappersAll)
 router.get('/:id_record', WrapperController.getOneWrapper)
 router.delete('/:id_record', WrapperController.deleteWrapper)
 

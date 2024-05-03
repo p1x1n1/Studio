@@ -1,5 +1,5 @@
 const Router = require('express')
-const categoryController = require('../controllers/categoryController')
+const categoryController = require('../controllers/category.controller')
 const checkRole = require('../middleware/checkRoleMiddleware')
 const router = new Router
 
