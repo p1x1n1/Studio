@@ -40,7 +40,7 @@ const wrapper_columns = [
 		dataIndex: 'img',
 		key: 'img',
 		render: (_,{img})=>(
-			<img src={img} alt={img} />
+			<img src={img} alt={img} width={100}/>
 		)
 	},
 ]
@@ -92,7 +92,7 @@ const flower_columns = [
 		dataIndex: 'img',
 		key: 'img',
 		render: (_,{img})=>(
-			<img src={img} alt={img} />
+			<img src={img} alt={img} width={100}/>
 		)
 	},
 ]

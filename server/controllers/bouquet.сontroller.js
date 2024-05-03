@@ -24,6 +24,21 @@ class BouquetController {
 		)
 		res.json(bouquet.rows)
 	}
+	async getBouquetsCategory(req, res) {
+		const category = req.params.id_category
+		const bouquet = await db.query(
+		`select arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+		bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+		"categoryIdRecord"
+		from bouquets 
+		inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
+		inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+		where ready_made = true and "categoryIdRecord"=($1) 
+		order by arc;`,
+		[category]
+		)
+		res.json(bouquet.rows)
+	}
 	async getOneBouquet(req, res) {
 		const arc = req.params.arc
 		const bouquet = await db.query('SELECT * FROM bouquets WHERE arc = ($1)',[arc])
