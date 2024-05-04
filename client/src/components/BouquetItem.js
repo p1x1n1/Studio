@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card,  Image } from 'react-bootstrap';
 import basket from '../base_img/icons/green_basket.png';
 import heart from '../base_img/icons/green_heart.png';
@@ -39,19 +39,21 @@ const BoquetItem = ({bouquet}) => {
                     <div>{bouquet.title}</div>
                     <div>Арт.{bouquet.arc}</div>
                     <div>{bouquet.price} руб.</div>
-                    <Row>
-                        <Col md={6}>
+                </div>
+                { (user.user.post === 'user') ?
+                <Row >
+                        <Col span={16}>
                             <Button variant='light' onClick={()=>{addBasket(bouquet.arc)}}>
                                 <Image width={50} height={50} src={basket} />
                             </Button>
                         </Col>
-                        <Col md={6}>
+                        <Col span={5}>
                             <Button variant='light' onClick={()=>{addSelected(bouquet.arc)}}> 
                                 <Image width={50} height={50} src={heart} />
                             </Button>
                         </Col>
-                    </Row>
-                </div>
+                </Row>
+                :<></>}
              </Card>
         </>
     );

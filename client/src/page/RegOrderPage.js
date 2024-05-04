@@ -5,7 +5,7 @@ import { ApiService } from '../http/api.service';
 import { useNavigate} from 'react-router-dom';
 import { Context } from '../index';
 import BouquetBasketOrder from '../components/BouquetBasketOrder';
-import BouquetBasketItem from '../components/BouquetBasketItem';
+import moment from 'moment';//check
 const { TextArea } = Input;
 
 
@@ -83,6 +83,22 @@ const RegOrderPage = () => {
         });
     };
     
+    function disabledDate(current) {
+        // Дата не может быть раньше сегодняшнего дня и позже чем через 3 месяца
+        return current && (current < moment().startOf('day') || current > moment().add(3, 'months').endOf('day'));
+    }
+    function range(start, end) {
+        const result = [];
+        for (let i = start; i < end; i++) {
+          result.push(i);
+        }
+        return result;
+      }
+    const disabledTime  = () => {
+        return {
+            disabledHours: () => [0,1,2,3,4,5,6,7,8,22,23],
+        }
+    }
 
     const SubmitOrder = () => {
         form.validateFields()
@@ -228,6 +244,9 @@ const RegOrderPage = () => {
                                                 type: 'mask',
                                             }}
                                             onChange={handleDateChange}
+                                            disabledDate={disabledDate}
+                                            picker="date"
+                                            placeholder="Выберите дату"
                                             />
                                     </Form.Item>
                                 </Col>
@@ -245,6 +264,9 @@ const RegOrderPage = () => {
                                         <TimePicker                                        
                                          format='HH:00' 
                                          onChange={handleTimeChange}
+                                         defaultValue={moment('09:00', 'HH:mm')} 
+                                         disabledTime={disabledTime}
+                                        hideDisabledOptions 
                                          />
                                         {/* <Input type='time' 
                                         onChange={(value) => setFormData(formData => { return { ...formData, time_order: value.target.value}})}/> */}

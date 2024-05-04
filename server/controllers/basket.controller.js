@@ -40,7 +40,8 @@ class BasketController {
 	}
 	async deleteOneBasket(req, res) {
 		const userLogin = req.params.login
-		const basket = await db.query('DELETE FROM baskets WHERE "userLogin" = ($1)',[userLogin])
+		const arc = req.params.arc
+		const basket = await db.query('DELETE FROM baskets WHERE "userLogin" = ($1) and "bouquetArc"=($2)',[userLogin,arc])
 		res.json({ success: true })
 	}
 }

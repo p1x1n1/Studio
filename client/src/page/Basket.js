@@ -30,6 +30,12 @@ const Basket = observer (() => {
             setBouquet([]);
         })
     }
+    function DeleteOne(arc){
+        apiService.delete('/basket/'+user.user.login+'/'+arc).then(res => {
+            setBouquet([]);
+        })
+        fetchDataBouquet();
+    }
     return (
         <>
             <Row>
@@ -44,7 +50,7 @@ const Basket = observer (() => {
                 </Row>             
                 {console.log(bouquet)}
                 {bouquet.map(bouquet =>  
-                    <BouquetBasketItem key={bouquet.arc} bouquet={bouquet}/>
+                    <BouquetBasketItem key={bouquet.arc} bouquet={bouquet} DeleteOne={DeleteOne}/>
                 )}
             </Col>
             <Col md={4}>
@@ -57,7 +63,6 @@ const Basket = observer (() => {
                     </div>
                 </div>
                 <div className='d-flex justife-content-center align-items-center mt-3'>
-                    
                     <Button className='pupleButton' variant='outline-light' onClick={() => { navigate(REG_ORDER+'/'+user.user.login)}}>Оформить заказ</Button>
                 </div>
                

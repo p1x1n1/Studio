@@ -25,6 +25,7 @@ const BoquetSelectedItem = ({bouquet}) => {
     function deleteSelected(arc) {
 		apiService.delete('/selected/'+login+'/'+arc).then(() => {
             alert('Удаленно из избранного');
+            
 		})
 	}
     const apiService = new ApiService()
