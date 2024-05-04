@@ -3,6 +3,7 @@ const db = require('../db.pool')
 class BouquetController {
 	async createBouquet(req, res) {
 		const { arc, title,ready_made,price,wrapperIdRecord, description, img } = req.body
+		console.log(req.body)
 		let bouquet
 		if (arc) {
 			bouquet = await db.query('UPDATE bouquets set title = ($1),"wrapperIdRecord" = ($2) , description = ($3),img = ($4), price = ($5) where arc = ($6) RETURNING *', [title, wrapperIdRecord,description,img,price,arc])

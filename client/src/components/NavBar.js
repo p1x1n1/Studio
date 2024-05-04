@@ -20,7 +20,7 @@ const NavBar = () => {
       user.setUser({});
       user.setIsAuth(false);
       navigate(LOGIN_ROUTE);
-      console.log(user.user.post)
+      console.log(user.user)
     }
     
     return (

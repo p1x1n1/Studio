@@ -371,25 +371,6 @@ function Inventory() {
 
 	//Bouquets
 	const [bouquets, setBouquets] = useState([{}])
-	// const [bouquet_composition,setBouquetComposition] = useState([{}]);
-
-	// function fetchDataBouquet() {
-	// 	apiService.get('/bouquet').then(res => {
-	// 		setBouquets(res);
-	// 		const updatedBouquets = res.map(bouquet => {
-	// 			apiService.get('/bouquetcomposition/'+bouquet.arc).
-	// 			then(res1 => {
-	// 				setBouquetComposition(res1)
-	// 			})
-	// 			return {
-	// 				...bouquet,
-	// 				composition: bouquet_composition
-	// 			};
-	// 		});
-	// 		setBouquets(updatedBouquets);
-	// 	})
-	// 	console.log('bouquet',bouquets);
-	// }
 
 	async function fetchDataBouquet() {
 		try {
