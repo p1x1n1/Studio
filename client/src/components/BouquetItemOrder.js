@@ -17,7 +17,7 @@ const BoquetItemOrder = ({bouquet}) => {
              className='d-flex justify-content-between mt-3'>
                 {/* {console.log(bouquet,'bouquet')} */}
                 <Card className='card_bouquet_item' style={{cursor: 'pointer'}} border={"pink"}>
-                   <Image className='card_img'  src={bouquet.img} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
+                   <Image className='card_img'  src={process.env.REACT_APP_API_URL +bouquet.img} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
                     <div className='d-flex justify-content-between '>
                     </div>
                 <div className='d-flex flex-column  align-items-center'>

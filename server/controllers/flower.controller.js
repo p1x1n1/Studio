@@ -1,13 +1,25 @@
+const uuid = require('uuid');
 const db = require('../db.pool')
+const path = require('path');
 const { Flower } = require('../models/models')
 
 class FlowerController {
 	async createFlower(req, res) {
-		const { id_record, title,  price, cnt, season_start, season_end, img } = req.body
+		const { id_record, title,  price, cnt, season_start, season_end} = req.body
+		let {img} = req.files
 		let flower
 		if (id_record) {
-			flower = await db.query('UPDATE flowers set title = ($1),cnt = ($2), price = ($3), season_start = ($4), season_end = ($5), img = ($6) where id_record = ($7) RETURNING *', [title, cnt, price, season_start, season_end, img ,id_record])
+			if (img){
+				let fileName = uuid.v4()+".jpg";
+				img.mv(path.resolve(__dirname,'..','static',fileName));
+				flower = await db.query('UPDATE flowers set title = ($1),cnt = ($2), price = ($3), season_start = ($4), season_end = ($5), img = ($6) where id_record = ($7) RETURNING *', [title, cnt, price, season_start, season_end, fileName ,id_record])
+			}
+			else{
+				flower = await db.query('UPDATE flowers set title = ($1),cnt = ($2), price = ($3), season_start = ($4), season_end = ($5) where id_record = ($6) RETURNING *', [title, cnt, price, season_start, season_end, id_record])
+			}
 		} else {
+			let fileName = uuid.v4()+".jpg";
+			img.mv(path.resolve(__dirname,'..','static',fileName));
 			flower = await db.query('INSERT INTO flowers(title, cnt, price, season_start, season_end, img ) values ($1, $2,$3,$4,$5,$6) RETURNING *', [title, cnt, price, season_start, season_end, img ])
 		}
 		res.json(flower.rows[0])

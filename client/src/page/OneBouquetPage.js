@@ -51,7 +51,7 @@ const OneBouquetPage = () => {
                 <Row>
                     <Col md={6}>
                         <Row className = "">
-                            <Image  width = {600} height = {600} src={bouquet.img} />
+                            <Image  width = {600} height = {600} src={process.env.REACT_APP_API_URL + bouquet.img} />
                         </Row> 
                         {/* <Row className="mt-3 mb-3 display-flex  ">
                                 <Col md={4}>

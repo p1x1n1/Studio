@@ -17,7 +17,7 @@ const BouquetBasketItem = (props) => {
          <>
         <Row className='d-flex   mt-3'>
             <Col md={5}>
-                <Image className='card_img'  src={bouquet.img} width={300}  onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
+                <Image className='card_img'  src={process.env.REACT_APP_API_URL +bouquet.img} width={300}  onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
             </Col>
             <Col md = {7}>
                 <div className='d-flex flex-column puple_text'>

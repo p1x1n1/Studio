@@ -32,7 +32,7 @@ const BoquetItem = ({bouquet}) => {
     return (
         <>
                 <Card className='card_bouquet_item' style={{cursor: 'pointer'}} border={"pink"}>
-                   <Image className='card_img'  src={bouquet.img} width={300} height={300} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
+                   <Image className='card_img'  src={process.env.REACT_APP_API_URL +bouquet.img} width={300} height={300} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
                     <div className='d-flex justify-content-between '>
                     </div>
                 <div className='d-flex flex-column  align-items-center'>

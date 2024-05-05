@@ -1,15 +1,34 @@
-const { Bouquet } = require("../models/models")
+const uuid = require('uuid');
 const db = require('../db.pool')
+const path = require('path');
+const { Bouquet } = require("../models/models")
+
 class BouquetController {
 	async createBouquet(req, res) {
-		const { arc, title,ready_made,price,wrapperIdRecord, description, img } = req.body
-		console.log(req.body)
+		const { arc, title,ready_made,price,wrapperIdRecord, description } = req.body
+		console.log(req)
+		let {img} = req.files
 		let bouquet
 		if (arc) {
-			bouquet = await db.query('UPDATE bouquets set title = ($1),"wrapperIdRecord" = ($2) , description = ($3),img = ($4), price = ($5) where arc = ($6) RETURNING *', [title, wrapperIdRecord,description,img,price,arc])
+			if (img){
+				let fileName = uuid.v4()+".jpg";
+				img.mv(path.resolve(__dirname,'..','static',fileName));
+				bouquet = await db.query('UPDATE bouquets set title = ($1),"wrapperIdRecord" = ($2) , description = ($3),img = ($4), price = ($5) where arc = ($6) RETURNING *', [title, wrapperIdRecord,description,fileName,price,arc])
+			}
+			else{
+				bouquet = await db.query('UPDATE bouquets set title = ($1),"wrapperIdRecord" = ($2) , description = ($3), price = ($4) where arc = ($5) RETURNING *', [title, wrapperIdRecord,description,price,arc])
+			}
 		} else {
-			if( ready_made) bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,"wrapperIdRecord",description,img) values ($1, $2,$3,$4,$5,$6) RETURNING *', [title, ready_made,price,wrapperIdRecord,description, img])
-			else bouquet = await db.query('INSERT INTO bouquets (title,price,"wrapperIdRecord",description,img,ready_made) values ($1, $2,$3,$4,$5,true) RETURNING *', [title, price,wrapperIdRecord,description, img])
+			if (img){
+				let fileName = uuid.v4()+".jpg";
+				img.mv(path.resolve(__dirname,'..','static',fileName));
+				if (ready_made) bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,"wrapperIdRecord",description,img) values ($1, $2,$3,$4,$5,$6) RETURNING *', [title, ready_made,price,wrapperIdRecord,description, fileName])
+				else bouquet = await db.query('INSERT INTO bouquets (title,price,"wrapperIdRecord",description,img,ready_made) values ($1, $2,$3,$4,$5,true) RETURNING *', [title, price,wrapperIdRecord,description, fileName])
+			}	
+			else{
+				if (ready_made) bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,"wrapperIdRecord",description) values ($1, $2,$3,$4,$5) RETURNING *', [title, ready_made,price,wrapperIdRecord,description])
+                else bouquet = await db.query('INSERT INTO bouquets (title,price,"wrapperIdRecord",description) values ($1, $2,$3,$4) RETURNING *', [title, price,wrapperIdRecord,description])
+			}
 		}
 		res.json(bouquet.rows[0])
 	}

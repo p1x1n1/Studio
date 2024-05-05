@@ -93,7 +93,7 @@ const flower_columns = [
 		dataIndex: 'img',
 		key: 'img',
 		render: (_,{img})=>(
-			<img src={img} alt={img} width={100}/>
+			<img src={process.env.REACT_APP_API_URL + img} alt={img} width={100}/>
 		)
 	},
 ]
@@ -169,7 +169,7 @@ const bouquet_columns = [
 			dataIndex: 'img',
 			key: 'img',
 			render: (_,{img})=>(
-				<Image src={img} alt={img} width={100}/>
+				<Image src={process.env.REACT_APP_API_URL + img} alt={img} width={100}/>
 			)
 	},
 	{
@@ -222,7 +222,7 @@ function Inventory() {
 
 	const [modalVisibleFlower, setModalVisibleFlower] = useState(false)
 	const [FlowerRecord, setFlowerRecord] = useState({})
-
+	const [flowerImg,setFlowerImg] = useState(null)
 
 	function showFlowerItem(recId) {
 		recId
@@ -234,7 +234,16 @@ function Inventory() {
 	}
 
 	function saveFlowerItem() {
-		apiService.post('/flower', FlowerRecord).then(() => {
+		const formData = new FormData();
+		formData.append('id_record', FlowerRecord.id_record);
+		formData.append('title', FlowerRecord.title);
+		formData.append('img', flowerImg ); 
+		formData.append('price', FlowerRecord.price);
+		formData.append('cnt', FlowerRecord.cnt);
+		formData.append('season_start', FlowerRecord.season_start);
+		formData.append('season_end', FlowerRecord.season_end);
+
+		apiService.postformData('/flower', formData).then(() => {
 			closeFlower()
 			fetchDataFlower()
 		})
@@ -407,6 +416,7 @@ function Inventory() {
 	const [OldbouquetCategoryRecord, setOldBouquetCategoryRecord] = useState([{}])
 	const [bouquetCompositionRecord, setCompositionRecord] = useState([{}])
 	const [bouquetCategoryRecord, setBouquetCategoryRecord] = useState([{}])
+	const [bouquetImg,setBouquetImg] = useState(null)
 
 	const filteredFlowers = flower.filter(fw => !bouquetCompositionRecord.some(composition => composition.flowerIdRecord === fw.id_record));
 	const filteredCategory = category.filter(c => !bouquetCategoryRecord.some(categories => categories.categoryIdRecord === c.id_record));
@@ -450,13 +460,21 @@ function Inventory() {
 		})
 	}
 	function saveItemBouquetandComposition() {
-		console.log('saveItemBouquetandComposition');
+		const formData = new FormData();
+		formData.append('arc', bouquetRecord.arc);
+		formData.append('title', bouquetRecord.title);
+		formData.append('img', bouquetImg ); 
+		formData.append('price', bouquetRecord.price);
+		formData.append('description', bouquetRecord.description);
+		formData.append('ready_made', bouquetRecord.ready_made);
+		formData.append('wrapperIdRecord', bouquetRecord.wrapperIdRecord);
+		console.log('bouquetFormData',formData)
 		let arc = bouquetRecord.arc;
 		if (arc) {
 			if (OldbouquetCompositionRecord !== bouquetCompositionRecord) apiService.delete('/bouquetcomposition/'+arc);
 			if (OldbouquetCategoryRecord !== bouquetCategoryRecord) apiService.delete('/bouquetcategory/'+arc);
 		}
-		apiService.post('/bouquet', bouquetRecord).then((res) => {
+		apiService.postformData('/bouquet', formData).then((res) => {
 	        console.log('res',res);
 			if (!arc) arc = res.arc
 			if (OldbouquetCompositionRecord !== bouquetCompositionRecord) 
@@ -640,18 +658,16 @@ function Inventory() {
 							value={bouquetRecord.price}
 						/>
 					</Form.Item>
-					<Form.Item label='Изображение'>
-							
-							<Input
-								onChange={v =>
-									setBouquetRecord(prevState => {
-										return { ...prevState, img: v.target.value }
-									})
-								}
-								value={bouquetRecord.img}
-							/>
-							<Image src={bouquetRecord.img} />
-					</Form.Item>
+					<ReactForm.Group controlId="formFile" className="mb-3">
+						<ReactForm.Label>Изображение</ReactForm.Label>
+						<ReactForm.Control type="file" 
+							onChange={v =>
+							{
+								console.log(v.target.files[0]);
+								setBouquetImg(v.target.files[0]);
+							}
+						}/>
+					</ReactForm.Group>
 					<Form.Item label='Описание'>
 						<Input 
 							onChange={v =>
@@ -758,17 +774,16 @@ function Inventory() {
 								value={FlowerRecord.season_end}
 							/>
 						</Form.Item>
-						<Form.Item label='Изображение'>
-							<Input
+						<ReactForm.Group controlId="formFile" className="mb-3">
+								<ReactForm.Label>Изображение</ReactForm.Label>
+								<ReactForm.Control type="file" 
 								onChange={v =>
-									setFlowerRecord(prevState => {
-										return { ...prevState, img: v.target.value }//... - operator spret - ...
-									})
-								}
-								value={FlowerRecord.img}
-							/>
-							<Image src={FlowerRecord.img} />
-						</Form.Item>
+									{
+										console.log(v.target.files[0])
+										setFlowerImg(v.target.files[0]);
+									}
+								}/>
+						</ReactForm.Group>
 					</Form>
 				</Modal>
 			</div> 
@@ -860,16 +875,6 @@ function Inventory() {
 									value={WrapperRecord.cnt}
 								/>
 							</Form.Item>
-							<Form.Item label='Изображение'>
-								<Input
-									onChange={v =>
-										setWrapperRecord(prevState => {
-											return { ...prevState, img: v.target.value }//... - operator spret - ...
-										})
-									}
-									value={WrapperRecord.img}
-								/>
-							</Form.Item>
 							<ReactForm.Group controlId="formFile" className="mb-3">
 								<ReactForm.Label>Изображение</ReactForm.Label>
 								<ReactForm.Control type="file" 
@@ -877,7 +882,6 @@ function Inventory() {
 									{
 										console.log(v.target.files[0])
 										setWrapperImg(v.target.files[0]);
-										console.log(wrapperImg)
 									}
 								}/>
 							</ReactForm.Group>
