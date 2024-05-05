@@ -12,6 +12,7 @@ const apiService = new ApiService()
 const Basket = observer (() => {  
     const [bouquet,setBouquet] = useState([]);
     const {user} = useContext(Context)
+    const [disProcent,setDisProcent] = useState();
     // user.user.basket = bouquet;
     // console.log('user+basket', user.user);
     const navigate = useNavigate()
@@ -19,7 +20,10 @@ const Basket = observer (() => {
 		apiService.get('/basket/'+user.user.login).then(res => {
             setBouquet(res);
         })
-        console.log('bouquet',bouquet);
+        apiService.get('/discount/'+user.user.discountIdRecord).then(res => {
+            setDisProcent(res.procent);
+        })
+        console.log('bouquet',bouquet,'dis',disProcent);
 	}
     useEffect(() => {
         console.log('bouquet',bouquet);
@@ -35,6 +39,21 @@ const Basket = observer (() => {
             setBouquet([]);
         })
         fetchDataBouquet();
+    }
+    let price;
+    function calculatePrice(){
+        console.log('bouquet',bouquet,'dis',disProcent);
+        let sum = 0;
+        bouquet.forEach(bouquet => {
+            sum += bouquet.price * bouquet.cnt;
+        });
+        price = sum 
+        return sum;
+    }
+    function calculatePriceWDiscounts(){
+        let sum = price;
+        sum = sum * ((100.00 - disProcent) / 100)
+        return sum;
     }
     return (
         <>
@@ -57,9 +76,9 @@ const Basket = observer (() => {
                 <div className='puple_border_box'>
                     <h1>Итого </h1>
                     <div>
-                        <p>Количество букетов</p>
-                        <p>Сумма</p>
-                        <p>Персональная скидка:</p>
+                        <p>Количество букетов: {bouquet.length}</p>
+                        <p>Сумма: {calculatePrice()}</p>
+                        <p>Cумма с персональной скидкой: {calculatePriceWDiscounts()}</p>
                     </div>
                 </div>
                 <div className='d-flex justife-content-center align-items-center mt-3'>

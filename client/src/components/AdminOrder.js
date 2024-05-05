@@ -126,7 +126,7 @@ const AdminOrder = () => {
         });
     };
 
-    function saveStatus(number_order,next_status){//добавить отменён
+    function saveStatus(number_order,next_status,login,sum){//добавить отменён
         apiService.post('/order',{
             number_order: number_order,
             statusOrderIdRecord: next_status,
@@ -325,7 +325,7 @@ const AdminOrder = () => {
                         <Button className='mb-3 greenButton' variant='outlined-light' 
                         onClick={() => {
                             (selectOrder.status === 1) ? next_status = 2 : next_status = 6; 
-                            saveStatus(selectOrder.number_order,next_status);
+                            saveStatus(selectOrder.number_order,next_status,selectOrder.userLogin,selectOrder.price);
                         }} 
                         disabled={!selectOrder.floristLogin && !selectOrder.courierLogin}>
                         Да

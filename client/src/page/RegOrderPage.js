@@ -16,6 +16,7 @@ const RegOrderPage = () => {
     const [localities, setlocalities] = useState([]);
     const [streets, setstreets] = useState([]);
     const [deliveries, setdeliveries] = useState([]);
+    const [disProcent,setDisProcent] = useState(0);
     const navigate = useNavigate();
     function fetchData() {
 		apiService.get('/locality').then(res => {
@@ -28,6 +29,9 @@ const RegOrderPage = () => {
         })
         apiService.get('/delivery').then(res => {
             setdeliveries(res);
+        })
+        apiService.get('/discount/'+user.user.discountIdRecord).then(res => {
+            setDisProcent(res.procent);
         })
         apiService.get('/basket/'+user.user.login).then(res => {
             setBasket(res);
@@ -47,6 +51,8 @@ const RegOrderPage = () => {
     const [Anonim, setAnonim] = useState(false); // Состояние для отслеживания нужна ли анонимная доставка
     const [NeedPostCard, setNeedPostCard] = useState(false);
     const [OrderSubmit, setOrderSubmit] = useState(false);
+    let price;
+
     const [formData,setFormData] = useState({
         anonymized: false,
         localityIdRecord:0,
@@ -87,17 +93,23 @@ const RegOrderPage = () => {
         // Дата не может быть раньше сегодняшнего дня и позже чем через 3 месяца
         return current && (current < moment().startOf('day') || current > moment().add(3, 'months').endOf('day'));
     }
-    function range(start, end) {
-        const result = [];
-        for (let i = start; i < end; i++) {
-          result.push(i);
-        }
-        return result;
-      }
     const disabledTime  = () => {
         return {
             disabledHours: () => [0,1,2,3,4,5,6,7,8,22,23],
         }
+    }
+
+
+    const calculatePriceWDiscounts= () => {
+        let sum = 0;
+        basket.forEach(bouquet => {
+            sum += bouquet.price * bouquet.cnt;
+            console.log(bouquet);
+        });
+        if (selectedDelivery.price) sum += parseFloat(selectedDelivery.price);
+        sum = sum * ((100.00-disProcent)/100);
+        console.log('sum-price',sum, price);
+        return sum;
     }
 
     const SubmitOrder = () => {
@@ -109,16 +121,20 @@ const RegOrderPage = () => {
                 comment: "Номер телефона получателя:"+RecepientPhone+'\n'+formData.comment 
                 });
         }
-        let priceBouquet = 0;//сделать в корзине
-        basket.map(bouquet =>{
-            priceBouquet = priceBouquet + parseFloat(bouquet.price);
+        let sum = 0;
+        basket.forEach(bouquet => {
+            sum += bouquet.price * bouquet.cnt;
+            console.log(bouquet);
         });
-        console.log('priceBouquet',(priceBouquet+parseFloat(selectedDelivery.price)).toString());
+        if (selectedDelivery.price) sum += parseFloat(selectedDelivery.price);
+         
         setFormData({
             ...formData,
-            price: (priceBouquet + parseFloat(selectedDelivery.price))
+            price: (sum * ((100.00-disProcent)/100))
+            // price: (priceBouquet + parseFloat(selectedDelivery.price))
             //price: (priceBouquet + parseFloat(selectedDelivery.price)).toString()//подумать ещё
         });
+        console.log('formDara submit',formData);
         apiService.post('/order',formData).then((res) => {
             console.log(res,'success');
             basket.map(bouquet =>{
@@ -330,29 +346,26 @@ const RegOrderPage = () => {
                         {basket.map(bouquet =>  
                             <>
                             <BouquetBasketOrder key={bouquet.arc} bouquet={bouquet}/>
-                            <Switch className='form_text mb-1' 
-                                checkedChildren='Открытка'
-                                unCheckedChildren='Без открытки'
-                                
-                                checked={NeedPostCard}
-                                style={{width:'50%', fontSize:'24'}}
+                            <Switch className=' mb-1' 
+                                checkedChildren='открытка'
+                                unCheckedChildren='без открытки'
+                                style={{width:'50%',height:'200'}}
                                 size='large'
-                                onChange={() => {                                           
-                                    setNeedPostCard(!NeedPostCard);           
+                                onChange={(checked) => {                                                   
                                     setBasket(prevBasket => prevBasket.map(item => {
                                         if (item.arc === bouquet.arc) {
                                             return {
                                                 ...item,
-                                                need_postcard: NeedPostCard,
+                                                need_postcard: checked,
                                                 postcard_comment:'',
                                             };
                                         }
                                         return item;
                                     }));   
-                                    console.log('basket',basket,NeedPostCard);                  
+                                    console.log('basket',basket,checked);                  
                                 }}
                             />
-                            {NeedPostCard ? 
+                            {bouquet.need_postcard ? 
                                 <TextArea showCount maxLength={100} rows={4} className='mt-3 mb-3'
                                     onChange={(value) => {                                        
                                         setBasket(prevBasket => prevBasket.map(item => {
@@ -369,7 +382,13 @@ const RegOrderPage = () => {
                                     }
                                 /> : null}
                             </>
-                        )}              
+                        )}     
+                         <div className='puple_border_box'>
+                        <h1>Итого </h1>
+                        <div>
+                            <p>Сумма с персональной скидкой: {calculatePriceWDiscounts()}</p>
+                        </div>
+                        </div>         
                         <Button type='submit' id='basket' onClick={SubmitOrder}>
                             Оформить заказ
                          </Button>

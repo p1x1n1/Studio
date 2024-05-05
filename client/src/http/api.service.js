@@ -24,4 +24,11 @@ export class ApiService {
 			method: 'POST'
 		})
 	}
+	postformData(url, formData) {
+		return this.#makeRequest(url, {
+		  body: formData,
+		  method: 'POST'
+		});
+	  }
+	  
 }

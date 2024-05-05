@@ -1,6 +1,7 @@
-import { Form, Button, Input, Table, Modal, Select, Segmented, Image, Row, Col, InputNumber, Tag } from 'antd'
+import { Form, Button, Input, Table, Modal, Select, Segmented, Image, Row, Col, InputNumber, Tag, Upload, message } from 'antd'
 import { ApiService } from '../http/api.service'
 import { useEffect, useState } from 'react'
+import {Form as ReactForm} from 'react-bootstrap';
 
 const apiService = new ApiService()
 
@@ -40,7 +41,7 @@ const wrapper_columns = [
 		dataIndex: 'img',
 		key: 'img',
 		render: (_,{img})=>(
-			<img src={img} alt={img} width={100}/>
+			<img src={process.env.REACT_APP_API_URL + img} alt={img} width={100}/>
 		)
 	},
 ]
@@ -262,6 +263,7 @@ function Inventory() {
 
 	const [modalVisibleWrapper, setModalVisibleWrapper] = useState(false)
 	const [WrapperRecord, setWrapperRecord] = useState({})
+	const [wrapperImg,setWrapperImg] = useState(null)
 
 	function showWrapperItem(recId) {
 		recId
@@ -272,7 +274,14 @@ function Inventory() {
 			: setModalVisibleWrapper(true)
 	}
 	function saveWrapperItem() {
-		apiService.post('/wrapper', WrapperRecord).then(() => {
+		const formData = new FormData();
+		formData.append('id_record', WrapperRecord.id_record);
+		formData.append('title', WrapperRecord.title);
+		formData.append('img', wrapperImg ); 
+		formData.append('price', WrapperRecord.price);
+		formData.append('cnt', WrapperRecord.cnt);
+		formData.append('wrapperCategoryIdRecord', WrapperRecord.wrapperCategoryIdRecord);
+		apiService.postformData('/wrapper', formData).then(() => {
 			closeWrapper()
 			fetchDataWrapper()
 		})
@@ -476,6 +485,9 @@ function Inventory() {
 		setCompositionRecord([{}])
 		setModalVisibleBouquet(false)
 	}
+
+	
+
 	return (
 		<>
 			<Segmented options={options} className='mb-3'
@@ -629,6 +641,7 @@ function Inventory() {
 						/>
 					</Form.Item>
 					<Form.Item label='Изображение'>
+							
 							<Input
 								onChange={v =>
 									setBouquetRecord(prevState => {
@@ -857,6 +870,17 @@ function Inventory() {
 									value={WrapperRecord.img}
 								/>
 							</Form.Item>
+							<ReactForm.Group controlId="formFile" className="mb-3">
+								<ReactForm.Label>Изображение</ReactForm.Label>
+								<ReactForm.Control type="file" 
+								onChange={v =>
+									{
+										console.log(v.target.files[0])
+										setWrapperImg(v.target.files[0]);
+										console.log(wrapperImg)
+									}
+								}/>
+							</ReactForm.Group>
 						</Form>
 					</Modal>
 				</div>

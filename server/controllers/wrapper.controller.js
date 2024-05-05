@@ -1,14 +1,26 @@
+const uuid = require('uuid');
 const db = require('../db.pool')
+const path = require('path');
+const ApiError = require('../error/ApiError');
 
 class WrapperController {
 	async createWrapper(req, res) {
-		let { id_record, title, price,cnt, wrapperCategoryIdRecord,img } = req.body
+		let { id_record, title, price,cnt, wrapperCategoryIdRecord} = req.body
+		console.log('body',req.body)
+		let {img} = req.files
 		price = parseFloat(price);
 		let wrapper
 		if (id_record) {
-			wrapper = await db.query('UPDATE wrappers set title = ($1),cnt = ($2), price = ($3),  img = ($4), "wrapperCategoryIdRecord"=($5) where id_record = ($6) RETURNING *', [title, price,cnt ,img,wrapperCategoryIdRecord,id_record])
+			if (img){
+				let fileName = uuid.v4()+".jpg";
+				img.mv(path.resolve(__dirname,'..','static',fileName));
+				wrapper = await db.query('UPDATE wrappers set title = ($1),cnt = ($2), price = ($3),  img = ($4), "wrapperCategoryIdRecord"=($5) where id_record = ($6) RETURNING *', [title, price,cnt ,fileName,wrapperCategoryIdRecord,id_record])
+			}
+			else{
+				wrapper = await db.query('UPDATE wrappers set title = ($1),cnt = ($2), price = ($3),  "wrapperCategoryIdRecord"=($4) where id_record = ($5) RETURNING *', [title, price,cnt ,wrapperCategoryIdRecord,id_record])
+			}
 		} else {
-			wrapper = await db.query('INSERT INTO wrappers (title, price,cnt ,img) values ($1, $2,$3,$4) RETURNING *', [title, price,cnt ,img])
+			wrapper = await db.query('INSERT INTO wrappers (title, price,cnt ,img) values ($1, $2,$3,$4) RETURNING *', [title, price,cnt ,fileName])
 		}
 		res.json(wrapper.rows[0])
 	}

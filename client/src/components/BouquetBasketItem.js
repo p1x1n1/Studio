@@ -26,12 +26,13 @@ const BouquetBasketItem = (props) => {
                         <h3>{bouquet.price} руб.</h3>
                 </div>
                 <InputNumber className='d-flex justify-content-between puple_border' changeOnWheel keyboard={true} size="large" min={1} max={3} defaultValue={bouquet.cnt}  />
+                <Button variant='light' onClick={()=>{props.DeleteOne(bouquet.arc)}}>
+                    <Image width={50} height={50} src={basket} />
+                    <p>Удалить из корзины</p>
+                    </Button>
             </Col>
         </Row>
-        <Button variant='light' onClick={()=>{props.DeleteOne(bouquet.arc)}}>
-                <Image width={50} height={50} src={basket} />
-                <p>Удалить из корзины</p>
-            </Button>
+        
         <Row className='green_line'></Row>
         </>
     );
