@@ -104,7 +104,7 @@ const Wrapper = sequelize.define('wrapper',{
 )
 const Bouquet = sequelize.define('bouquet',{
     arc: {type:DataTypes.INTEGER,primaryKey:true,autoIncrement:true},
-    title: {type: DataTypes.STRING(50),unique:true},
+    title: {type: DataTypes.STRING(50)},
     ready_made:{type:DataTypes.BOOLEAN,defaultValue:true},
     price:{type:DataTypes.DECIMAL(10, 2)},
     description: {type:DataTypes.TEXT( )},

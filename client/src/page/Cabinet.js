@@ -6,6 +6,7 @@ import { Context } from '../index';
 import { Form, Input,Modal } from 'antd';
 import { ApiService } from '../http/api.service'
 import { check } from '../http/userApi';
+import {Form as ReactForm} from 'react-bootstrap';
 
 
 const apiService = new ApiService()
@@ -15,15 +16,25 @@ const Cabinet = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [UserRecord, setUserRecord] = useState({})
     const [loading, setLoading] = useState(true)
+	const [img,setImg] = useState(null)
 
     function saveItem(login) {
+		const formData = new FormData();
+		formData.append('avatar', img);
+		formData.append('email', UserRecord.email);
+		formData.append('lastname', UserRecord.lastname ); 
+		formData.append('name_', UserRecord.name_);
+		formData.append('surname', UserRecord.surname);
+		formData.append('phone', UserRecord.phone);
+		formData.append('login', UserRecord.login);
+		formData.append('postIdRecord', UserRecord.postIdRecord);
         (user.user.post==='user')?
-		apiService.post('/user/'+login, UserRecord).then(() => {
+		apiService.postformData('/user/'+login, formData).then(() => {
 			close()
 			//fetchData()
 		})
         :
-        apiService.post('/employee/'+login, UserRecord).then(() => {
+        apiService.postformData('/employee/'+login, formData).then(() => {
             close()
 			//fetchData()
 		})
@@ -51,7 +62,7 @@ const Cabinet = () => {
         <div className='mt-4'>
             <Row>
                 <Col md={5}>
-                    <FormControl type='image' src={avatar}/>
+                    <FormControl type='image' height={450} width={300} src={user.user.avatar ? process.env.REACT_APP_API_URL+user.user.avatar:avatar}/>
                 </Col>
                 <Col md={7}>
                     <h1 style={{fontFamily:'Marck Script'}}>Добрый день{user.user.name_ ? ', '+ user.user.name_ : <></>} !</h1>
@@ -136,7 +147,16 @@ const Cabinet = () => {
 								value={UserRecord.lastname}
 							/>
 						</Form.Item>
-						
+						<ReactForm.Group controlId="formFile" className="mb-3">
+							<ReactForm.Label>Изображение</ReactForm.Label>
+							<ReactForm.Control type="file" 
+								onChange={v =>
+								{
+									console.log(v.target.files[0]);
+									setImg(v.target.files[0]);
+								}
+							}/>
+						</ReactForm.Group>
 					</Form>
 				</Modal>
         </div>

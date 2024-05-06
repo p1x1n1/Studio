@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form, Image} from 'react-bootstrap';
+import { Button, Form, Image} from 'react-bootstrap';
 import basket from '../base_img/icons/pink_basket.png';
 import img_input from "../base_img/icons/pink_image.png";
 import { Col, InputNumber, Row, Select } from 'antd';
@@ -54,11 +54,19 @@ const FormBoquet = (props) => {
         totalPrice = total * stoimost_rabot;
         return totalPrice;
     };
-
+    const [img,setImg]=useState(null)
     function saveToBouquet() {
 		console.log('saveItemBouquetandComposition');
+        const formData = new FormData();
+		
+		formData.append('title', bouquet.title);
+		formData.append('img', img ); 
+		formData.append('price', totalPrice);
+		formData.append('description', bouquet.description);
+		formData.append('ready_made', false);
+		formData.append('wrapperIdRecord', bouquet.wrapperIdRecord);
 		let arc;
-		apiService.post('/bouquet', {title:bouquet.title,img:bouquet.img,description:bouquet.description,price: totalPrice,wrapperIdRecord:bouquet.wrapperIdRecord,ready_made:false}).then((res) => {
+		apiService.postformData('/bouquet', formData).then((res) => {
 	        console.log('res',res);
 			arc = res.arc
 			// eslint-disable-next-line no-lone-blocks
@@ -131,38 +139,6 @@ const FormBoquet = (props) => {
                                     <Button onClick={addFlower} variant="light" className="banner_button" >Добавить цветок</Button>
                                 </Form.Group>
                               
-                                {/* {[...Array(numFlowers)].map((_, index) => (
-                                <Form.Group className="mb-3" key={index}>
-                                    <Row>
-                                        <Col md={8}>
-                                            <Form.Select
-                                                className='form_text'
-                                                value={selectedFlowers[index]}
-                                                onChange={(e) => {
-                                                    const newSelectedFlowers = [...selectedFlowers];
-                                                    newSelectedFlowers[index] = e.target.value;
-                                                    console.log('newSelectedFlowers',newSelectedFlowers);
-                                                    setSelectedFlowers(newSelectedFlowers);
-                                                    setBouquet({bouquet,flowers: newSelectedFlowers})
-                                            }}
-                                            >
-                                                <option selected disabled></option>
-                                                {filteredFlowers.map((fw) => (
-                                                    <option className='form_text' key={fw.id_record} data-foo="bar" value={fw.id_record} style={{backgroundImage: fw.img}} >
-                                                        {fw.title}
-                                                    </option>
-                                                ))}
-                                            </Form.Select>
-                                        </Col>
-                                        <Col md={3}>
-                                            <Form.Control 
-                                                className='form_text' 
-                                                type="number" min={1} max={getMaxQuantity(selectedFlowers[index])}
-                                                onChange={(e) => handleQuantityChange(index, e.target.value)}/></Col>
-                                                {console.log('selectedFlowers',selectedFlowers)}
-                                    </Row>
-                                </Form.Group>))} */}
-                                {/* <Button variant="light" className="banner_button" onClick={handleAddSelect}>Добавить еще один цветок</Button> */}
                             <Form.Group>
                                 <Form.Label className='form_text' style={{fontSize: 24}}>Упаковка:</Form.Label>
                                 <Select className='form_text'
@@ -180,10 +156,17 @@ const FormBoquet = (props) => {
                             </Form.Group>
                             </Col>                            
                             <Col md = {8}>
-                                <Form.Group className="mb-3" controlId="formImg">
-                                    <Form.Label className='form_text' style={{fontSize:24}}>Пример букета</Form.Label>
-                                    <Form.Control type="image" alt="" src={bouquet.img} />
-                                </Form.Group>
+                            <Form.Group controlId="formFile" className="mb-3">
+                                <Form.Label>Изображение с примером букета</Form.Label>
+                                <Form.Control type="file" 
+                                        onChange={v =>
+                                        {
+                                            console.log(v.target.files[0]);
+                                            setImg(v.target.files[0]);
+                                        }
+                                    }/>
+                            </Form.Group>
+                            <Image src={img_input} height={200}/>
                             </Col>        
                         </Row>
                         <p>Итог:{calculateTotalPrice()} рублей</p>

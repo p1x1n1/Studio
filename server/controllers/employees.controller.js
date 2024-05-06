@@ -1,18 +1,26 @@
 const { Employee } = require("../models/models")
+const uuid = require('uuid');
 const db = require('../db.pool')
+const path = require('path');
 class employeeController {
 	async createEmployee(req, res) {
-		const { login,email, phone, name_,surname,lastname,avatar, postIdRecord } = req.body
+		const { login,email, phone, name_,surname,lastname, postIdRecord } = req.body
+		let {avatar} = req.files
+		let fileName = uuid.v4()+".jpg";
+		avatar.mv(path.resolve(__dirname,'..','static',fileName));
 		let employee
 		employee = await db.query('INSERT INTO employees (login,email, phone, name_,surname,lastname,avatar, "postIdRecord" ) values ($1, $2,$3,$4,$5,$6,$7,$8) RETURNING *', 
-        [login,email, phone, name_,surname,lastname,avatar, postIdRecord ])
+        [login,email, phone, name_,surname,lastname,fileName, postIdRecord ])
 		res.json(employee.rows[0])
 	}
     async updateEmployee(req, res) {
-		const { login,email, phone, name_,surname,lastname,avatar, postIdRecord } = req.body
+		let {avatar} = req.files
+		let fileName = uuid.v4()+".jpg";
+		avatar.mv(path.resolve(__dirname,'..','static',fileName));
+		const { login,email, phone, name_,surname,lastname,postIdRecord } = req.body
 		let employee
 		employee = await db.query('UPDATE employees set name_ = ($1),surname = ($2) , lastname = ($3), avatar=($4), "postIdRecord" = ($5), phone = ($6)  where login = ($7) RETURNING *',
-         [name_,surname,lastname,avatar, postIdRecord,phone,login]);
+         [name_,surname,lastname,fileName, postIdRecord,phone,login]);
 		res.json(employee.rows[0])
 	}
 	async getEmployee(req, res) {

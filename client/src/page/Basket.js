@@ -64,7 +64,7 @@ const Basket = observer (() => {
                         <h1> Корзина </h1>
                     </Col>
                     <Col md={4}>
-                        <h2 style={{color:'blueviolet'}} onClick={()=>{DeleteAll()}}> Удалить всё </h2>
+                        <Button className='banner_button' variant='outlined-light'  onClick={()=>{DeleteAll()}}> Удалить всё </Button>
                     </Col>
                 </Row>             
                 {console.log(bouquet)}
