@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Button, Card, Col, Image, Row } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Card,  Image } from 'react-bootstrap';
 import basket from '../base_img/icons/green_basket.png';
 import heart from '../base_img/icons/green_heart.png';
 import {useNavigate} from 'react-router-dom';
@@ -7,10 +7,11 @@ import '../css/Item.css';
 import { Boquet_ROUTE } from '../utils/consts';
 import { ApiService } from '../http/api.service';
 import { Context } from '../index';
+import { Col, Row } from 'antd';
+
 
 const BoquetItemOrder = ({bouquet}) => {
     const navigate = useNavigate();
-    
     return (
          <>
         <Col md={3} 
@@ -27,6 +28,7 @@ const BoquetItemOrder = ({bouquet}) => {
                     <p>Подпись к открытке:  {bouquet.postcard_comment}</p>
                     <p>Состав: </p>
                 </div>
+                
              </Card>
         </Col>
     </>

@@ -6,7 +6,7 @@ const generateJwt = (login, email,phone,post) => {
     return jwt.sign(
         {login, email, phone,post},
         process.env.SECRET_KEY,
-        {expiresIn: '24h'}
+        {expiresIn: '8h'}
     )
 }
 class AuthController{

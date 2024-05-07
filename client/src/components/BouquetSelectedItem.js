@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Button, Card, Col, Image, Row } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Card,Image } from 'react-bootstrap';
 import basket from '../base_img/icons/green_basket.png';
 import heart from '../base_img/icons/green_heart.png';
 import {useNavigate} from 'react-router-dom';
@@ -7,31 +7,27 @@ import '../css/Item.css';
 import { Boquet_ROUTE } from '../utils/consts';
 import { ApiService } from '../http/api.service';
 import { Context } from '../index';
+import { Col, Row } from 'antd';
 //1.41
-const BoquetSelectedItem = ({bouquet}) => {
+const BoquetSelectedItem = (props) => {
+    const bouquet = props.bouquet;
     const navigate = useNavigate();
     const {user} = useContext(Context)
     const login = user.user.login;
-    console.log('login', login);
-    const cnt = 1;
-    function addBasket(arc) {
-		apiService.post('/basket',{login,arc,cnt}).then(() => {
-            alert('Добавлено в корзину');
-		})
-        .catch(err => {
-            alert(err.message);
-        })
-	}
-    function deleteSelected(arc) {
-		apiService.delete('/selected/'+login+'/'+arc).then(() => {
-            alert('Удаленно из избранного');
-            
-		})
-	}
+    const [inBasket,setInBasket] = useState(false);
+
+    useEffect(() => {
+        if(user.user.post === 'user'){
+            apiService.get('/basket/'+login+'/'+bouquet.arc).then((res) => {
+                setInBasket(true)                
+            }).catch((err) => {})
+        }
+    },[])
+    
     const apiService = new ApiService()
     return (
          <>
-        <Col md={6} 
+        <Col md={8}  style={{padding:'20px'}}
              className='d-flex justify-content-between align-items-center mt-3'>
                 <Card className='card_bouquet_item' style={{cursor: 'pointer'}} border={"pink"}>
                    <Image className='card_img'  src={process.env.REACT_APP_API_URL +bouquet.img} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
@@ -41,20 +37,28 @@ const BoquetSelectedItem = ({bouquet}) => {
                     <div>{bouquet.title}</div>
                     <div>Арт.{bouquet.arc}</div>
                     <div>{bouquet.price} руб.</div>
-                    <Row>
-                        <Col md={6}>
-                            <Button variant='light' onClick={()=>{addBasket(bouquet.arc)}}>
-                                <Image width={50} height={50} src={basket} />
-                            </Button>
-                        </Col>
-                        <Col md={6}>
-                            <Button variant='light' onClick={()=>{deleteSelected(bouquet.arc)}} > 
+                </div>
+                <Row>
+                        {!inBasket ? 
+                            <Col span={12}>
+                                <Button style={{width:'100%',height:'100%'}}variant='light' onClick={()=>{props.addBasket(bouquet.arc)}}>
+                                    <Image width={50} height={50} src={basket} />
+                                </Button>
+                            </Col>:
+                            <Col span={12}>
+                                <Button style={{width:'100%',height:'100%'}} variant='light'>
+                                    <p>В корзине</p>
+                                    <Image width={50} height={50} src={basket} />
+                                </Button>
+                            </Col>
+                        }
+                          <Col span={12}>
+                            <Button variant='light' style={{width:'100%',height:'100%'}} onClick={()=>{props.deleteSelected(bouquet.arc)}} > 
                                 <Image width={50} height={50} src={heart} />
                                 <p> В избранном</p>
                             </Button>
                         </Col>
                     </Row>
-                </div>
              </Card>
         </Col>
     </>

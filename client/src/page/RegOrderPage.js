@@ -161,6 +161,10 @@ const RegOrderPage = () => {
         });
         console.log('formDara submit',formData);
         })
+        .catch((err) => {
+            alert('Неккоректные данные');
+
+        });
     }
 
     const filterOption = (input, option) =>

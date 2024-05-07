@@ -22,8 +22,8 @@ const BouquetBasketOrder = ({bouquet}) => {
                         <h3>{bouquet.title}</h3>
                         <h3>Арт. {bouquet.arc}</h3>
                         <h3>{bouquet.price} руб.</h3>
+                        <h3>Количество: {bouquet.cnt}</h3>
                 </div>
-                <InputNumber className='d-flex justify-content-between puple_border' changeOnWheel keyboard={true} size="large" min={1} max={3} defaultValue={bouquet.cnt}  />
             </Col>
         </Row>
         <Row className='green_line'></Row>

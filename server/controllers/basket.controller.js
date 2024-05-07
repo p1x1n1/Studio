@@ -11,6 +11,7 @@ class BasketController {
 	}
 	async updateBasket(req, res) {
 		const { userLogin, boquetArc, cnt } = req.body
+		console.log(req.body)
 		let basket
 		basket = await db.query('UPDATE baskets set cnt = ($3) where "userLogin" = ($1) and "bouquetArc" = ($2)  RETURNING *', [userLogin, boquetArc, cnt])
 		res.json(basket.rows[0])
@@ -27,9 +28,11 @@ class BasketController {
 		console.log('basket',basket.rows,userLogin)
 		res.json(basket.rows)
 	}
+
 	async getOneBasketBouquet(req, res) {
 		const login = req.params.login
-		const basket = await db.query('SELECT * FROM baskets WHERE id_record = ($1)',[id_record])
+		const arc = req.params.arc
+		const basket = await db.query('SELECT * FROM baskets WHERE "userLogin" = ($1) and "bouquetArc"=($2)',[login,arc])
 		//console.log(id_record+'flower')
 		res.json(basket.rows[0])
 	}

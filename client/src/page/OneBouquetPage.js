@@ -17,17 +17,21 @@ const OneBouquetPage = () => {
     function fetchDataBouquet() {
 		apiService.get('/bouquet/'+arc).then(res => {
             setBouquet(res);
-        })
-        apiService.get('/bouquetcomposition/'+arc).then(res => {
-            setComposition(res);
-            console.log('composition',composition);
-        })
+            apiService.get('/bouquetcomposition/'+res.arc).then(res => {
+                setComposition(res);
+                console.log('composition',composition);
+            })
+        }).catch(
+            err => {
+                alert(err.message);
+            }
+        )
         console.log('bouquet',bouquet);
 	}
     useEffect(() => {
         console.log('bouquet',bouquet);
         fetchDataBouquet();
-	}, [])
+	}, [arc])
     function addBasket(arc) {
         let cnt = 1;
 		apiService.post('/basket',{login,arc,cnt}).then(() => {

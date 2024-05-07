@@ -12,12 +12,15 @@ const apiService = new ApiService()
 const Basket = observer (() => {  
     const [bouquet,setBouquet] = useState([]);
     const {user} = useContext(Context)
+    const login = user.user.login;
+    console.log('login', login);
     const [disProcent,setDisProcent] = useState();
+   
     // user.user.basket = bouquet;
     // console.log('user+basket', user.user);
     const navigate = useNavigate()
     function fetchDataBouquet() {
-		apiService.get('/basket/'+user.user.login).then(res => {
+		apiService.get('/basket/'+login).then(res => {
             setBouquet(res);
         })
         apiService.get('/discount/'+user.user.discountIdRecord).then(res => {
@@ -29,13 +32,14 @@ const Basket = observer (() => {
         console.log('bouquet',bouquet);
         fetchDataBouquet();
 	}, [])
+    
     function DeleteAll(){
-        apiService.delete('/basket/'+user.user.login).then(res => {
+        apiService.delete('/basket/'+login).then(res => {
             setBouquet([]);
         })
     }
     function DeleteOne(arc){
-        apiService.delete('/basket/'+user.user.login+'/'+arc).then(res => {
+        apiService.delete('/basket/'+login+'/'+arc).then(res => {
             setBouquet([]);
         })
         fetchDataBouquet();

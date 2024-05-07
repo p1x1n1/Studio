@@ -47,57 +47,130 @@ class BouquetController {
 	async getBouquetsCategory(req, res) {
 		const category = req.params.id_category
 		const flowers = '('+req.params.flowers+')'
+		let start_end= req.params.start_end
 		//const f = req.params.flowers.split(',').map(Number);
 		//const flowers =  (${f.join(',')});
 		let bouquet;
 		console.log(req.params,flowers)
-		if (category !='undefined'  && flowers!='(undefined)') {
-			 bouquet = await db.query(
-				`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
-				bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
-				"categoryIdRecord", "flowerIdRecord", composition_bouquets.cnt
-				from bouquets 
-				inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
-				inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
-				inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
-				where ready_made = true and "categoryIdRecord"=($1) 
-				and "flowerIdRecord" in ${flowers}
-				order by arc;`,
-				[category]
-		)}
-		else {
-			if (category !='undefined'){
-				 bouquet = await db.query(
-					`select  arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
-					bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
-					"categoryIdRecord"
-					from bouquets 
-					inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
-					inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
-					where ready_made = true and "categoryIdRecord"=($1) 
-					order by arc;`,
-					[category]
-					)
-			}
-			if ( flowers!='(undefined)') {
-				 bouquet = await db.query(
+		if (start_end === 'undefined'){
+			if (category !='undefined'  && flowers!='(undefined)') {
+				bouquet = await db.query(
 					`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
 					bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
-					 "flowerIdRecord", composition_bouquets.cnt
+					"categoryIdRecord", "flowerIdRecord", composition_bouquets.cnt
 					from bouquets 
+					inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
 					inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
 					inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
-					where ready_made = true 
+					where ready_made = true and "categoryIdRecord"=($1) 
 					and "flowerIdRecord" in ${flowers}
-					order by arc;`
+					order by arc;`,
+					[category]
 			)}
+			else {
+				if (category !='undefined'){
+					bouquet = await db.query(
+						`select  arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+						bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+						"categoryIdRecord"
+						from bouquets 
+						inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
+						inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+						where ready_made = true and "categoryIdRecord"=($1) 
+						order by arc;`,
+						[category]
+						)
+				}
+				if ( flowers!='(undefined)') {
+					bouquet = await db.query(
+						`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+						bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+						"flowerIdRecord", composition_bouquets.cnt
+						from bouquets 
+						inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
+						inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+						where ready_made = true 
+						and "flowerIdRecord" in ${flowers}
+						order by arc;`
+				)}
+			}
+		}
+		else{
+			start_end = start_end.split(',').map(Number);
+			if (category !='undefined'  && flowers!='(undefined)') {
+				bouquet = await db.query(
+					`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+					bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+					"categoryIdRecord", "flowerIdRecord", composition_bouquets.cnt
+					from bouquets 
+					inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
+					inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
+					inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+					where ready_made = true and "categoryIdRecord"=($1) 
+					and "flowerIdRecord" in ${flowers} and bouquets.price between ${start_end[0]} and ${start_end[1]}
+					order by arc;`,
+					[category]
+			)}
+			else {
+				if (category =='undefined'  && flowers =='(undefined)') {
+					bouquet = await db.query(
+						`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+						bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+						"categoryIdRecord", "flowerIdRecord", composition_bouquets.cnt
+						from bouquets 
+						inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
+						inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
+						inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+						where ready_made = true and bouquets.price between ${start_end[0]} and ${start_end[1]}
+						order by arc;`
+				)}
+				else{
+					if (category !='undefined'){
+						bouquet = await db.query(
+							`select  arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+							bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+							"categoryIdRecord"
+							from bouquets 
+							inner join bouquet_categories on bouquets.arc = bouquet_categories."bouquetArc"
+							inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+							where ready_made = true and "categoryIdRecord"=($1)  and bouquets.price between ${start_end[0]} and ${start_end[1]}
+							order by arc;`,
+							[category]
+							)
+					}
+					if ( flowers!='(undefined)') {
+						bouquet = await db.query(
+							`select distinct on (arc) arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,
+							bouquets."wrapperIdRecord", wrappers.title as wrapper_name,
+							"flowerIdRecord", composition_bouquets.cnt
+							from bouquets 
+							inner join composition_bouquets on bouquets.arc = composition_bouquets."bouquetArc"
+							inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record 
+							where ready_made = true 
+							and "flowerIdRecord" in ${flowers} and bouquets.price between ${start_end[0]} and ${start_end[1]}
+							order by arc;`
+					)}
+				}
+			}
 		}
 		res.json(bouquet.rows)
 	}
 	async getOneBouquet(req, res) {
 		const arc = req.params.arc
-		const bouquet = await db.query('SELECT * FROM bouquets WHERE arc = ($1)',[arc])
-		res.json(bouquet.rows[0])
+		const int_arc = parseInt(arc);
+		// console.log(arc,typeof arc,int_arc,arc == int_arc.toString(),int_arc.toString())
+		let bouquet;
+		if(arc === int_arc.toString()){
+		 bouquet = await db.query('SELECT * FROM bouquets WHERE arc = ($1)',[arc])}
+		else{
+             bouquet = await db.query
+		    ('SELECT * FROM bouquets WHERE title = ($1)',[arc])
+		}
+		if (bouquet){
+		res.json(bouquet.rows[0])}
+		else{
+			res.json({ message: 'Bouquet not found' })
+        }
 	}
 	async deleteBouquet(req, res) {
 		const arc = req.params.arc

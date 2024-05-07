@@ -32,7 +32,8 @@ class userController {
 	}
 	async getOneUser(req, res) {
 		const login = req.params.login
-		const user = await db.query(`SELECT * FROM users  SELECT * FROM users
+		const user = await db.query(`
+		SELECT * FROM users
         inner join discounts on discounts.id_record = users."discountIdRecord" WHERE login = ($1)`,[login])
         user.password_=undefined;
 		res.json(user.rows[0])

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '..';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -11,7 +11,10 @@ import cabinet from '../base_img/icons/green_avatar.png';
 import basket from '../base_img/icons/green_basket.png';
 import heart from '../base_img/icons/green_heart.png';
 import '../css/NavBar.css';
+import { ApiService } from "../http/api.service";
 
+
+const apiService = new ApiService();
 
 const NavBar = () => {
     const {user} = useContext(Context)
@@ -22,6 +25,8 @@ const NavBar = () => {
       navigate(LOGIN_ROUTE);
       console.log(user.user)
     }
+    const [NameOrArc,setNameOrArc] = useState();
+    useEffect(() => {}, [NameOrArc])
     
     return (
      <>
@@ -67,11 +72,15 @@ const NavBar = () => {
               <Form className="d-flex">
                 <Form.Control
                   type="search"
-                  placeholder="Артикул/Название"
+                  placeholder="Артикул/Название букета"
                   className="me-2"
                   aria-label="Артикул/Название"
+                  onChange={(v)=>{
+                    setNameOrArc(v.target.value);
+                    console.log(NameOrArc)
+                  }}
                 />
-                <Button variant="outline-success" onClick={()=>navigate(Boquet_ROUTE)}>Поиск</Button>
+                <Button variant="outline-success" onClick={()=>{navigate(Boquet_ROUTE+'/'+NameOrArc)}}>Поиск</Button>
               </Form>
             </Offcanvas.Body>
             

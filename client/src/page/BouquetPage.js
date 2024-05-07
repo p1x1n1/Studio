@@ -3,12 +3,13 @@ import Container from "react-bootstrap/Container";
 import CategoryBar from "../components/CategoryBar"
 import BouquetList from '../components/BouquetList';
 import { ApiService } from '../http/api.service';
+// import { Col, Row } from 'react-bootstrap';
 import { Col, Row } from 'antd';
 
 const BouquetPage = () => {
     const [choosenCategory,setchoosenCategory] = useState() ;
     const [choosenFlower,setchoosenFlower] = useState([]) ;
-    
+    const [start_end,setstart_end] = useState([]);
     
     function chooseCategory (category){
         setchoosenCategory(category) ;
@@ -18,18 +19,21 @@ const BouquetPage = () => {
         setchoosenFlower(flowers) ;
         // console.log(flowers)
     }
+    function choosePrice(a){
+        setstart_end(a) ;
+    }
     
 
     return (
         <>
-            <Container className="d-flex justify-content-between align-items-center mt-3" >
+            <Container fluid className="align-items-center mt-3" >
                 <Row className="mt-3">
-                    <Col flex = {6} > 
+                    <Col md = {6} > 
                     {/* style={{marginRight:'10px'}} */}
-                        <CategoryBar width = {100} chooseCategory={chooseCategory} chooseFlowers={chooseFlowers}/>
+                        <CategoryBar width = {100} chooseCategory={chooseCategory} chooseFlowers={chooseFlowers} choosePrice={choosePrice}/>
                     </Col>
-                    <Col flex = {18}>
-                        <BouquetList category={choosenCategory} flowers={choosenFlower}/>
+                    <Col md = {18}>
+                        <BouquetList category={choosenCategory} flowers={choosenFlower} start_end={start_end}/>
                     </Col>
                 </Row>
             </Container>

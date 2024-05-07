@@ -24,8 +24,8 @@ class employeeController {
 		res.json(employee.rows[0])
 	}
 	async getEmployee(req, res) {
-		const employee = await db.query(`
-        SELECT * FROM employees
+		const employee = await db.query(`\\
+        SELECT login,email,name_,lastname,surname,phone,avatar,"postIdRecord",title FROM employees
         inner join posts on posts.id_record = employees."postIdRecord";
         `)
         employee.password_=undefined;

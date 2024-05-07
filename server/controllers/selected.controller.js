@@ -23,20 +23,21 @@ class SelectedController {
 	}
 	async getOneSelectedBouquet(req, res) {
 		const login = req.params.login
-		const selected = await db.query('SELECT * FROM selecteds WHERE id_record = ($1)',[id_record])
+		const arc = req.params.arc
+		const selected = await db.query('SELECT * FROM selecteds WHERE "userLogin" = ($1) and selecteds."bouquetArc" = ($2)',[login,arc])
 		//console.log(id_record+'flower')
 		res.json(selected.rows[0])
 	}
 	async deleteSelected(req, res) {
 		const userLogin = req.params.login
-		const selected = await db.query('DELETE FROM selecteds WHERE "userLogin" = ($1)',[userLogin])
+		const selected = await db.query('DELETE FROM selecteds WHERE "userLogin" = ($1) ',[userLogin])
 		res.json({ success: true })
 	}
 	async deleteOneSelected(req, res) {
 		console.log('delete one selected',req.params)
 		const userLogin = req.params.login
-		const boquetArc = req.params.login.arc
-		const selected = await db.query('DELETE FROM selecteds WHERE "userLogin" = ($1)',[userLogin])
+		const boquetArc = req.params.arc
+		const selected = await db.query('DELETE FROM selecteds WHERE "userLogin" = ($1) and "bouquetArc" = ($2)',[userLogin,boquetArc])
 		res.json({ success: true })
 	}
 }

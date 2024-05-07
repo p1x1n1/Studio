@@ -15,7 +15,7 @@ const CheckboxGroup = Checkbox.Group;
 const TypeBar = observer((props) => {
     //const {boquet} = useContext(Context)
     const [categories,setCategories]= useState([])
-    const [start_end,setStartEnd] = useState([])
+    const [start_end,setStartEnd] = useState([1000,5000])
     const [flower,setFlower] = useState([])
     const [selected_categories,setSelected_categories] = useState([])
 
@@ -63,7 +63,20 @@ const TypeBar = observer((props) => {
           </Container>*/
     //добавить множественный выбор
   <>
-        <Slider range max={100000} min = {0} />
+        <h1>Цена</h1>
+        <div className='d-flex flex-row'>
+            <p style={{width:'10%'}}>{start_end[0]}</p>
+            <Slider style={{width:'70%'}} range max={10001} min = {0} 
+              onChangeComplete ={(v)=>{
+                setStartEnd(v);
+                props.choosePrice(v);
+                }}
+              defaultValue={start_end}
+              //value={start_end}
+              step={1}
+            />
+            <p style={{width:'10%'}}>{start_end[1]}</p>
+        </div>
         <h1>Категории</h1>
         <ListGroup >
             {categories.map(category => 

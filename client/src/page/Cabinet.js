@@ -3,7 +3,7 @@ import { Button, Col, Container, FormControl,  Row, Spinner } from 'react-bootst
 import avatar from '../base_img/icons/green_avatar.png';
 import EmployerPanel from '../components/EmloyerPanel';
 import { Context } from '../index';
-import { Form, Input,Modal } from 'antd';
+import { Avatar, Form, Image, Input,Modal } from 'antd';
 import { ApiService } from '../http/api.service'
 import { check } from '../http/userApi';
 import {Form as ReactForm} from 'react-bootstrap';
@@ -62,7 +62,7 @@ const Cabinet = () => {
         <div className='mt-4'>
             <Row>
                 <Col md={5}>
-                    <FormControl type='image' height={450} width={300} src={user.user.avatar ? process.env.REACT_APP_API_URL+user.user.avatar:avatar}/>
+                    <Image   style = {{width:'70%',height:'70%', margin:'auto 0',padding:'auto 0'}} src={user.user.avatar ? process.env.REACT_APP_API_URL+user.user.avatar:avatar}/>
                 </Col>
                 <Col md={7}>
                     <h1 style={{fontFamily:'Marck Script'}}>Добрый день{user.user.name_ ? ', '+ user.user.name_ : <></>} !</h1>
