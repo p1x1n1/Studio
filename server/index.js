@@ -5,10 +5,10 @@ const models = require('./models/models')
 const cors = require('cors')
 const router = require('./routes/index')
 const authRoutes=require('./routes/auth.routes')
-const fileUpload=require('express-fileupload')
+const fileUpload = require('express-fileupload')
 const errorHandler = require('./middleware/ErrorHandingMiddleWare')
 const path = require('path')
-// const pdfTemplate = require('./documents');
+
 
 const PORT = process.env.PORT || 5000
 

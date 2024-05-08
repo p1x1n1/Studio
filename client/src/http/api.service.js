@@ -10,6 +10,18 @@ export class ApiService {
 			method: 'GET' 
 		})
 	}
+	getFile(url){
+		return fetch(this.#apiPath + url,{ 
+		  method: 'GET' 
+		}).then(response => {
+		  if (response.ok) {
+			return response.blob();
+		  } else {
+			throw new Error('Error getting file: ' + response.statusText);
+		  }
+		});
+	  }
+	
 
 	delete(url) {
 		return this.#makeRequest(url, { method: 'DELETE' })

@@ -19,7 +19,7 @@ const postRouter = require('./post.router.js')
 const categoryRouter = require('./category.router.js')
 const wrapperCategoryRouter = require('./wrapper.category.router.js')
 const discountRouter = require('./discount.router.js')
-
+const documentRouter = require('./document.router.js')
 
 router.use('/user',userRouter)
 router.use('/employee',employeeRouter)
@@ -39,6 +39,7 @@ router.use('/bouquetcategory',bouquetCategoryRouter)
 router.use('/wrapper',wrapperRouter)
 router.use('/category',categoryRouter)
 router.use('/wrapper_category',wrapperCategoryRouter)
+router.use('/document',documentRouter)
 
 
 module.exports = router

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import Admin from './AdminPanel';
 import { useNavigate } from 'react-router-dom';
-import { INVENTORY, ORDER } from '../utils/consts';
+import { DOCUMENT, INVENTORY, ORDER } from '../utils/consts';
 import { Context } from '../index';
 
 
@@ -18,7 +18,7 @@ const EmployerPanel = () => {
                     <Admin/> 
                     : (post=== 'Флорист') ? <Col md={6} ><Button className='pupleButton mb-3' variant='outline-light' onClick={()=>navigate(INVENTORY)} >Инвентаризация</Button></Col> :<></> }
                <Col md={6}><Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(ORDER) } >Текущие заказы</Button></Col>
-               <Col md={6}><Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(ORDER) } >Отчёты</Button></Col>
+               <Col md={6}><Button className='greenButton mb-3' variant='outline-success' onClick={()=>navigate(DOCUMENT) } >Отчёты</Button></Col>
             </Row>
         </div>
         
