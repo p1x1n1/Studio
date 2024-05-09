@@ -20,7 +20,6 @@ background-position: center center;*/
     width: 90%;
     height: 90%;
     background: #ffffff52; 
-
 }
 .banner_h2{
     /*выравнивание по горизонтали*/
@@ -59,13 +58,23 @@ color: #FED6FF;
 }
 
 .banner_button {  
-    width: 400px;
+    width: 60%;
     margin-top: 2%;
     margin-left: 2%;
     margin-right: 2%;
     margin-bottom: 5%;
     background: #970778c5;
     color: #f8eded;
+}
+
+.banner_button:hover {  
+    width: 60%;
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 5%;
+    background: #C6DF76;
+    color: #ffffff;
 }
 
 .form_text {
@@ -81,3 +90,4 @@ color: #FED6FF;
     margin-bottom: 2%;
     border: 2px solid #2F611D;
     transform: matrix(1, 0, 0, 1, 0, 0);}
+

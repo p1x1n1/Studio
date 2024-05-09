@@ -60,23 +60,26 @@ const Cabinet = () => {
         <div className='mt-4'>
             <Row>
                 <Col md={5}>
-                    <Image   style = {{width:'70%',height:'70%', margin:'auto 0',padding:'auto 0'}} src={user.user.avatar ? process.env.REACT_APP_API_URL+user.user.avatar:avatar}/>
-                </Col>
-                <Col md={7}>
-                    <h1 style={{fontFamily:'Marck Script'}}>Добрый день{user.user.name_ ? ', '+ user.user.name_ : <></>} !</h1>
-                    <div style={{ display: 'flex', flexDirection:' column'}}>
+                    <Image className='center'  style = {{width:'70%',height:'70%', margin:'auto 0',padding:'auto 0',borderRadius: "70px"}} src={user.user.avatar ? process.env.REACT_APP_API_URL+user.user.avatar:avatar}/>
+					<h1 style={{fontFamily:'goosberry'}}> Вы зашли под профилем {user.user.post} </h1>
+				</Col>
+                <Col md={7} className='cabinet'>
+                    <h1 style={{fontFamily:'goosberry'}}>Добрый день{user.user.name_ ? ', '+ user.user.name_ : <></>} !</h1>
+                    <div style={{ display: 'flex', flexDirection:' column'}} >
                         <h1> Email: {user.user.email}</h1>
                         <h1> Имя: {user.user.name_ ?  user.user.name_ : <></>}</h1>
                         <h1> Фамилия: {user.user.surname ?  user.user.surname : <></>}</h1>
                         <h1> Отчество: {user.user.lastname ?  user.user.lastname : <></>}</h1>
+						<h1> Телефон: {user.user.phone ?  user.user.phone : <></>}</h1>
                     </div>
-                    <Button className='pupleButton mb-3' variant='outline-light' 
-                    onClick={() => {setModalVisible(true); setUserRecord(user.user)}}> Редактировать информация </Button>
+                    <Button className='pupleButton' variant='outline-light' 
+                    onClick={() => {setModalVisible(true); setUserRecord(user.user)}}> Редактировать информацию </Button>
                     {console.log('role',user.user.post)}
                     {(user.user.post==='user')? 
 						<>
+							<Button className='greenButton' onClick={()=>navigate(DOCUMENT)}>Заказы</Button>
+							<h1>Персональная скидка: {user.user.procent} {' процентов'}</h1>
 							<h1>Сумма заказов: {user.user.order_sum} {' руб.'}</h1>
-							<Button onClick={()=>navigate(DOCUMENT)}>Заказы</Button>
 						</>
 						: <EmployerPanel post={user.user.post}/> }
                 </Col>
@@ -89,10 +92,10 @@ const Cabinet = () => {
 					onCancel={() => close()}
 					centered
 					footer={[
-						<Button className='mb-3'type='primary' onClick={() =>  saveItem(UserRecord.login) } disabled={!UserRecord.login && !UserRecord.email }>
+						<Button className='mb-3 greenButton' type='primary' onClick={() =>  saveItem(UserRecord.login) } disabled={!UserRecord.login && !UserRecord.email }>
 							Сохранить
 						</Button>,
-						<Button onClick={() => close()}>Отмена</Button>
+						<Button className='mb-3 greenButton' onClick={() => close()}>Отмена</Button>
 					]
 				}
 				>

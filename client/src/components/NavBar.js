@@ -3,13 +3,13 @@ import { Context } from '..';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import {Button, Form, Image, NavDropdown, Offcanvas} from "react-bootstrap"
+import {Button, Form, Image, NavDropdown, Offcanvas, Stack} from "react-bootstrap"
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LOGIN_ROUTE, SHOP_ROUTE,Boquet_ROUTE, IndBoquet_ROUTE, CABINET, Basket_ROUTE, SELECTED } from '../utils/consts';
-import logo from '../base_img/icons/logo_men.png';
-import cabinet from '../base_img/icons/green_avatar.png';
-import basket from '../base_img/icons/green_basket.png';
-import heart from '../base_img/icons/green_heart.png';
+import logo from '../base_img/icons/label.png';
+import cabinet from '../base_img/icons/green_user_2.png';
+import basket from '../base_img/icons/flower-basket.png';
+import heart from '../base_img/icons/heart.png';
 import '../css/NavBar.css';
 import { ApiService } from "../http/api.service";
 
@@ -31,32 +31,22 @@ const NavBar = () => {
     return (
      <>
      <div className='navbar_background'></div>
-        <Navbar className=" mb-3 navbar">
+        <Navbar className=" mb-3 navbars">
         <Container fluid>
           <Navbar.Brand >
              <NavLink to={SHOP_ROUTE}>
-                <div className='brand'>
-                  <Image width={200} height={150} src={logo}/> 
-                  <h1 className='brand'> FlowerS/Studio</h1>
-                </div>
+                <Stack direction='horizontal'>
+                  <Image style={{width:'13%'}} src={logo}/> 
+                  <h1 className='brand' > FlowerS/Studio</h1>
+                </Stack>
             </NavLink>
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls={`offcanvasNavbar `} />
-          <Navbar.Offcanvas
-            id={`offcanvasNavbar `}
-            aria-labelledby={`offcanvasNavbarLabel `}
-            placement="end"
-          >
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title id={`offcanvasNavbarLabel `}>
-                
-              </Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
-              <Nav className="justify-content-end flex-grow-1 pe-3">
-                <NavDropdown
-                  title="Букеты"
+            <Navbar.Toggle aria-controls={`offcanvasNavbar `} />
+              <NavDropdown 
+                  variant="light"
+                  title="Букеты" 
                   id={`offcanvasNavbarDropdown `}
+                  style={{ color: "white" }}
                 >
                   <NavDropdown.Item href="#action4">
                    <NavLink className= "navlink" to={Boquet_ROUTE}> Каталог</NavLink>
@@ -65,10 +55,9 @@ const NavBar = () => {
                   <NavDropdown.Item href="#action5">
                     <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальные букеты</NavLink>
                   </NavDropdown.Item>
-                </NavDropdown>
-                <Nav.Link  > Доставка </Nav.Link>
-                <Nav.Link > Контакты </Nav.Link>
-              </Nav>
+              </NavDropdown>
+              <Nav.Link  style={{ color: "white" }}> Доставка </Nav.Link>
+              <Nav.Link  style={{ color: "white" }}> Контакты </Nav.Link>
               <Form className="d-flex">
                 <Form.Control
                   type="search"
@@ -82,13 +71,10 @@ const NavBar = () => {
                 />
                 <Button variant="outline-success" onClick={()=>{navigate(Boquet_ROUTE+'/'+NameOrArc)}}>Поиск</Button>
               </Form>
-            </Offcanvas.Body>
-            
-          </Navbar.Offcanvas>
           <div className='ml-2'>
             {user.isAuth ?
             <Nav>
-              <NavLink className='navlink' to={CABINET}> <Image width={50} height={50} src={cabinet}/> </NavLink>
+              <NavLink className='navlink ' to={CABINET}> <Image className='hover_white' width={50} height={50} src={cabinet}/> </NavLink>
              { (user.user.post === 'user') ?
                 <Nav>
                   <NavLink className="navlink" to={Basket_ROUTE +'/'+ user.user.login}> <Image width={50} height={50} src={basket}/> </NavLink>

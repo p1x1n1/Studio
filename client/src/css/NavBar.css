@@ -1,32 +1,73 @@
 
+*{
+    font-family: 'Citrica';
+}
 .navlink{
     color: #8142C1;
     margin-left: auto;
     margin-top: 3%;
 }
+.white-text{
+    color: white;
+}
 
 .navlink:hover{
     color: #8142C1;
 }
+.hover_white:hover{
+    color: #f3e7ff;
+}
+
 .navbar_background{
     position: absolute;
-    width: 1728px;
-    height: 190px;
+    width: 100%;
+    height: 100;
 }
-.navbar{
-background: rgba(217, 217, 217, 0.43);
+.navbars{
+background: #E2A5C8;
 border-radius: 177.5px;
-
+color: white;
 }
 .brand{
-    color: #8142C1;
-    text-align: center; 
-    font-size:medium; 
+    color: white;
+    font-size: large; 
     font-family: "GUDINI";
+}
+.brand:hover{
+    color: #FE3B6D;
+    font-size: large; 
+    font-family: "GUDINI";
+}
+.cabinet{
+
 }
 @font-face {
     font-family: "GUDINI"; 
     src: url("./GUDINI.otf") format("truetype"); 
+    font-style: normal; 
+    font-weight: normal; 
+  }
+@font-face {
+    font-family: "Marlino"; 
+    src: url("./Marlino-Regular.otf") format("truetype"); 
+    font-style: normal; 
+    font-weight: normal; 
+  }
+  @font-face {
+    font-family: "goosberry"; 
+    src: url("./goosberry_version_02.otf") format("truetype"); 
+    font-style: normal; 
+    font-weight: normal; 
+  }
+  @font-face {
+    font-family: "Klukva"; 
+    src: url("./Klukva_version_01.otf") format("truetype"); 
+    font-style: normal; 
+    font-weight: normal; 
+  }
+  @font-face {
+    font-family: "Citrica"; 
+    src: url("./citricacyrillic.ttf") format("truetype"); 
     font-style: normal; 
     font-weight: normal; 
   }

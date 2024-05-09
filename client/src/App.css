@@ -1,26 +1,29 @@
-
-*{
-  font-family: 'Marmelad';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 29px;
-  color: #2F611D;
-  }
 .container_background{
   position: relative;
-  background-image: url(./base_img/background.jpg);
+  /* background: linear-gradient(180deg, #FAB0D3 19.01%, rgba(249, 207, 199, 0.982022) 37.64%, rgba(248, 246, 185, 0.96) 60.46%, rgba(200, 214, 218, 0.95) 77.22%, rgba(151, 181, 251, 0.94) 93.05%); */
+  background: linear-gradient(180deg, rgba(255, 197, 209, 0.3) 12.5%, rgba(255, 197, 209, 0.690164) 29.5%, #FFC5D1 61.33%, rgba(246, 255, 250, 0.94) 84.61%);
+  backdrop-filter: blur(2px);
   background-repeat: repeat-y;
   background-size: cover;
 }
 .Container{
   background-color: rgba(255, 255, 255, 0.712);
+  padding-left: 1%;
+  padding: 1%;
+  padding-right: 1%;
+  padding-bottom: 1%;
 }
+.footer{
+  background: #C6DF76;
+  color: white;
+  }
 .puple_text{
-font-weight: 400;
-font-size: 40px;
-line-height: 48px;
 color: #3F1D61;
+}
+.center{
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 #basket{
   border-color: #9d4fea9c;
@@ -37,25 +40,17 @@ color: #3F1D61;
   height: 60px;
 }
 
-.accordion{
-  margin-top: 50px;
-}
+
 .accordion-item{
   border-color: #9d4fea9c;
 }
 .accordion-header{  
   color: #4fea7e91;
 }
-
-
-
-
-
-
 .carousel-item{
-  height: 400px;
+  height: 280px;
   width: 100%;
-  margin-top: 5%;
+  margin-top: 1%;
 }
 .button_carousel{
   width: 40%;
@@ -64,15 +59,12 @@ color: #3F1D61;
   top: 437.58px;
   background: #2F611D;
   border: none;
-
   font-weight: 400;
   font-size: 36px;
   line-height: 43px;
   color: #ffffff;
   box-shadow: inset 0px 4px 4px rgba(250, 8, 210, 0.25);
   mix-blend-mode: lighten;
-
-
 }
 .p_car{
 font-family: 'Marmelad';
@@ -106,10 +98,27 @@ box-sizing: border-box;
 background: rgba(47, 97, 29, 0.5);
 border: 2px solid rgba(47, 97, 29, 0.5);
 color: #FFFFFF;
+margin: 1%;
 }
+
+.greenButton:hover{
+  box-sizing: border-box;
+  background: #C6DF76;
+  border: 2px solid rgba(47, 97, 29, 0.5);
+  color: #FFFFFF;
+  }
+
 .pupleButton{
-box-sizing: border-box;
-background: rgba(130, 87, 173, 0.2);
-border: 2px solid rgba(130, 87, 173, 0.2);
-color: #3F1D61;
+  box-sizing: border-box;
+  background: rgba(130, 87, 173, 0.2);
+  border: 2px solid rgba(130, 87, 173, 0.2);
+  color: #3F1D61;
+  margin: 1%;
 }
+
+.pupleButton:hover{
+  box-sizing: border-box;
+  background: #9d4fea9c;
+  border: 2px solid rgba(130, 87, 173, 0.2);
+  color: white;
+  }

@@ -67,7 +67,7 @@ const UserOrderDocument = (props) => {
                               <Stack direction='horizontal' gap={3} >
                                   <h5>Номер заказа: {order.number_order} </h5>
                                   <h5 style={{color: 'green'}} className="p-2 ms-auto">Статус: {order.status_order_title}</h5>
-                                  {(order.statusOrderIdRecord === 7) ? <Button onClick={()=>createAndDownloadPdf(order)}>Получить Чек</Button>:<></>}
+                                  {(order.statusOrderIdRecord === 7) ? <Button className= 'pupleButton'onClick={()=>createAndDownloadPdf(order)}>Получить Чек</Button>:<></>}
                               </Stack>
                           </Accordion.Header>
                           <Accordion.Body>
