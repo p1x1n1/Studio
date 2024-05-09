@@ -6,25 +6,24 @@ import { Context } from '../index';
 import { ApiService } from '../http/api.service';
 import { saveAs } from 'file-saver';
 import { Button } from 'react-bootstrap';
+import AdminDocumnet from '../components/AdminDocument';
+import UserOrderDocument from '../components/UserOrderDocument';
 
 const apiService = new ApiService();
 const Document = () => {
     const {user} = useContext(Context)
-    const createAndDownloadPdf = () => {
-        console.log(user.user.name_);
-        apiService.post('/document', {name:user.user.name_,price1:4000,price2:2000,receiptId:4})
-          .then(() => apiService.getFile('/document'))
+    function getDocument(){
+      apiService.getFile('/document')
           .then((res) => {
             const pdfBlob = new Blob([res], { type: 'application/pdf' });
-            saveAs(pdfBlob, 'newPdf.pdf');
+            saveAs(pdfBlob, 'Отчёт.pdf');
           })
-          
-      }
+    }
     return (
         <>{ (user.user.post ==='user')?
-            <AdminOrder/>
+            <UserOrderDocument getDocument={getDocument}/>
             :(user.user.post ==='Администратор') ?
-            <Button onClick={createAndDownloadPdf}>Получить отчёт</Button>
+            <AdminDocumnet getDocument={getDocument}/>
             : (user.user.post ==='Курьер') ?
             <CourierOrder />:
             <FloristOrder />}

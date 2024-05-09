@@ -7,6 +7,8 @@ import { Avatar, Form, Image, Input,Modal } from 'antd';
 import { ApiService } from '../http/api.service'
 import { check } from '../http/userApi';
 import {Form as ReactForm} from 'react-bootstrap';
+import { DOCUMENT, ORDER } from '../utils/consts';
+import { useNavigate } from 'react-router-dom';
 
 
 const apiService = new ApiService()
@@ -17,7 +19,7 @@ const Cabinet = () => {
     const [UserRecord, setUserRecord] = useState({})
     const [loading, setLoading] = useState(true)
 	const [img,setImg] = useState(null)
-
+	const navigate = useNavigate();
     function saveItem(login) {
 		const formData = new FormData();
 		formData.append('avatar', img);
@@ -53,11 +55,7 @@ const Cabinet = () => {
 		setUserRecord({})
 		setModalVisible(false)
 	}
-    //const User = {email: '', password:'',phone:"",name:"",surname:"",lastname:"",sumOrder:""};
-    // const Employer = {email: '', password:'',phone:"",name:"",surname:"",lastname:"",postId:'1'};
-    // const Post =[{id:1, name:"Администратор"},{id:2, name:"Флорист"},{id:3, name:"Курьер"}]
-    // const postId = Employer.postId ;
-    // console.log(postId);
+
     return (
         <div className='mt-4'>
             <Row>
@@ -75,7 +73,12 @@ const Cabinet = () => {
                     <Button className='pupleButton mb-3' variant='outline-light' 
                     onClick={() => {setModalVisible(true); setUserRecord(user.user)}}> Редактировать информация </Button>
                     {console.log('role',user.user.post)}
-                    {(user.user.post==='user')? <h1>Сумма заказов: {user.user.order_sum} {' руб.'}</h1> : <EmployerPanel post={user.user.post}/> }
+                    {(user.user.post==='user')? 
+						<>
+							<h1>Сумма заказов: {user.user.order_sum} {' руб.'}</h1>
+							<Button onClick={()=>navigate(DOCUMENT)}>Заказы</Button>
+						</>
+						: <EmployerPanel post={user.user.post}/> }
                 </Col>
             </Row>
             <Modal

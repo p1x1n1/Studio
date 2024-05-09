@@ -5,10 +5,11 @@ import { ApiService } from "../http/api.service";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Context } from '../index';
+import { message } from "antd";
 
 const apiService = new ApiService();
 const OneBouquetPage = () => {
-    const {arc} = useParams();
+    let {arc} = useParams();
     const {user} = useContext(Context)
     const login = user.user.login;
     console.log('arc',arc);
@@ -23,7 +24,7 @@ const OneBouquetPage = () => {
             })
         }).catch(
             err => {
-                alert(err.message);
+                alert("Букет не найден");
             }
         )
         console.log('bouquet',bouquet);
@@ -51,6 +52,7 @@ const OneBouquetPage = () => {
     //const bouquet = {arc:1, name: 'Букет1',ready_made:true,price:1500,img:'https://cvetaevatomsk.ru/uploads/goods/2021-11/1636032945_img_5057.jpg'};
     return (
         <>
+           {(arc) ?
            <Container className="mt-4">
                 <Row>
                     <Col md={6}>
@@ -122,6 +124,11 @@ const OneBouquetPage = () => {
                     </Col>
                 </Row>
            </Container>
+           :
+           <>
+           <h1>Букет не найден</h1>
+           <h3>Попробуйте изменить запрос</h3>
+           </>}
         </>
     );
 };

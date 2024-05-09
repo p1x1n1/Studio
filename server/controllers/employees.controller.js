@@ -14,17 +14,23 @@ class employeeController {
 		res.json(employee.rows[0])
 	}
     async updateEmployee(req, res) {
-		let {avatar} = req.files
-		let fileName = uuid.v4()+".jpg";
-		avatar.mv(path.resolve(__dirname,'..','static',fileName));
 		const { login,email, phone, name_,surname,lastname,postIdRecord } = req.body
 		let employee
-		employee = await db.query('UPDATE employees set name_ = ($1),surname = ($2) , lastname = ($3), avatar=($4), "postIdRecord" = ($5), phone = ($6)  where login = ($7) RETURNING *',
-         [name_,surname,lastname,fileName, postIdRecord,phone,login]);
+		if(req.files){
+			let {avatar} = req.files
+			let fileName = uuid.v4()+".jpg";
+			avatar.mv(path.resolve(__dirname,'..','static',fileName));
+			employee = await db.query('UPDATE employees set name_ = ($1),surname = ($2) , lastname = ($3), avatar=($4), "postIdRecord" = ($5), phone = ($6)  where login = ($7) RETURNING *',
+			[name_,surname,lastname,fileName, postIdRecord,phone,login]);
+		}
+		else{
+			employee = await db.query('UPDATE employees set name_ = ($1),surname = ($2) , lastname = ($3),  "postIdRecord" = ($4), phone = ($5)  where login = ($6) RETURNING *',
+			[name_,surname,lastname, postIdRecord,phone,login]);
+		}
 		res.json(employee.rows[0])
 	}
 	async getEmployee(req, res) {
-		const employee = await db.query(`\\
+		const employee = await db.query(`
         SELECT login,email,name_,lastname,surname,phone,avatar,"postIdRecord",title FROM employees
         inner join posts on posts.id_record = employees."postIdRecord";
         `)

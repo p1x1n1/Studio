@@ -14,13 +14,20 @@ class userController {
 		res.json(user.rows[0])
 	}
     async updateUser(req, res) {
-		let {avatar} = req.files
-		let fileName = uuid.v4()+".jpg";
-		avatar.mv(path.resolve(__dirname,'..','static',fileName));
 		const { login,email, phone, name_,surname,lastname } = req.body
 		let user
-		user = await db.query('UPDATE users set name_ = ($1),surname = ($2) , lastname = ($3), avatar=($4),  phone = ($5)  where login = ($6) RETURNING *',
-         [name_,surname,lastname,fileName, phone,login]);
+		if(req.files){
+			let {avatar} = req.files
+			let fileName = uuid.v4()+".jpg";
+			avatar.mv(path.resolve(__dirname,'..','static',fileName));
+			
+			user = await db.query('UPDATE users set name_ = ($1),surname = ($2) , lastname = ($3), avatar=($4),  phone = ($5)  where login = ($6) RETURNING *',
+			[name_,surname,lastname,fileName, phone,login]);
+		}
+		else{
+            user = await db.query('UPDATE users set name_ = ($1),surname = ($2) , lastname = ($3),  phone = ($4)  where login = ($5) RETURNING *',
+            [name_,surname,lastname,phone,login]);
+        }
 		res.json(user.rows[0])
 	}
 	async getUser(req, res) {

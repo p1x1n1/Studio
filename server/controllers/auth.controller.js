@@ -30,11 +30,13 @@ class AuthController{
         let post = 'user'
         if(!user){ 
             user = await Employee.findOne({where:{login}})
+            if (!user){
+                return next(ApiError.internal('Пользователь с таким логином не существует'))
+            }
+            else{
             post = user.postIdRecord
             post = await Post.findOne({where:{id_record: post}})
             post = post.title
-            if (!user){
-                return next(ApiError.internal('Пользователь с таким логином не существует'))
             }
         }      
         if (post==='user'){
