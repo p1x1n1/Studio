@@ -10,11 +10,11 @@ const UserOrderDocument = (props) => {
     const {user} = useContext(Context)
     const [orders,setOrders] = useState([])
     const [composition, setComposition] = useState([]);
-    const [selectOrder,setSelectOrder] = useState({});
 
-    const createAndDownloadPdf = () => {
-        console.log(user.user.name_,selectOrder);
-        apiService.post('/document/user', selectOrder)
+
+    const createAndDownloadPdf = (Order) => {
+        console.log(user.user.name_,Order);
+        apiService.post('/document/user', Order)
           .then(
             props.getDocument()
         )
@@ -62,12 +62,12 @@ const UserOrderDocument = (props) => {
         {orders.map((order)=>
           <>
             <Accordion className='mb-0 mt-0'>
-              <Accordion.Item onClick={() => setSelectOrder(order)}>
+              <Accordion.Item>
                           <Accordion.Header>
                               <Stack direction='horizontal' gap={3} >
                                   <h5>Номер заказа: {order.number_order} </h5>
                                   <h5 style={{color: 'green'}} className="p-2 ms-auto">Статус: {order.status_order_title}</h5>
-                                  {(order.statusOrderIdRecord === 7) ? <Button onClick={createAndDownloadPdf}>Получить Чек</Button>:<></>}
+                                  {(order.statusOrderIdRecord === 7) ? <Button onClick={()=>createAndDownloadPdf(order)}>Получить Чек</Button>:<></>}
                               </Stack>
                           </Accordion.Header>
                           <Accordion.Body>

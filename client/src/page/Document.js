@@ -15,6 +15,7 @@ const Document = () => {
     function getDocument(){
       apiService.getFile('/document')
           .then((res) => {
+            console.log('res',res);
             const pdfBlob = new Blob([res], { type: 'application/pdf' });
             saveAs(pdfBlob, 'Отчёт.pdf');
           })

@@ -20,7 +20,7 @@ class OrderCompositionController {
 	async getOrderComposition(req, res) {
 		const orderNumberOrder = req.params.orderNumberOrder
 		const order = await db.query(`
-		SELECT arc,composition_orders.cnt,postcard_comment,postcard,bouquets.title as title, ready_made,bouquets.img as img,
+		SELECT arc,composition_orders.cnt,postcard_comment,postcard,bouquets.title as title, ready_made,bouquets.img as img, bouquets.price as price,
 		wrappers.title as wrapper_name
 		FROM composition_orders 
 		INNER JOIN bouquets on bouquets.arc = composition_orders."bouquetArc" 
