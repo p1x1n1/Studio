@@ -26,7 +26,7 @@ const BouquetBasketItem = (props) => {
         apiService.get('/selected/'+login+'/'+bouquet.arc).then((res) => {
             setInSelected(true)                
         }).catch((err) => {});
-	}, [])
+	}, [bouquet])
     function addSelected(arc) {
 		apiService.post('/selected',{login,arc}).then(() => {
             alert('Добавлено в избранное');
@@ -40,7 +40,9 @@ const BouquetBasketItem = (props) => {
 		})
 	}
     function updateCnt(cnt){
-        apiService.post('/basket/'+bouquet.arc,{userLogin:user.user.login, boquetArc:bouquet.arc,cnt:cnt})
+        apiService.post('/basket/'+bouquet.arc,{userLogin:user.user.login, boquetArc:bouquet.arc,cnt:cnt}).then(()=>
+            props.fetch()
+        )
     }
     return (
          <>

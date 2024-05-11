@@ -70,7 +70,7 @@ const Basket = observer (() => {
                 </Row>             
                 {console.log(bouquet)}
                 {bouquet.map(bouquet =>  
-                    <BouquetBasketItem key={bouquet.arc} bouquet={bouquet} DeleteOne={DeleteOne}/>
+                    <BouquetBasketItem key={bouquet.arc} bouquet={bouquet} DeleteOne={DeleteOne} fetch={fetchDataBouquet}/>
                 )}
             </Col>
             <Col md={4}>

@@ -32,7 +32,7 @@ class OrderController{
         inner join users on users.login = orders."userLogin"
         inner join localities on localities.id_record = orders."localityIdRecord"
         inner join streets on streets.id_record = orders."streetIdRecord"
-        inner join discounts on discounts.id_record = orders."discountIdRecord"
+        inner join discounts on discounts.id_record = users."discountIdRecord"
         ;`
         const orders = await db.query(s)
         //const orders = await Order.findAll()

@@ -96,6 +96,7 @@ const FormBoquet = (props) => {
                                     <Row>
                                         <Col span={15}>
                                             <Select 
+                                                style={{width: '90%'}}
                                                 key={index}
                                                 onChange={v => {
                                                         //учесть count и учесть flower одновремено тк flower pk потому стоит просто удалить предыдущий состав и заменить на новый
@@ -115,7 +116,7 @@ const FormBoquet = (props) => {
                                             {console.log('filteredFlowers',filteredFlowers,flowers)}
                                             </Select>
                                         </Col>
-                                    <Col span={6}>
+                                    <Col span={5}>
                                         <InputNumber min={1} max={getMaxQuantity(selectedFlowers[index])}
                                          defaultValue={1} 
                                          onChange={v => {
@@ -126,8 +127,12 @@ const FormBoquet = (props) => {
                                                     return { ...prevState,flowers: selectedFlowers}}))
                                             }} />
                                     </Col>
-                                    <Col  span={3}>
-                                        <Button onClick={() => {
+                                    <Col  span={4}>
+                                        <Button 
+                                        className='banner_button'
+                                        style={{width: '80%'}}
+                                        variant="light"
+                                        onClick={() => {                                            
                                             const updatedRecords = selectedFlowers.filter((item, i) => i !== index);
                                             setSelectedFlowers(updatedRecords);
                                             setBouquet((prevState => {
@@ -142,6 +147,7 @@ const FormBoquet = (props) => {
                             <Form.Group>
                                 <Form.Label className='form_text' style={{fontSize: 24}}>Упаковка:</Form.Label>
                                 <Select className='form_text'
+                                style={{width: '90%'}}
                                 onChange={v => {
                                     setBouquet((prevState => {
                                         return { ...prevState,wrapperIdRecord: v}}))
@@ -169,7 +175,7 @@ const FormBoquet = (props) => {
                             <Image src={img_input} height={200}/>
                             </Col>        
                         </Row>
-                        <p>Итог:{calculateTotalPrice()} рублей</p>
+                        <h3>Итог: {calculateTotalPrice()} рублей</h3>
                         <div className='form_line'></div>
                         { (props.post === 'user') ?
                         <Button id='basket' onClick={() => saveToBouquet()} >

@@ -25,19 +25,50 @@ color: #3F1D61;
   display: flex;
   justify-content: center;
 }
+.greenButton{
+  box-sizing: border-box;
+  background: rgba(47, 97, 29, 0.5);
+  border: 2px solid rgba(47, 97, 29, 0.5);
+  color: #FFFFFF;
+  margin: 1%;
+  }
+  
+  .greenButton:hover{
+    box-sizing: border-box;
+    background: #FE3B6D;
+    border: 2px solid rgba(47, 97, 29, 0.5);
+    color: #FFFFFF;
+    }
+  
+  .pupleButton{
+    box-sizing: border-box;
+    background: rgba(130, 87, 173, 0.2);
+    border: 2px solid rgba(130, 87, 173, 0.2);
+    color: #3F1D61;
+    margin: 1%;
+  }
+  
+  .pupleButton:hover{
+    box-sizing: border-box;
+    background: #9d4fea9c;
+    border: 2px solid rgba(130, 87, 173, 0.2);
+    color: white;
+    }
+
 #basket{
   border-color: #9d4fea9c;
   background-color: #c0abca49;
-  color: white;
+  color: rgb(29, 48, 99);
   width: 300px;
   height: 60px;
-  font-family: 'Marmelad';
 }
 #heart{
   border-color: #9d4fea9c;
   background-color: #c0abca49;
   width: 100px;
   height: 60px;
+  font-weight: 24px ;
+  color: rgb(31, 51, 107);
 }
 
 
@@ -93,32 +124,4 @@ color: #FFFFFF;
   text-align: center;
 }
 
-.greenButton{
-box-sizing: border-box;
-background: rgba(47, 97, 29, 0.5);
-border: 2px solid rgba(47, 97, 29, 0.5);
-color: #FFFFFF;
-margin: 1%;
-}
 
-.greenButton:hover{
-  box-sizing: border-box;
-  background: #C6DF76;
-  border: 2px solid rgba(47, 97, 29, 0.5);
-  color: #FFFFFF;
-  }
-
-.pupleButton{
-  box-sizing: border-box;
-  background: rgba(130, 87, 173, 0.2);
-  border: 2px solid rgba(130, 87, 173, 0.2);
-  color: #3F1D61;
-  margin: 1%;
-}
-
-.pupleButton:hover{
-  box-sizing: border-box;
-  background: #9d4fea9c;
-  border: 2px solid rgba(130, 87, 173, 0.2);
-  color: white;
-  }

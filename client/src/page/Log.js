@@ -24,12 +24,6 @@ const Auth = () => {
             console.log('data',data);
             user.setUser(data);
             user.setIsAuth(true);
-            // let info = await getUser(login, password,user.user.post);
-            ////////////////////////////////////////////////////////////////
-            //console.log('info',info);
-            //user.setInfo(info);
-
-            ////////////////////////////////
             navigate("/");
         } 
         catch (e) {
@@ -40,9 +34,9 @@ const Auth = () => {
     }
     return (
         <Container 
-        className="d-flex justify-content-center align-items-center"
-            style={{height: window.innerHeight - 54}}>
-             <Card style={{width: 600}} className="p-5" id='card_auth'>
+        className="d-flex justify-content-center align-items-center container_auth"
+            style={{width:'100%'}}>
+             <Card style={{width: 600}} className='p-5 card_log'>
                 <h2 className="m-auto">'Авторизация' </h2>
                 <Form className="d-flex flex-column">
                     <Form.Control
@@ -60,11 +54,11 @@ const Auth = () => {
                         autoComplete="on"
                     />
                     <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
-                            <div>
-                                Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
+                            <div style={{color:"white"}}>
+                                Нет аккаунта? <NavLink className='navlink' to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
                             </div>
                         <Button
-                            variant={"outline-success"}
+                            className='greenButton'
                             onClick={click}
                         >
                         'Войти' 

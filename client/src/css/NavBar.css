@@ -3,9 +3,9 @@
     font-family: 'Citrica';
 }
 .navlink{
-    color: #8142C1;
+    color: rgb(255, 167, 249);
     margin-left: auto;
-    margin-top: 3%;
+    margin: 3%;
 }
 .white-text{
     color: white;

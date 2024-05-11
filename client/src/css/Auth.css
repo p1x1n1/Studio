@@ -1,5 +1,5 @@
 
-#container_auth{
+.container_auth{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,7 @@
     width: 100%;
    
 }
-#card_auth{
+.card_log{
     margin-top: 10;
     position: relative;
     border: 2px solid #ffffff80;
@@ -18,7 +18,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url("https://i.pinimg.com/originals/c3/47/7d/c3477d11190aa11b2a2acf6aa30481a0.jpg") transparent;
+    background: url("../base_img/log.jpg");
+    /* background: url("https://i.pinimg.com/originals/c3/47/7d/c3477d11190aa11b2a2acf6aa30481a0.jpg") transparent; */
+  /*  background-position: center;
+    background-size:auto;*/
+}
+.card_auth{
+    margin-top: 10;
+    position: relative;
+    border: 2px solid #ffffff80;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    width: 50%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("../base_img/auth2.jpg");
+    /* background: url("https://i.pinimg.com/originals/c3/47/7d/c3477d11190aa11b2a2acf6aa30481a0.jpg") transparent; */
   /*  background-position: center;
     background-size:auto;*/
 }

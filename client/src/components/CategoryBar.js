@@ -78,9 +78,10 @@ const TypeBar = observer((props) => {
             <p style={{width:'10%'}}>{start_end[1]}</p>
         </div>
         <h1>Категории</h1>
-        <ListGroup >
+        <ListGroup>
             {categories.map(category => 
-            <ListGroup.Item
+            <ListGroup.Item 
+        
             style={{cursor: 'pointer'}}
             active={ selected_categories.id_record === category.id_record}//если совпадает то активно
             onClick={()=> {setSelected_categories(category); props.chooseCategory(category.id_record)}} //событие клика на категорию

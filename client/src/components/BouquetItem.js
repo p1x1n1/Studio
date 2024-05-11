@@ -8,7 +8,7 @@ import { Boquet_ROUTE } from '../utils/consts';
 import { ApiService } from '../http/api.service';
 import { Context } from '../index';
 import { Col, Row } from 'antd';
-//1.41
+
 const BoquetItem = (props) => {
     const navigate = useNavigate();
     const bouquet = props.bouquet
@@ -59,10 +59,10 @@ const BoquetItem = (props) => {
     return (
         <>
                 <Card className='card_bouquet_item' style={{cursor: 'pointer'}} border={"pink"}>
-                   <Image className='card_img'  src={process.env.REACT_APP_API_URL +bouquet.img} width={300} height={300} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
+                   <Image className='card_img' style={{width:'100%'}}  src={process.env.REACT_APP_API_URL +bouquet.img} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
                     <div className='d-flex justify-content-between '>
                     </div>
-                <div className='d-flex flex-column  align-items-center'>
+                <div className='d-flex flex-column align-items-center'>
                     <div>{bouquet.title}</div>
                     <div>Арт.{bouquet.arc}</div>
                     <div>{bouquet.price} руб.</div>

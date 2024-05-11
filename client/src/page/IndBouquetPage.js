@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '../css/IndBoquet.css';
 import { ApiService } from '../http/api.service'
-import { Button, Container } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import FormBoquet from '../components/FormBoquet';
 import { useNavigate } from 'react-router-dom';
 import { Basket_ROUTE } from '../utils/consts';
@@ -60,8 +60,14 @@ const Indboquet = () => {
                 {[...Array(boquetCount)].map((_, index) => (
                     <FormBoquet key={index} position={index} flowers={flowers} wrappers={wrappers} addBouquet={addBouquet} post={post} login = {user.user.login} stoimost={1.5}/>
                 ))}
-                <Button className='banner_button' style={{background:"#6d699e"}} onClick={handleAddBoquet}>Добавить букет</Button>
-                <Button className='banner_button' style={{background:"#6d699e"}} onClick={() => navigate(Basket_ROUTE)}>Перейти в корзину</Button>
+                <Row className='mt-2'>
+                    <Col md={2}>
+                        <Button style={{width: '100%'}} className='banner_button'  variant='light' onClick={handleAddBoquet}>Добавить букет</Button>
+                    </Col>
+                    <Col md={3}>
+                        <Button style={{width: '100%'}} className='banner_button'  variant='light' onClick={() => navigate(Basket_ROUTE)}>Перейти в корзину</Button>
+                    </Col>
+                </Row>
             </Container>
         </>
     );

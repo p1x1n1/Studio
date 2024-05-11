@@ -46,7 +46,7 @@ const NavBar = () => {
                   variant="light"
                   title="Букеты" 
                   id={`offcanvasNavbarDropdown `}
-                  style={{ color: "white" }}
+                  style={{ color: "white", margin:"1%" }}
                 >
                   <NavDropdown.Item href="#action4">
                    <NavLink className= "navlink" to={Boquet_ROUTE}> Каталог</NavLink>
@@ -56,8 +56,8 @@ const NavBar = () => {
                     <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальные букеты</NavLink>
                   </NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link  style={{ color: "white" }}> Доставка </Nav.Link>
-              <Nav.Link  style={{ color: "white" }}> Контакты </Nav.Link>
+              <Nav.Link  style={{ color: "white", margin:"1%"}}> Доставка </Nav.Link>
+              <Nav.Link  style={{ color: "white", margin:"1%" }}> Контакты </Nav.Link>
               <Form className="d-flex">
                 <Form.Control
                   type="search"
@@ -69,21 +69,21 @@ const NavBar = () => {
                     console.log(NameOrArc)
                   }}
                 />
-                <Button variant="outline-success" onClick={()=>{navigate(Boquet_ROUTE+'/'+NameOrArc)}}>Поиск</Button>
+                <Button style={{ marginLeft:"1%" }} variant="outline-success" onClick={()=>{navigate(Boquet_ROUTE+'/'+NameOrArc)}}>Поиск</Button>
               </Form>
           <div className='ml-2'>
             {user.isAuth ?
             <Nav>
-              <NavLink className='navlink ' to={CABINET}> <Image className='hover_white' width={50} height={50} src={cabinet}/> </NavLink>
+              <NavLink className='navlink ' style={{ marginLeft:"1%" }} to={CABINET}> <Image className='hover_white' width={50} height={50} src={cabinet}/> </NavLink>
              { (user.user.post === 'user') ?
                 <Nav>
-                  <NavLink className="navlink" to={Basket_ROUTE +'/'+ user.user.login}> <Image width={50} height={50} src={basket}/> </NavLink>
-                  <NavLink className="navlink" to={SELECTED+'/'+ user.user.login}> <Image width={50} height={50} src={heart}/> </NavLink>
+                  <NavLink  style={{ marginLeft:"1%" }} className="navlink" to={Basket_ROUTE +'/'+ user.user.login} > <Image width={50} height={50} src={basket}/> </NavLink>
+                  <NavLink  style={{ marginRight:"2%" }} className="navlink" to={SELECTED+'/'+ user.user.login}> <Image width={50} height={50} src={heart}/> </NavLink>
                 </Nav> 
                 : <></>}
-              <Button variant={"outline-success"} onClick={logOut}>Выйти</Button>
+              <Button variant={"outline-success"} style={{ marginLeft:"1%" }} onClick={logOut}>Выйти</Button>
             </Nav>
-            : <Button variant={"outline-success"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
+            : <Button variant={"outline-success"} style={{ marginLeft:"2%" }} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
             }
           </div>
         </Container>

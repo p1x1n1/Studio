@@ -54,8 +54,8 @@ const BoquetSelectedItem = (props) => {
                         }
                           <Col span={12}>
                             <Button variant='light' style={{width:'100%',height:'100%'}} onClick={()=>{props.deleteSelected(bouquet.arc)}} > 
-                                <Image width={50} height={50} src={heart} />
                                 <p> В избранном</p>
+                                <Image width={50} height={50} src={heart} />
                             </Button>
                         </Col>
                     </Row>

@@ -184,10 +184,12 @@ const AdminOrder = () => {
                                 </Stack>
                             </Accordion.Header>
                             <Accordion.Body>
-                                <h5>Информация о покупателе:</h5>
-                                    <p>Логин: {order.userLogin} </p>
-                                    <p>Почта: {order.email} Телефон: {order.phone}</p>
-                                    <p>Имя: {order.name_} Фамилия: {order.surname} Отчество: {order.lastname}</p>
+                                <table>
+                                    <h5>Информация о покупателе:</h5>
+                                        <tr>Логин: {order.userLogin} </tr>
+                                        <tr>Почта: {order.email} Телефон: {order.phone}</tr>
+                                        <tr>Имя: {order.name_} Фамилия: {order.surname} Отчество: {order.lastname}</tr>
+                                </table>
                                 <h5>Доставка:</h5>
                                     <p>Населённый пункт: {order.localities_name} </p>
                                     <p>Улица: {order.streets_name}</p>

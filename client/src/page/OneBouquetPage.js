@@ -13,17 +13,23 @@ const OneBouquetPage = () => {
     const {user} = useContext(Context)
     const login = user.user.login;
     console.log('arc',arc);
+    const [isFind,setIsFind] = useState(false);
     const [bouquet,setBouquet] = useState([]);
     const [composition,setComposition] = useState([{}])
+    const [inBasket,setInBasket] = useState(false);
+    const [inSelected,setInSelected] = useState(false);
+
     function fetchDataBouquet() {
 		apiService.get('/bouquet/'+arc).then(res => {
             setBouquet(res);
+            setIsFind(true);
             apiService.get('/bouquetcomposition/'+res.arc).then(res => {
                 setComposition(res);
                 console.log('composition',composition);
             })
         }).catch(
             err => {
+                setIsFind(false);
                 alert("Букет не найден");
             }
         )
@@ -32,11 +38,20 @@ const OneBouquetPage = () => {
     useEffect(() => {
         console.log('bouquet',bouquet);
         fetchDataBouquet();
-	}, [arc])
+        if(user.user.post === 'user'){
+            apiService.get('/basket/'+login+'/'+arc).then((res) => {
+                setInBasket(true)                
+            }).catch((err) => {})
+            apiService.get('/selected/'+login+'/'+arc).then((res) => {
+                setInSelected(true)                
+            }).catch((err) => {})
+        }
+	}, [arc,setInBasket,setInSelected])
     function addBasket(arc) {
         let cnt = 1;
 		apiService.post('/basket',{login,arc,cnt}).then(() => {
             alert('Добавлено в корзину');
+            setInSelected(true) 
 		})
         .catch(err => {
             alert(err.message);
@@ -45,14 +60,27 @@ const OneBouquetPage = () => {
     function addSelected(arc) {
 		apiService.post('/selected',{login,arc}).then(() => {
             alert('Добавлено в избранное');
+            setInSelected(true) 
 		}).catch(err => {
             alert(err.message);
         })
 	}
-    //const bouquet = {arc:1, name: 'Букет1',ready_made:true,price:1500,img:'https://cvetaevatomsk.ru/uploads/goods/2021-11/1636032945_img_5057.jpg'};
+    function deleteSelected(arc) {
+		apiService.delete('/selected/'+login+'/'+arc).then(() => {
+            alert('Удаленно из избранного');  
+            setInSelected(false) 
+		})
+	}
+    function deleteBasket(arc){
+        apiService.delete('/basket/'+login+'/'+arc).then(res => {
+            alert('Удаленно из корзины'); 
+            setInBasket(false);
+        })
+    }
+    
     return (
         <>
-           {(arc) ?
+           {(isFind) ?
            <Container className="mt-4">
                 <Row>
                     <Col md={6}>
@@ -74,27 +102,43 @@ const OneBouquetPage = () => {
                     <Col md={6}  >
                         <Row>
                             <h1  style={{color:'#3f1d61'}}>{bouquet.title}</h1>
-                            <h3  style={{color:'#3f1d61'}}>Арт.{bouquet.arc}</h3>
+                            <h3  style={{color:'#3f1d61'}}>Арт. {bouquet.arc}</h3>
                             <h1  style={{color:'#2F611D'}}>{bouquet.price} р.</h1>
                         </Row>
                         { (user.user.post === 'user') ?
-                        <Row className="d-flex row">
-                            <Col>
-                                <Button id='basket' onClick={()=>{addBasket(bouquet.arc)}}>
-                                    <Image width={50} height={50} src={basket}/>
-                                    
-                                </Button>
-                            </Col>
-                            <Col>
-                                <Button id ='heart' onClick={()=>{addSelected(bouquet.arc)}}>
-                                <Image width={50} height={50} src={heart}/>
-                                </Button>
-                            </Col>
+                       <Row className="d-flex row">
+                       {!inBasket ? 
+                           <Col span={12}>
+                               <Button id='basket' style={{width:'100%',height:'100%'}} variant='light' onClick={()=>{addBasket(bouquet.arc)}}>
+                                   <Image width={50} height={50} src={basket} />
+                               </Button>
+                           </Col>:
+                           <Col span={12}>
+                               <Button id='basket' style={{width:'100%',height:'100%'}} variant='light' onClick={()=>{deleteBasket(bouquet.arc)}}>
+                                   <p>В корзине</p>
+                                   <Image width={50} height={50} src={basket} />
+                               </Button>
+                           </Col>
+                       }
+                       {!inSelected ?
+                           <Col span={12}>
+                               <Button id='heart' style={{width:'100%',height:'100%'}} variant='light' onClick={()=>{addSelected(bouquet.arc)}}> 
+                                   <Image width={50} height={50} src={heart} />
+                               </Button>
+                           </Col>
+                           :
+                           <Col span={12}>
+                               <Button id='heart' style={{width:'100%',height:'100%'}} variant='light' onClick={()=>{deleteSelected(bouquet.arc)}}> 
+                                   <p>В избранном</p>
+                                   <Image width={50} height={50} src={heart} />
+                               </Button>
+                           </Col>
+                        }
                         </Row>
                         :<></>
                         }
                         <Row>
-                        <Accordion defaultActiveKey="0" flush>
+                        <Accordion className="mt-3" defaultActiveKey="0" flush>
                             <Accordion.Item eventKey="0" >
                                 <Accordion.Header  >Описание</Accordion.Header>
                                 <Accordion.Body >
@@ -125,10 +169,10 @@ const OneBouquetPage = () => {
                 </Row>
            </Container>
            :
-           <>
-           <h1>Букет не найден</h1>
-           <h3>Попробуйте изменить запрос</h3>
-           </>}
+           <div className="center d-flex flex-column">
+                <h1>Букет не найден</h1>
+                <h3>Попробуйте изменить запрос</h3>
+           </div>}
         </>
     );
 };

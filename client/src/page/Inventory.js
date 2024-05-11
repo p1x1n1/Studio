@@ -177,7 +177,7 @@ const bouquet_columns = [
 		dataIndex: 'description',
 		key: 'description',
 		render: (_,{description}) =>(
-			<p style={{fontSize:10}}>{description}</p>
+			<p style={{fontSize:15}}>{description}</p>
 		)
 	}
 ]
@@ -242,7 +242,7 @@ function Inventory() {
 		formData.append('cnt', FlowerRecord.cnt);
 		formData.append('season_start', FlowerRecord.season_start);
 		formData.append('season_end', FlowerRecord.season_end);
-
+		console.log('flower',formData)
 		apiService.postformData('/flower', formData).then(() => {
 			closeFlower()
 			fetchDataFlower()
@@ -507,7 +507,7 @@ function Inventory() {
 	
 
 	return (
-		<>
+		<div>
 			<Segmented options={options} className='mb-3'
             onChange={(value) => { 
 				setStatus(value);
@@ -997,7 +997,7 @@ function Inventory() {
 			</div>
 			:<></>
 			}
-		</>
+		</div>
 	)
 }
 export default Inventory;
