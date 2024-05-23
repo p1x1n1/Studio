@@ -10,12 +10,14 @@ const generateJwt = (login, email,phone,post) => {
     )
 }
 class AuthController{
-    async registration (req,res){//jwt token //npm i jsonwebtoken bcrypt 
+    async registration (req,res,next){//jwt token //npm i jsonwebtoken bcrypt 
         const {login,email,password_,name_,lastname,surname,phone} = req.body
         if (!email || !password_ || !login){  return next(ApiError.badRequest('Некорекктный email,login или пароль'))   }
         const candidate = await User.findOne({where:{login}})//ещё в сотрудниках
         const candidate2 = await Employee.findOne({where:{login}})
-        if(candidate || candidate2){ return next(ApiError.badRequest('Пользователь с таким логином уже существует'))}
+        if (candidate || candidate2) { 
+            return next(ApiError.badRequest('Пользователь с таким логином уже существует'))
+        }
         const hashPassword = await bcrypt.hash(password_,5)//хэшируемый пароль
         const user = await User.create({login,email,password_: hashPassword,name_,lastname,surname,phone,order_sum:0,discountIdRecord:1})
         
@@ -39,12 +41,12 @@ class AuthController{
             post = post.title
             }
         }      
-        if (post==='user'){
-             //procent = await Discount.findOne({where:{id_record: user.discountIdRecord}})
-             //console.log(procent)
-             //user.setDataValue('procent', procent.procent);
-             //user.set('procent', procent.procent, { raw: true });
-        }
+        // if (post==='user'){
+        //      //procent = await Discount.findOne({where:{id_record: user.discountIdRecord}})
+        //      //console.log(procent)
+        //      //user.setDataValue('procent', procent.procent);
+        //      //user.set('procent', procent.procent, { raw: true });
+        // }
         user.setDataValue('post', post); // Добавляем поле post к объекту user.dataValues
         user.set('post', post, { raw: true }); // Устанавливаем поле post как атрибут
 
@@ -81,6 +83,9 @@ class AuthController{
        console.log('USER',req.user)
        let user = {} ;
        console.log('post',req.user.post)
+        // if (!req.user.login || req.user.post) {
+        // return next(ApiError.badRequest('Не задан логин или роль пользователя'))
+        // }
         if (req.user.post == 'user'){
          user = await User.findOne({where:{login:req.user.login}})
         }
@@ -93,22 +98,7 @@ class AuthController{
        const token = generateJwt(req.user.login, req.user.email,req.user.phone,req.user.post)
        return res.json({token,user})
     }
-    // async getUser(req, res) {
-    //     const {login,password_,post} = req.body
-    //     console.log(login);
-    //     let user;
-    //     (post ==='user') ?
-    //      user = await User.findOne({where:{login}})
-    //     :  user = await Employee.findOne({where:{login}});
-    //     let comparePassword = bcrypt.compareSync(password_, user.password_)
-    //     if (!comparePassword) {
-    //         return next(ApiError.internal('Указан неверный пароль'))
-    //     }
-    //     return res.json({user})
-    // }
-    async registrationEmployee(req,res){
 
-    }
 }
 
 module.exports = new AuthController()

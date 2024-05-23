@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Context } from '../index';
 import { message } from "antd";
+import UnFindInfo from "../components/UnFindInfo";
 
 const apiService = new ApiService();
 const OneBouquetPage = () => {
@@ -27,6 +28,14 @@ const OneBouquetPage = () => {
                 setComposition(res);
                 console.log('composition',composition);
             })
+            if(user.user.post === 'user'){
+                apiService.get('/basket/'+login+'/'+res.arc).then((res) => {
+                    setInBasket(true)                
+                }).catch((err) => {})
+                apiService.get('/selected/'+login+'/'+res.arc).then((res) => {
+                    setInSelected(true)                
+                }).catch((err) => {})
+            }
         }).catch(
             err => {
                 setIsFind(false);
@@ -38,14 +47,6 @@ const OneBouquetPage = () => {
     useEffect(() => {
         console.log('bouquet',bouquet);
         fetchDataBouquet();
-        if(user.user.post === 'user'){
-            apiService.get('/basket/'+login+'/'+arc).then((res) => {
-                setInBasket(true)                
-            }).catch((err) => {})
-            apiService.get('/selected/'+login+'/'+arc).then((res) => {
-                setInSelected(true)                
-            }).catch((err) => {})
-        }
 	}, [arc,setInBasket,setInSelected])
     function addBasket(arc) {
         let cnt = 1;
@@ -169,10 +170,7 @@ const OneBouquetPage = () => {
                 </Row>
            </Container>
            :
-           <div className="center d-flex flex-column">
-                <h1>Букет не найден</h1>
-                <h3>Попробуйте изменить запрос</h3>
-           </div>}
+          <UnFindInfo page={'onebouquet'}></UnFindInfo>}
         </>
     );
 };

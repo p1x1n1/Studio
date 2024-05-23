@@ -11,35 +11,12 @@ const Reg = () => {
     const location = useLocation()
     const navigate = useNavigate()
 
-
     const [authErrorMessage, setAuthErrorMessage] = useState('')
 	const [form] = Form.useForm()
     const validateMessages = {
-        required: 'Обязательное поле!'//при правиле валидации requered
+        required: 'Обязательное поле!'
     }
-    
-    // const click = async (event) => {
-    //     console.log(event)
-    //     const form = event.currentTarget;
-    //     if (form.checkValidity() === false) {
-    //         event.preventDefault();
-    //         event.stopPropagation();
-    //     }
-    //     else{
-    //         setValidated(true);
-    //     }
-    //     if(validated)
-    //     {try {
-    //         console.log (login,surname,email,phone,password)
-    //         let data = await registration(login,email,password,name,lastname,surname,phone);
-    //         console.log(data);
-    //         user.setUser(data)
-    //         user.setIsAuth(true)
-    //         navigate("/")
-    //     } catch (e) {
-    //         alert(e.response.data.message)
-    //     }}
-    // }
+
     async function auth() {
 		form
 			.validateFields()
@@ -66,21 +43,27 @@ const Reg = () => {
 		}
 	}
 	function checkPasswordStrength(rule, value) {
-		if (value && value.length >= 6 && value.match(/[a-zA-Z]/)) {
+		if (value && value.length >= 8 && value.match(/[a-zA-Z]/)) {
 		  return Promise.resolve();
 		}
-		return Promise.reject('Пароль должен состоять минимум из 6 символов и содержать хотя бы 1 букву!');
+		return Promise.reject('Пароль должен состоять минимум из 8 символов и содержать хотя бы 1 букву!');
 	  }
     return (
         <Container id='container_auth'
         className="d-flex justify-content-center align-items-center">
              <Card  className="p-5 card_auth" >
                 <h2 className="m-auto">"Регистрация"</h2>
-                <Form className="d-flex flex-column" 
+                <Form 
+                className="d-flex flex-column" 
+                // labelAlign='left'
+				// labelCol={{ span: 7 }}
+				// wrapperCol={{ span: 18 }}
+                layout = 'horizontal'
                 form={form}
-                validateMessages={validateMessages}
+                validateMessages={validateMessages}                
                 >
-                     <Form.Item
+                     <Form.Item 
+                       label={<label style={{ color: "white" }}>Логин</label>}
                        name="login"
                         rules={[
                             {
@@ -91,6 +74,7 @@ const Reg = () => {
                     <Input placeholder="Введите ваш login..." allowClear />
                     <Form.Item/>
                     <Form.Item
+                        label={<label style={{ color: "white" }}>Почта</label>}
                         rules={[
                             {
                                 required: true,
@@ -103,6 +87,7 @@ const Reg = () => {
                     <Input placeholder="Введите вашу почту..." allowClear />
                     <Form.Item/>
                     <Form.Item
+                        label={<label style={{ color: "white" }}>Телефон</label>}
                         rules={[
                             {
                                 required: true
@@ -120,6 +105,7 @@ const Reg = () => {
                                 validator: checkPasswordStrength
                             }
                         ]}
+                        label = {<label style={{ color: "white" }}> Пароль</label>}
                         name="password"
                     />
                     <Input.Password placeholder="Введите ваш пароль..." allowClear />
@@ -135,26 +121,32 @@ const Reg = () => {
                                 }
                             })
                         ]}
+                        label = {<label style={{ color: "white" }}>Повторите Пароль</label>}
                         type="passwordRepeat"
                     />
                     <Input.Password  placeholder="Повторите ваш пароль..." allowClear />
                     <Form.Item/>
-                    <Form.Item
-                        name='name_'
-                    />
-                    <Input placeholder="Введите вашe Имя..."/>
-                    <Form.Item/>
-                    <Form.Item
-                        name='surname'
-                    />
-                    <Input  placeholder="Введите вашe Фамилия..."/>
-                    <Form.Item/>
-                    <Form.Item
-                        name='lastname'
-                    />
-                    <Input placeholder="Введите вашe Отчество..." />
-                    <Form.Item/>
-                    <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
+                        <Form.Item
+                            label = {<label style={{ color: "white" }}>Имя</label>}
+                            name='name_'
+                        />
+                        <Input placeholder="Введите вашe Имя..."/>
+                        <Form.Item/>
+                        <Form.Item
+                             label = {<label style={{ color: "white" }}>Фамилия</label>}
+                            name='surname'
+                        />
+                        <Input  placeholder="Введите Фамилию..."/>
+                        <Form.Item/>
+                        <Form.Item
+                            label = {<label style={{ color: "white" }}>Отчество</label>}
+                            name='lastname'
+                        />
+                        <Input placeholder="Введите вашe Отчество..." />
+                        <Form.Item/>
+                </Form>
+                {authErrorMessage ? <div className='auth-error-message'>{authErrorMessage}</div> : <></>}
+                <Row className="d-flex justify-content-between mt-3 ">
                                <div style={{color:"white"}}>Есть аккаунт? <NavLink className='navlink' to={LOGIN_ROUTE}>Войдите!</NavLink></div> 
                         <Button
                             className='greenButton'
@@ -163,7 +155,6 @@ const Reg = () => {
                             'Регистрация'
                         </Button>
                     </Row>
-                </Form>
             </Card>
         </Container>
     );

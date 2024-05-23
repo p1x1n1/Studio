@@ -14,6 +14,7 @@ const UserOrderDocument = (props) => {
 
     const createAndDownloadPdf = (Order) => {
         console.log(user.user.name_,Order);
+        //if(Order.composition.length > 0)
         apiService.post('/document/user', Order)
           .then(
             props.getDocument()
@@ -27,7 +28,8 @@ const UserOrderDocument = (props) => {
             console.log(response,'response');
             const updatedOrders = response.map((order)=>
             {
-                apiService.get('/ordercomposition/'+order.number_order).then((res) => {
+                apiService.get('/ordercomposition/'+order.number_order).
+                then((res) => {
                     setComposition(res);
                 }).catch((err) => {
                     console.log(err,'error');
@@ -93,7 +95,6 @@ const UserOrderDocument = (props) => {
                               <h5>Нзначенные сотрудники:</h5>
                                   <p>Флорист: {order.floristLogin}</p>
                                   <p>Курьер: {order.courierLogin}</p>
-                            
                           </Accordion.Body>
                       </Accordion.Item>
                   </Accordion>

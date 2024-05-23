@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const db = require('../db.pool')
 const path = require('path');
-const { Bouquet } = require("../models/models")
+
 
 class BouquetController {
 	async createBouquet(req, res) {
@@ -36,6 +36,21 @@ class BouquetController {
 		const bouquet = await db.query('SELECT * FROM bouquets ORDER BY arc')
 		res.json(bouquet.rows)
 	}
+	async getPopularBouquets(req, res) {
+		const bouquet = await db.query(`SELECT bouquets.*, COUNT(  composition_orders."bouquetArc") AS bouquet_count
+		FROM bouquets
+		LEFT JOIN composition_orders ON bouquets.arc = composition_orders."bouquetArc"
+		where ready_made=true
+		GROUP BY bouquets.arc
+		ORDER BY bouquet_count DESC
+		LIMIT 10;
+		`)
+		res.json(bouquet.rows)
+	}
+	async getSeasonBouquets(req, res) {
+		const bouquet = await db.query('SELECT * FROM bouquets where ready_made = true ORDER BY arc')
+		res.json(bouquet.rows)
+	}
 	async getBouquetsInfo(req, res) {
 		const bouquet = await db.query(
 			`select arc, bouquets.title, bouquets.ready_made,bouquets.price,bouquets.description,bouquets.img,bouquets."wrapperIdRecord",
@@ -48,8 +63,6 @@ class BouquetController {
 		const category = req.params.id_category
 		const flowers = '('+req.params.flowers+')'
 		let start_end= req.params.start_end
-		//const f = req.params.flowers.split(',').map(Number);
-		//const flowers =  (${f.join(',')});
 		let bouquet;
 		console.log(req.params,flowers)
 		if (start_end === 'undefined'){
@@ -158,7 +171,6 @@ class BouquetController {
 	async getOneBouquet(req, res) {
 		const arc = req.params.arc
 		const int_arc = parseInt(arc);
-		// console.log(arc,typeof arc,int_arc,arc == int_arc.toString(),int_arc.toString())
 		let bouquet;
 		if(arc === int_arc.toString()){
 		 bouquet = await db.query('SELECT * FROM bouquets WHERE arc = ($1)',[arc])}

@@ -24,8 +24,8 @@ class SelectedController {
 	async getOneSelectedBouquet(req, res) {
 		const login = req.params.login
 		const arc = req.params.arc
+		console.log('req',req.params)
 		const selected = await db.query('SELECT * FROM selecteds WHERE "userLogin" = ($1) and selecteds."bouquetArc" = ($2)',[login,arc])
-		//console.log(id_record+'flower')
 		res.json(selected.rows[0])
 	}
 	async deleteSelected(req, res) {

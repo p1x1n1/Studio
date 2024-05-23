@@ -5,8 +5,8 @@
     /*background: linear-gradient(43deg, #541097 0%,#a612b9 46%,#c8fca6da 100%);/*интересное свойство*/
   }
   .tab_content{
-    max-width: 800px;
-    width:100%;
+    /* max-width: 1200px; */
+    width:95%;
     background-color: #FFFFFF;
     padding: 30px 10px;
     border-radius: 15px;
@@ -45,7 +45,7 @@
   }
 
 #popular:checked ~ nav label .popular,#popular:checked ~ nav label .season{/*Псевдокласс, который активируется, когда пользователь отмечает чекбокс или выбирает одну из радиокнопок. */
-    color: #6F55CA;
+    color: #FE3B6D;
 }
 input[type='radio']{
     display: none;
@@ -54,7 +54,7 @@ input[type='radio']{
 .tab_content nav .slider{
     position: absolute;
     height: 4.5px;
-    background-color: #6F55CA;
+    background-color: #FE3B6D;
     border-radius: 20px;
     width: 50%;
     z-index: 1;/*определяет порядок наложения элементов в трёхмерном пространстве на веб-странице*/
@@ -69,8 +69,11 @@ input[type='radio']{
 }
 
 #popular:checked ~ nav.popular{
-    color:#6F55CA;
+    color:#FE3B6D;
 }
 #season:checked ~ nav .season{
-    color:#6F55CA;
+    color:#C6DF76;
+}
+.pink_text{
+  color: #FE3B6D;
 }

@@ -17,6 +17,21 @@ class OrderCompositionController {
 		const order = await db.query('SELECT "orderNumberOrder","bouquetArc", flowers.name_type as flower_name FROM composition_orders INNER JOIN flowers on flowers.id_type=composition_orders.bouquetArc ORDER BY orderNumberOrder,bouquetArc ')
 		res.json(order.rows)
 	}
+	async getAdminSales(req, res) {
+		const start = req.params.start_date
+		const end = req.params.end_date
+		const order = await db.query(
+			`
+			SELECT bouquets.title as title, sum(cnt) as cnt, sum(cnt*bouquets.price) as all_sum,
+			ROUND(sum(cnt*bouquets.price)/sum(cnt),2) as one_sum
+			FROM composition_orders
+			INNER JOIN bouquets on bouquets.arc = composition_orders."bouquetArc"
+			INNER JOIN orders on orders.number_order = composition_orders."orderNumberOrder"
+			WHERE date_order BETWEEN ($1) AND ($2)
+			GROUP BY  title;
+			`,[start,end])
+		res.json(order.rows)
+	}
 	async getOrderComposition(req, res) {
 		const orderNumberOrder = req.params.orderNumberOrder
 		const order = await db.query(`

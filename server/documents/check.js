@@ -1,16 +1,20 @@
 
 module.exports = (order) => {
-   // console.log('check',o,o.order);
+   console.log('check',order);
+
    let order_compos = '';
    // const order=o.order
    if(order.composition){
       order.composition.forEach((bouquet)=>{
+         bouquet_procent = bouquet.price*(100-order.procent)/100;
+         console.log('check',bouquet_procent);
          order_compos+=
          '<tr>'+
                '<td>'+bouquet.arc+'</td>'+
                '<td>'+bouquet.title+'</td>'+
                '<td>'+bouquet.cnt+'</td>'+
                '<td>'+bouquet.price+'</td>'+
+               '<td>'+bouquet_procent+'</td>'+
          '</tr>'
       })
    }
@@ -106,7 +110,7 @@ return `
                      </tr>
                      <tr>
                         <td class="title">
-                          <img  src="http://127.0.0.1:5500/server/documents/label.png"
+                          <img  src="https://i.pinimg.com/736x/9a/e4/22/9ae422266d262fbc1669ab558e2fb401.jpg"
                            style="width:100%; max-width:156px;">
                         </td>
                         <td>
@@ -256,6 +260,7 @@ return `
                     <th>Букет</th>
                     <th>Количество</th>
                     <th>Цена</th>
+                    <th>Цена c персональной скидкой</th>
                  </tr>
                  ${order_compos}
             </table>

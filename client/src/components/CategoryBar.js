@@ -17,7 +17,7 @@ const TypeBar = observer((props) => {
     const [categories,setCategories]= useState([])
     const [start_end,setStartEnd] = useState([1000,5000])
     const [flower,setFlower] = useState([])
-    const [selected_categories,setSelected_categories] = useState([])
+    const [selected_categories,setSelected_categories] = useState([props.choosenCategory])
 
 
     const [checkedList, setCheckedList] = useState(flower);

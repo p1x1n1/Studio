@@ -7,23 +7,26 @@ const apiService = new ApiService ();
 
 const AdminDocumnet = (props) => {
     const {user} = useContext(Context)
+    const [start_date, setStart] = useState('2024-04-20');
+    const [end_date, setEnd] = useState('2024-05-29');
     const createAndDownloadPdf = () => {
-        console.log(user.user.name_);
-        apiService.post('/document', {name:user.user.name_,price1:4000,price2:2000,receiptId:4})
-          .then(
-            props.getDocument()
-        )
+      let all, data;
+        apiService.get('/order/admin/sales/'+start_date+'/'+end_date).then(
+          (response) =>  {
+            all = response;
+            console.log(all);
+            apiService.get('/ordercomposition/admin/sales/'+start_date+'/'+end_date).then( 
+              (response) =>  {
+              data = response;
+              console.log(data);
+              apiService.post('/document/admin/sales', {start_date:start_date,end_date:end_date,date: data,all:all})
+              .then(
+                props.getDocument()
+              )
+             })
+            })
       }
-    
 
-    function fetchDataOrder(){
-        
-    }
-    
-    useEffect(() => {
-		fetchDataOrder();
-
-	}, [])
 
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -37,7 +40,8 @@ const AdminDocumnet = (props) => {
 
     
     return(
-        <Button onClick={createAndDownloadPdf}>Получить отчёт</Button>
+
+        <Button className='greenButton' onClick={createAndDownloadPdf}>Получить отчёт</Button>
     );
 }
  

@@ -32,8 +32,8 @@ class BasketController {
 	async getOneBasketBouquet(req, res) {
 		const login = req.params.login
 		const arc = req.params.arc
+		console.log('req',req.params)
 		const basket = await db.query('SELECT * FROM baskets WHERE "userLogin" = ($1) and "bouquetArc"=($2)',[login,arc])
-		//console.log(id_record+'flower')
 		res.json(basket.rows[0])
 	}
 	async deleteBasket(req, res) {

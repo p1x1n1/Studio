@@ -13,11 +13,9 @@ describe("ApiService", () => {
 		title: 'Ирис',
 		cnt: 11,
 		price: '70.00',
-		season_start: '2024-03-20T20:00:00.000Z',
-		season_end: '2025-03-20T20:00:00.000Z',
 		img: 'ad62d71f-6035-492a-9a08-b7fafc55ebee.jpg'
 	   };
-    global.fetch = jest.fn().mockResolvedValueOnce(
+    global.fetch = jest.fn().mockResolvedValueOnce(// Мокинг (имитации) модулей 
       new Response(JSON.stringify(mockResponse), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -41,9 +39,9 @@ describe("ApiService", () => {
         headers: { "Content-Type": "application/json" },
       })
     );
-    const response = await apiService.getFile("/test");
+    const response = await apiService.getFile("/flower");
     expect(global.fetch).toHaveBeenCalledWith(
-      "http://localhost:5000/api/test",
+      "http://localhost:5000/api/flower",
       { method: "GET" }
     );
     expect(response).toEqual(mockResponse);
@@ -55,10 +53,10 @@ describe("ApiService", () => {
 		{ status: 200 })
 	);
 
-    await apiService.delete("/test");
+    await apiService.delete("/flower");
 
     expect(global.fetch).toHaveBeenCalledWith(
-      "http://localhost:5000/api/test",
+      "http://localhost:5000/api/flower",
       { method: "DELETE" }
     );
   });
@@ -66,12 +64,7 @@ describe("ApiService", () => {
   it("post метод выполнил POST запрос с json объектом", async () => {
     const mockResponse = {
 		id_record: 6,
-		title: 'Роза',
-		cnt: 25,
-		price: '80.00',
-		season_start: '2024-05-16T20:00:00.000Z',
-		season_end: '2024-05-24T20:00:00.000Z',
-		img: 'd12ecc48-7529-443c-a1bb-08e98287257e.jpg'
+		title: 'Монобукеты'
 	  };
     global.fetch = jest.fn().mockResolvedValueOnce(
       new Response(JSON.stringify(mockResponse), {
@@ -80,12 +73,14 @@ describe("ApiService", () => {
       })
     );
 
-    const data = { name: "John Doe" };
+    const data = {
+      id_record: 6,
+      title: 'Монобукеты'};
 
-    const response = await apiService.post("/test", data);
+    const response = await apiService.post("/category", data);
 
     expect(global.fetch).toHaveBeenCalledWith(
-      "http://localhost:5000/api/test",
+      "http://localhost:5000/api/category",
       {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -102,8 +97,6 @@ describe("ApiService", () => {
 		title: 'Роза',
 		cnt: 25,
 		price: '80.00',
-		season_start: '2024-05-16T20:00:00.000Z',
-		season_end: '2024-05-24T20:00:00.000Z',
 		img: 'd12ecc48-7529-443c-a1bb-08e98287257e.jpg'
 	  };
     global.fetch = jest.fn().mockResolvedValueOnce(
@@ -128,3 +121,4 @@ describe("ApiService", () => {
     expect(response).toEqual(mockResponse);
   });
 });
+

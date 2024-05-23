@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { REG_ORDER } from '../utils/consts';
 import { ApiService } from '../http/api.service';
 import { observer } from 'mobx-react-lite';
+import UnFindInfo from '../components/UnFindInfo';
 
 
 const apiService = new ApiService()
@@ -69,9 +70,13 @@ const Basket = observer (() => {
                     </Col>
                 </Row>             
                 {console.log(bouquet)}
-                {bouquet.map(bouquet =>  
-                    <BouquetBasketItem key={bouquet.arc} bouquet={bouquet} DeleteOne={DeleteOne} fetch={fetchDataBouquet}/>
-                )}
+                { (bouquet.length > 0) ?
+                    bouquet.map(bouquet =>  
+                        <BouquetBasketItem key={bouquet.arc} bouquet={bouquet} DeleteOne={DeleteOne} fetch={fetchDataBouquet}/>
+                    )
+                    : 
+                    <UnFindInfo page={'basket'}></UnFindInfo>
+                }
             </Col>
             <Col md={4}>
                 <div className='puple_border_box'>

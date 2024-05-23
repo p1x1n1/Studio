@@ -5,9 +5,11 @@ import BouquetList from '../components/BouquetList';
 import { ApiService } from '../http/api.service';
 // import { Col, Row } from 'react-bootstrap';
 import { Col, Row } from 'antd';
+import { useParams } from 'react-router-dom';
 
 const BouquetPage = () => {
-    const [choosenCategory,setchoosenCategory] = useState() ;
+    let {id} = useParams();
+    const [choosenCategory,setchoosenCategory] = useState(id) ;
     const [choosenFlower,setchoosenFlower] = useState([]) ;
     const [start_end,setstart_end] = useState([]);
     
@@ -30,7 +32,7 @@ const BouquetPage = () => {
                 <Row className="mt-3">
                     <Col md = {6} > 
                     {/* style={{marginRight:'10px'}} */}
-                        <CategoryBar width = {100} chooseCategory={chooseCategory} chooseFlowers={chooseFlowers} choosePrice={choosePrice}/>
+                        <CategoryBar width = {100} choosenCategory={id} chooseCategory={chooseCategory} chooseFlowers={chooseFlowers} choosePrice={choosePrice}/>
                     </Col>
                     <Col md = {18}>
                         <BouquetList category={choosenCategory} flowers={choosenFlower} start_end={start_end}/>

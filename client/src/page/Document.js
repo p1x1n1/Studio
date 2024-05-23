@@ -21,14 +21,15 @@ const Document = () => {
           })
     }
     return (
-        <>{ (user.user.post ==='user')?
+        <div style={{minHeight:'400px'}}>
+            { (user.user.post ==='user')?
             <UserOrderDocument getDocument={getDocument}/>
             :(user.user.post ==='Администратор') ?
             <AdminDocumnet getDocument={getDocument}/>
             : (user.user.post ==='Курьер') ?
             <CourierOrder />:
             <FloristOrder />}
-        </>
+        </div>
     );
 };
 

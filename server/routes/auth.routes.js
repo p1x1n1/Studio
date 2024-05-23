@@ -7,7 +7,6 @@ router.post('/registration',AuthController.registration)
 router.post('/login',AuthController.login)
 router.get('/auth',authMiddleware,AuthController.check)
 // router.get('/user',AuthController.getUser)
-
 //(req,res)=>{res.status(200).json({message:"AUTH"})}
 
 module.exports = router
