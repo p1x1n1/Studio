@@ -94,7 +94,7 @@ class OrderController{
             FROM orders
             where "statusOrderIdRecord" = ($1)
         `;
-        
+        console.log('orders',orders.rows)
         const totalCountResult = await db.query(totalCountQuery, [status]);
         const totalCount = totalCountResult.rows[0].total;
         const ordersWithComposition = await Promise.all(orders.rows.map(async order => {

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Accordion, Button, Form, Stack } from 'react-bootstrap';
+import { Accordion, Button, Stack, Form } from 'react-bootstrap';
 import { ApiService } from '../http/api.service';
 import BoquetItemOrder from './BouquetItemOrder';
-import { Modal, Pagination, Segmented, Table, message } from 'antd';
+import { Modal, Segmented, Table, Pagination, message } from 'antd';
 import { Context } from '../index';
 
 const employee_columns = [
@@ -65,6 +65,7 @@ const AdminOrder = () => {
     const [status, setStatus] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalOrders, setTotalOrders] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
     const ordersPerPage = 10;
     const [visibleStatusChange, setVisibleStatusChange] = useState(false);
     const [visibleFloristSelect, setVisibleFloristSelect] = useState(false);
@@ -76,17 +77,17 @@ const AdminOrder = () => {
     const [selectCourier, setCourier] = useState('');
     const [VisibleConfirmCourier, setVisibleConfirmCourier] = useState(false);
     const [VisibleCancelOrder, setVisibleCancelOrder] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
 
     const offset = (currentPage - 1) * ordersPerPage;
 
     function fetchDataOrder() {
         let url = `/order/admin/${status}?offset=${offset}&limit=${ordersPerPage}`;
         if (searchQuery) {
-            url += `&search=${searchQuery}`;
+            url += `&number_order=${searchQuery}`;
         }
         apiService.get(url)
             .then(response => {
+                console.log(response);
                 setOrders(response.orders);
                 setTotalOrders(response.total);
             })
@@ -113,14 +114,14 @@ const AdminOrder = () => {
         fetchDataOrder();
         fetchDataFlorist();
         fetchDataCourier();
-    }, [status, currentPage]);
+    }, [status, currentPage, searchQuery]);
 
     const [messageApi, contextHolder] = message.useMessage();
 
     const success = (number_order) => {
         messageApi.open({
             type: 'success',
-            content: `Статус заказа ${number_order} изменён на ${selectOrder.status === 1 ? "Принят" : selectOrder.status === 1 ? "Отменен" : "Передан в доставку"}`,
+            content: `Статус заказа ${number_order} изменён на ${selectOrder.status === 1 ? "Принят" : "Передан в доставку"}`,
             duration: 5,
         });
     };
@@ -131,17 +132,16 @@ const AdminOrder = () => {
             statusOrderIdRecord: next_status,
             employeeLogin: user.user.login,
         }).then(() => {
-            success(number_order)
+            success(number_order);
             fetchDataOrder();
             setVisibleStatusChange(false);
         }
-        );
+    );
     }
 
     function cancelOrder(number_order) {
         apiService.post('/order', {
             number_order: number_order,
-            statusOrderIdRecord: 2,
             employeeLogin: user.user.login,
         }).then(() => {
             messageApi.open({
