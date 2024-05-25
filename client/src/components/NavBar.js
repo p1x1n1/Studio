@@ -41,15 +41,15 @@ const NavBar = () => {
                 </Stack>
             </NavLink>
           </Navbar.Brand>
-            <Navbar.Toggle aria-controls={`offcanvasNavbar `} />
+            <Navbar.Toggle aria-controls='bouquet' />
               <NavDropdown 
                   variant="light"
                   title="Букеты" 
-                  id={`offcanvasNavbarDropdown `}
+                  id='bouquet'
                   style={{ color: "white", margin:"1%" }}
                 >
                   <NavDropdown.Item href="#action4">
-                   <NavLink className= "navlink" to={Boquet_ROUTE}> Каталог</NavLink>
+                   <NavLink id='catalog' className= "navlink" to={Boquet_ROUTE}> Каталог</NavLink>
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item href="#action5">
@@ -63,21 +63,22 @@ const NavBar = () => {
                   type="search"
                   placeholder="Артикул/Название букета"
                   className="me-2"
+                  id='search_input'
                   aria-label="Артикул/Название"
                   onChange={(v)=>{
                     setNameOrArc(v.target.value);
                     console.log(NameOrArc)
                   }}
                 />
-                <Button style={{ marginLeft:"1%" }} variant="outline-success" onClick={()=>{navigate(Boquet_ROUTE+'/'+NameOrArc)}}>Поиск</Button>
+                <Button id='search_button' style={{ marginLeft:"1%" }} variant="outline-success" onClick={()=>{navigate(Boquet_ROUTE+'/'+NameOrArc)}}>Поиск</Button>
               </Form>
           <div className='ml-2'>
             {user.isAuth ?
             <Nav>
-              <NavLink className='navlink ' style={{ marginLeft:"1%" }} to={CABINET}> <Image className='hover_white' width={50} height={50} src={cabinet}/> </NavLink>
+              <NavLink className='navlink ' id='cabinet' style={{ marginLeft:"1%" }} to={CABINET}> <Image className='hover_white' width={50} height={50} src={cabinet}/> </NavLink>
              { (user.user.post === 'user') ?
                 <Nav>
-                  <NavLink  style={{ marginLeft:"1%" }} className="navlink" to={Basket_ROUTE +'/'+ user.user.login} > <Image width={50} height={50} src={basket}/> </NavLink>
+                  <NavLink  style={{ marginLeft:"1%" }}  id='baskets' className="navlink" to={Basket_ROUTE +'/'+ user.user.login} > <Image width={50} height={50} src={basket}/> </NavLink>
                   <NavLink  style={{ marginRight:"2%" }} className="navlink" to={SELECTED+'/'+ user.user.login}> <Image width={50} height={50} src={heart}/> </NavLink>
                 </Nav> 
                 : <></>}
@@ -89,33 +90,6 @@ const NavBar = () => {
         </Container>
       </Navbar>
      </>
-      /*
-        <Navbar className="Navbar" style={{height:50,fontFamily:'Marmelad'}}>
-        <Container className='d-flex justife-content-between'>
-          <Nav bg = "light" className='d-flex justife-content-between' >
-            <NavLink className= "navlink" to={Boquet_ROUTE}>Каталог</NavLink>
-            <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальный Букет</NavLink>
-          </Nav>
-
-          <Navbar.Brand href=""  style={{height:50}}>
-            <NavLink to={SHOP_ROUTE}>
-                <Image width={220} height={60} src={logo}/>
-            </NavLink>
-            </Navbar.Brand>
-          <Nav >
-            <Nav.Link href="#pricing">Доставка</Nav.Link>
-            <Nav.Link href="#pricing">О нас</Nav.Link>
-            <Nav.Link href="#pricing">Контакты</Nav.Link>
-          </Nav>
-          {user.isAuth ?
-          <Nav>
-            <NavLink className="navlink">Кабинет</NavLink>
-            <NavLink className="navlink" onClick={logOut}>Выйти</NavLink>
-          </Nav>
-          : <Button variant={"outline-success"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
-          }
-        </Container>
-      </Navbar>*/
     );
 };
 

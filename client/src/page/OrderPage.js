@@ -10,13 +10,14 @@ import UserOrderDocument from '../components/UserOrderDocument';
 const OrderPage = () => {
     const {user} = useContext(Context)
     return (
-        <>{ (user.user.post ==='user')?
+        <div style={{minHeight:'400px'}}>
+            { (user.user.post ==='user')?
             <UserOrderDocument/>
             :(user.user.post ==='Администратор') ?
             <AdminOrder/>: (user.user.post ==='Курьер') ?
             <CourierOrder />:
             <FloristOrder />}
-        </>
+        </div>
     );
 };
 

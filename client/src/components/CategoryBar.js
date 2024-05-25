@@ -81,8 +81,8 @@ const TypeBar = observer((props) => {
         <ListGroup>
             {categories.map(category => 
             <ListGroup.Item 
-        
-            style={{cursor: 'pointer'}}
+            id={category.id_record}
+            style={{cursor: 'pointer',width:'100%'}}
             active={ selected_categories.id_record === category.id_record}//если совпадает то активно
             onClick={()=> {setSelected_categories(category); props.chooseCategory(category.id_record)}} //событие клика на категорию
             key={category.id_record}>
@@ -95,7 +95,7 @@ const TypeBar = observer((props) => {
             Выбрать все
         </Checkbox>
         <Divider />
-        <CheckboxGroup label="title" options={flower} value={checkedList} onChange={onChange} />
+        <CheckboxGroup label="title" options={flower} value={checkedList} onChange={onChange} className='d-flex flex-column' />
     
   </>
     );

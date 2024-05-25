@@ -12,8 +12,8 @@ import UserOrderDocument from '../components/UserOrderDocument';
 const apiService = new ApiService();
 const Document = () => {
     const {user} = useContext(Context)
-    function getDocument(){
-      apiService.getFile('/document')
+    function getDocument(path){
+      apiService.getFile(path)
           .then((res) => {
             console.log('res',res);
             const pdfBlob = new Blob([res], { type: 'application/pdf' });

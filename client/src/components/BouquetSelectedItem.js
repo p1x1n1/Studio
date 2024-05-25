@@ -14,12 +14,12 @@ const BoquetSelectedItem = (props) => {
     const navigate = useNavigate();
     const {user} = useContext(Context)
     const login = user.user.login;
-    const [inBasket,setInBasket] = useState(false);
+    
 
     useEffect(() => {
         if(user.user.post === 'user'){
             apiService.get('/basket/'+login+'/'+bouquet.arc).then((res) => {
-                setInBasket(true)                
+                props.setInBasket(true)                
             }).catch((err) => {})
         }
     },[])
@@ -39,23 +39,21 @@ const BoquetSelectedItem = (props) => {
                     <div>{bouquet.price} руб.</div>
                 </div>
                 <Row>
-                        {!inBasket ? 
+                        {!props.inBasket ? 
                             <Col span={12}>
                                 <Button style={{width:'100%',height:'100%'}}variant='light' onClick={()=>{props.addBasket(bouquet.arc)}}>
                                     <Image width={50} height={50} src={basket} />
                                 </Button>
                             </Col>:
                             <Col span={12}>
-                                <Button style={{width:'100%',height:'100%'}} variant='light'>
-                                    <p>В корзине</p>
-                                    <Image width={50} height={50} src={basket} />
+                                <Button style={{width:'100%',height:'100%'}} variant='light' onClick={()=>{props.deleteBasket(bouquet.arc)}}>
+                                <p><Image width={25}  src={basket} /> Убрать из корзины   </p>
                                 </Button>
                             </Col>
                         }
                           <Col span={12}>
                             <Button variant='light' style={{width:'100%',height:'100%'}} onClick={()=>{props.deleteSelected(bouquet.arc)}} > 
-                                <p> В избранном</p>
-                                <Image width={50} height={50} src={heart} />
+                            <p><Image width={25}  src={heart} /> Убрать из избранного </p>
                             </Button>
                         </Col>
                     </Row>

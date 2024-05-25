@@ -44,6 +44,7 @@ const Auth = () => {
                         placeholder="Введите ваш login..."
                         value={login}
                         onChange={e=>setLogin(e.target.value)}
+                        id='login'
                     />
                     <Form.Control
                         className="mt-2"
@@ -52,6 +53,7 @@ const Auth = () => {
                         onChange={e=>setPassword(e.target.value)}
                         type="password"
                         autoComplete="on"
+                        id='pass'
                     />
                     <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
                             <div style={{color:"white"}}>
@@ -60,6 +62,7 @@ const Auth = () => {
                         <Button
                             className='greenButton'
                             onClick={click}
+                            id='AuthButton'
                         >
                         'Войти' 
                         </Button>

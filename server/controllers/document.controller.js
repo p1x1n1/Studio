@@ -26,7 +26,7 @@ class documentController {
 	};
 	async createAdminSales(req, res){
 		console.log('Create',req.body);
-		pdf.create(salesTemplete(req.body), {}).toFile(path.resolve(__dirname,'..','static','result.pdf'), (err) => {
+		pdf.create(salesTemplete(req.body), {}).toFile(path.resolve(__dirname,'..','static','sales.pdf'), (err) => {
 			if(err) {
 				res.send(Promise.reject());
 			}
@@ -38,6 +38,11 @@ class documentController {
 		console.log('getOne')
 		console.log(path.resolve(__dirname,'..','static','result.pdf'));
 		res.sendFile(path.resolve(__dirname,'..','static','result.pdf'));
+	}
+	async getSales(req, res) {
+		console.log('getOne')
+		console.log(path.resolve(__dirname,'..','static','sales.pdf'));
+		res.sendFile(path.resolve(__dirname,'..','static','sales.pdf'));
 
 	}
 }

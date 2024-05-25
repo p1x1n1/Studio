@@ -29,7 +29,7 @@ const Shop = () => {
                         <Image src={ExampleCarouselImage} className="d-block w-100 img-fluid" text="First slide" />
                         <Carousel.Caption>
                             <h1 className='h_carousel'>Твой букет всё скажет за тебя</h1>
-                            <button className='button_carousel' onClick={() => navigate(Boquet_ROUTE)}> Каталог </button>
+                            <button className='button_carousel' id='catalogButton' onClick={() => navigate(Boquet_ROUTE)}> Каталог </button>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>

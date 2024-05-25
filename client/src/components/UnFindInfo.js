@@ -16,8 +16,17 @@ const UnFindInfo = observer ((props) => {
         <>
             <h1>Корзина Пуста</h1>
             <h3>Добавьте что-нибудь в корзину</h3>
-            <Button className='banner_button' width={100} variant='outlined-light' onClick={() => navigate(Boquet_ROUTE)}>Каталог</Button>
+            <Button className='banner_button' style={{marginLeft:'20%'}} width={100} variant='outlined-light' onClick={() => navigate(Boquet_ROUTE)}>Каталог</Button>
         </>
+        :
+        (props.page == 'selected')?
+        <div className='d-flex justify-content-center align-items-center flex-column text-center '>
+            <h1>Избранное Пусто</h1>
+            <h3>Добавьте что-нибудь в избранное</h3>
+            <Button className='banner_button' style={{ width: '100px' }} variant='outlined-light' onClick={() => navigate(Boquet_ROUTE)}>
+                Каталог
+            </Button>
+        </div>
         :
         (props.page =='onebouquet')?
         <>

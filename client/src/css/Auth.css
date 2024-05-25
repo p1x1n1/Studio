@@ -34,7 +34,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url("../base_img/auth2.jpg");
+    background: url("../base_img/auth4.jpg");
     background-size: cover;
     /* background: url("https://i.pinimg.com/originals/c3/47/7d/c3477d11190aa11b2a2acf6aa30481a0.jpg") transparent; */
   /*  background-position: center;
@@ -42,8 +42,11 @@
 }
 h2{
     font-size: 2em;
-    color: #fcddfa;
+    color: #ffffff;
     text-align: center;
+}
+h3{
+    color: #E2A5C8;
 }
 .auth-error-message {
 	width: 60%;

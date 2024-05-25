@@ -7,7 +7,7 @@ import '../css/Item.css';
 import { Boquet_ROUTE, LOGIN_ROUTE } from '../utils/consts';
 import { ApiService } from '../http/api.service';
 import { Context } from '../index';
-import { Col, Modal, Row } from 'antd';
+import { Col, Modal, Row, message } from 'antd';
 
 const BoquetItem = (props) => {
     const navigate = useNavigate();
@@ -20,8 +20,13 @@ const BoquetItem = (props) => {
     console.log('login', login,'bouquet',bouquet);
     const cnt = 1;
     function addBasket(arc) {
+        let cnt = 1;
 		apiService.post('/basket',{login,arc,cnt}).then(() => {
-            alert('Добавлено в корзину');
+            messageApi.open({
+                type: 'success',
+                content: 'Добавлено в корзину',
+                duration: 5,
+                });
             setInBasket(true) 
 		})
         .catch(err => {
@@ -30,22 +35,38 @@ const BoquetItem = (props) => {
 	}
     function addSelected(arc) {
 		apiService.post('/selected',{login,arc}).then(() => {
-            alert('Добавлено в избранное');
+            messageApi.open({
+                type: 'success',
+                content: 'Добавлено в избранное',
+                duration: 5,
+                });
             setInSelected(true) 
-		})
+		}).catch(err => {
+            alert(err.message);
+        })
 	}
     function deleteSelected(arc) {
 		apiService.delete('/selected/'+login+'/'+arc).then(() => {
-            alert('Удаленно из избранного');  
+            messageApi.open({
+                type: 'error',
+                content: 'Удаленно из избранного',
+                duration: 5,
+                });
+             
             setInSelected(false) 
 		})
 	}
     function deleteBasket(arc){
-        apiService.delete('/basket/'+user.user.login+'/'+arc).then(res => {
-            alert('Удаленно из корзины'); 
+        apiService.delete('/basket/'+login+'/'+arc).then(res => {
+            messageApi.open({
+                type: 'error',
+                content: 'Удаленно из корзины',
+                duration: 5,
+                });
             setInBasket(false);
         })
     }
+    const [messageApi, contextHolder] = message.useMessage();
     useEffect(() => {
         const bouquet = props.bouquet
         console.log(bouquet);
@@ -61,6 +82,7 @@ const BoquetItem = (props) => {
     const apiService = new ApiService()
     return (
         <>
+                {contextHolder}
                 <Card className='card_bouquet_item' style={{cursor: 'pointer'}} border={"pink"}>
                    <Image className='card_img' style={{width:'100%'}}  src={process.env.REACT_APP_API_URL +bouquet.img} onClick={() => navigate(Boquet_ROUTE+'/'+bouquet.arc)}/>
                     <div className='d-flex justify-content-between '>
@@ -80,8 +102,7 @@ const BoquetItem = (props) => {
                         </Col>:
                         <Col span={12}>
                             <Button style={{width:'100%',height:'100%'}} variant='light' onClick={()=>{deleteBasket(bouquet.arc)}}>
-                                <p>В корзине</p>
-                                <Image width={50} height={50} src={basket} />
+                                <p><Image width={25}  src={basket} /> Убрать из корзины   </p>
                             </Button>
                         </Col>
                     }
@@ -94,8 +115,7 @@ const BoquetItem = (props) => {
                         :
                         <Col span={12}>
                             <Button style={{width:'100%',height:'100%'}} variant='light' onClick={()=>{deleteSelected(bouquet.arc)}}> 
-                                <p>В избранном</p>
-                                <Image width={50} height={50} src={heart} />
+                                <p><Image width={25}  src={heart} /> Убрать из избранного </p>
                             </Button>
                         </Col>
                     }

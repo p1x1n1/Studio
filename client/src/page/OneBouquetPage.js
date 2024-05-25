@@ -39,7 +39,6 @@ const OneBouquetPage = () => {
         }).catch(
             err => {
                 setIsFind(false);
-                alert("Букет не найден");
             }
         )
         console.log('bouquet',bouquet);
@@ -51,8 +50,12 @@ const OneBouquetPage = () => {
     function addBasket(arc) {
         let cnt = 1;
 		apiService.post('/basket',{login,arc,cnt}).then(() => {
-            alert('Добавлено в корзину');
-            setInSelected(true) 
+            messageApi.open({
+                type: 'success',
+                content: 'Добавлено в корзину',
+                duration: 5,
+                });
+            setInBasket(true) 
 		})
         .catch(err => {
             alert(err.message);
@@ -60,7 +63,11 @@ const OneBouquetPage = () => {
 	}
     function addSelected(arc) {
 		apiService.post('/selected',{login,arc}).then(() => {
-            alert('Добавлено в избранное');
+            messageApi.open({
+                type: 'success',
+                content: 'Добавлено в избранное',
+                duration: 5,
+                });
             setInSelected(true) 
 		}).catch(err => {
             alert(err.message);
@@ -68,19 +75,37 @@ const OneBouquetPage = () => {
 	}
     function deleteSelected(arc) {
 		apiService.delete('/selected/'+login+'/'+arc).then(() => {
-            alert('Удаленно из избранного');  
+            messageApi.open({
+                type: 'error',
+                content: 'Удаленно из избранного',
+                duration: 5,
+                });
+             
             setInSelected(false) 
 		})
 	}
     function deleteBasket(arc){
         apiService.delete('/basket/'+login+'/'+arc).then(res => {
-            alert('Удаленно из корзины'); 
+            messageApi.open({
+                type: 'error',
+                content: 'Удаленно из корзины',
+                duration: 5,
+                });
             setInBasket(false);
         })
     }
-    
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const success = (number_order) => {
+        messageApi.open({
+        type: 'success',
+        content: 'Добавлено в корзину',
+        duration: 5,
+        });
+    };
     return (
         <>
+            {contextHolder}
            {(isFind) ?
            <Container className="mt-4">
                 <Row>
@@ -105,6 +130,14 @@ const OneBouquetPage = () => {
                             <h1  style={{color:'#3f1d61'}}>{bouquet.title}</h1>
                             <h3  style={{color:'#3f1d61'}}>Арт. {bouquet.arc}</h3>
                             <h1  style={{color:'#2F611D'}}>{bouquet.price} р.</h1>
+                        </Row>
+                        <Row>
+                            <p style={{color:'#3f1d61'}}>
+                                Для максимального повтора состава и цветовой гаммы,
+                                 букет необходимо заказать за 7-10 дней. 
+                                 В случае заказа позже, возможны замены цветочного состава
+                            </p>
+                            
                         </Row>
                         { (user.user.post === 'user') ?
                        <Row className="d-flex row">

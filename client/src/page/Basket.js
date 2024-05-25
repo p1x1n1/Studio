@@ -7,6 +7,7 @@ import { REG_ORDER } from '../utils/consts';
 import { ApiService } from '../http/api.service';
 import { observer } from 'mobx-react-lite';
 import UnFindInfo from '../components/UnFindInfo';
+import { message } from 'antd';
 
 
 const apiService = new ApiService()
@@ -39,6 +40,11 @@ const Basket = observer (() => {
     function DeleteOne(arc){
         apiService.delete('/basket/'+login+'/'+arc).then(res => {
             setBouquet([]);
+            messageApi.open({
+                type: 'error',
+                content: 'Удаленно из корзины',
+                duration: 5,
+                });
         })
         fetchDataBouquet();
     }
@@ -57,8 +63,10 @@ const Basket = observer (() => {
         sum = sum * ((100.00 - disProcent) / 100)
         return sum;
     }
+    const [messageApi, contextHolder] = message.useMessage();
     return (
         <>
+         {contextHolder}
             <Row>
             <Col md={8}>
                 <Row>
@@ -88,7 +96,7 @@ const Basket = observer (() => {
                     </div>
                 </div>
                 <div className='d-flex justife-content-center align-items-center mt-3'>
-                    <Button className='pupleButton' variant='outline-light' onClick={() => { navigate(REG_ORDER+'/'+user.user.login)}}>Оформить заказ</Button>
+                    <Button id='order' className='pupleButton' disabled={!bouquet.length} variant='outline-light' onClick={() => { navigate(REG_ORDER+'/'+user.user.login)}}>Оформить заказ</Button>
                 </div>
                
             </Col>

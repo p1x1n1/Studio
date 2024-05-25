@@ -7,10 +7,9 @@ class FlowerController {
 	async createFlower(req, res) {
 		const { id_record, title,  price, cnt, season_start, season_end} = req.body
 		console.log(req.body,req.files)
-		
 		let flower
-		if (id_record) {
-			if (req.files){
+		if (id_record && id_record != "undefined") {
+			if (req.files && req.files != null){
 				let {img} = req.files
 				let fileName = uuid.v4()+".jpg";
 				img.mv(path.resolve(__dirname,'..','static',fileName));
@@ -33,12 +32,12 @@ class FlowerController {
 	async getFlowers(req, res) {
 		//flower = await Flower.findAll()
 		//res.json(flower)
-		const flower = await db.query('SELECT * FROM flowers where flowers.cnt > 0 ORDER BY id_record')
+		const flower = await db.query('SELECT * FROM flowers where flowers.cnt > 0 ORDER BY title')
 		console.log((flower.rows))
 		res.json(flower.rows)
 	}
 	async getFlowersAll(req, res) {
-		const flower = await db.query('SELECT * FROM flowers ORDER BY id_record')
+		const flower = await db.query('SELECT * FROM flowers ORDER BY title')
 		res.json(flower.rows)
 	}
 	async getOneFlower(req, res) {

@@ -7,11 +7,11 @@ class WrapperController {
 	async createWrapper(req, res) {
 		let { id_record, title, price,cnt, wrapperCategoryIdRecord} = req.body
 		console.log('body',req.body)
-		let {img} = req.files
 		price = parseFloat(price);
 		let wrapper
-		if (id_record) {
-			if (img){
+		if (id_record!='undefined') {
+			if (req.files && req.files != null){
+				let {img} = req.files
 				let fileName = uuid.v4()+".jpg";
 				img.mv(path.resolve(__dirname,'..','static',fileName));
 				wrapper = await db.query('UPDATE wrappers set title = ($1),cnt = ($2), price = ($3),  img = ($4), "wrapperCategoryIdRecord"=($5) where id_record = ($6) RETURNING *', [title, price,cnt ,fileName,wrapperCategoryIdRecord,id_record])

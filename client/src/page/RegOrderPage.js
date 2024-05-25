@@ -189,7 +189,7 @@ const RegOrderPage = () => {
                         <Form.Item label='Адрес' >
                             {/* <h3>Адрес:</h3> */}
                             <Form.Item label='Населённый пункт' className='form_text' 
-                            name='locality'
+                            name='locality' id='locality'
                             rules={[
 								{
 									required: true,
@@ -206,7 +206,7 @@ const RegOrderPage = () => {
                                 labelInValue className='form_text'>
                                 </Select>
                             </Form.Item>
-                            <Form.Item label='Улица' className='form_text' name='street'
+                            <Form.Item label='Улица' className='form_text' name='street' id='street'
                             rules={[
 								{
 									required: true,
@@ -223,7 +223,7 @@ const RegOrderPage = () => {
                                 labelInValue className='form_text'>
                                 </Select>
                             </Form.Item>
-                            <Form.Item label='Дом' className='form_text' name='house'
+                            <Form.Item label='Дом' className='form_text' name='house' id='house'
                             rules={[
 								{
 									required: true,
@@ -240,7 +240,7 @@ const RegOrderPage = () => {
                         <Form.Item>
                             <Row>
                                 <Col md={6}>
-                                    <Form.Item label='Способ доставки:' name='delivery'
+                                    <Form.Item label='Способ доставки:' name='delivery' id='delivery'
                                     rules={[
                                         {
                                             required: true,
@@ -252,7 +252,7 @@ const RegOrderPage = () => {
                                         >
                                         </Select>
                                     </Form.Item>
-                                    <Form.Item label='Дата доставки:'  name='date-picker'
+                                    <Form.Item label='Дата доставки:'  name='date-picker' id='date-picker'
                                     rules={[
                                         {
                                             required: true,
@@ -274,7 +274,7 @@ const RegOrderPage = () => {
                                     <Form.Item label='Стоимость доставки:'>
                                     <Input disabled placeholder = {selectedDelivery? selectedDelivery.price+" руб.":''}/>
                                     </Form.Item>
-                                    <Form.Item name="time-picker" 
+                                    <Form.Item name="time-picker"  id='time-picker' 
                                     value={formData.time_order} label='Время доставки:'
                                     rules={[
                                         {
@@ -299,6 +299,7 @@ const RegOrderPage = () => {
                         <Form.Item className="mb-3">
                             <Form.Item className='form_text' valuePropName="checked" style={{fontSize: 24}} label='Я получатель'>
                                 <Switch
+                                    id='switchRecepient'
                                     className='form_text'
                                     checked={isRecepient}
                                     onChange={() => {
@@ -311,7 +312,7 @@ const RegOrderPage = () => {
                             <>
                                 <h3>Получатель</h3>
                                 <Form.Item className='form_text' style={{fontSize: 24}} 
-                                label='Номер телефона получателя:' name='phoneRecepient'
+                                label='Номер телефона получателя:' name='phoneRecepient' id="phoneR"
                                 rules={[
 								{
 									required: true,
