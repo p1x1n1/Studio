@@ -147,7 +147,7 @@ return `
                 </table>
                 <br/>
              <br />
-             <h1 class="justify-center">Итоговая сумма продаж: ${all}$</h1>
+             <h1 class="justify-center">Итоговая сумма продаж: ${all} рублей</h1>
           </div>
        </body>
     </html>
