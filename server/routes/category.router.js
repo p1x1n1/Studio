@@ -3,7 +3,7 @@ const categoryController = require('../controllers/category.controller')
 const checkRole = require('../middleware/checkRoleMiddleware')
 const router = new Router
 
-router.post('/',checkRole('Администратор'),categoryController.create)//для создания только от админа добавить в букеты и тд
+router.post('/',categoryController.create)//для создания только от админа добавить в букеты и тд
 router.get('/',categoryController.getALL)
 router.get('/:id',categoryController.getOne)//отдельный букет или цвееток
 router.delete('/:id',categoryController.deleteOne)

@@ -59,10 +59,9 @@ const UserOrderDocument = (props) => {
 
     return (
         <>
+        <Accordion className='mb-0 mt-0' flush>
             {orders.map((order) =>
-                <>
-                    <Accordion className='mb-0 mt-0'>
-                        <Accordion.Item>
+                        <Accordion.Item eventKey={order.number_order}>
                             <Accordion.Header>
                                 <Stack direction='horizontal' gap={5}>
                                     <h5>Номер заказа: {order.number_order} </h5>
@@ -168,9 +167,8 @@ const UserOrderDocument = (props) => {
                                 </Table>
                             </Accordion.Body>
                         </Accordion.Item>
-                    </Accordion>
-                </>
             )}
+        </Accordion>
         </>
     );
 }

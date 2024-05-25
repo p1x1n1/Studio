@@ -8,7 +8,7 @@ class BouquetController {
 		const { arc, title,ready_made,price,wrapperIdRecord, description } = req.body
 		console.log(req.body,req.files,req.body.img);
 		let bouquet
-		if (arc !="undefined") {
+		if (arc !="undefined" && arc) {
 			if (req.files){
 				let {img} = req.files
 				let fileName = uuid.v4()+".jpg";
@@ -20,6 +20,7 @@ class BouquetController {
 			}
 		} else {
 			if (req.files){
+				console.log('update')
 				let {img} = req.files
 				let fileName = uuid.v4()+".jpg";
 				img.mv(path.resolve(__dirname,'..','static',fileName));
@@ -27,11 +28,12 @@ class BouquetController {
 				else bouquet = await db.query('INSERT INTO bouquets (title,price,"wrapperIdRecord",description,img,ready_made) values ($1, $2,$3,$4,$5,true) RETURNING *', [title, price,wrapperIdRecord,description, fileName])
 			}	
 			else{
-				if (ready_made != 'undefined' ){ bouquet = await db.query('INSERT INTO bouquets (title,ready_made,price,"wrapperIdRecord",description) values ($1, $2,$3,$4,$5) RETURNING *', [title, ready_made,price,wrapperIdRecord,description])}
-                else bouquet = await db.query('INSERT INTO bouquets (title,price,"wrapperIdRecord",description,redy_made) values ($1, $2,$3,$4) RETURNING *', [title, price,wrapperIdRecord,description])
+				if (ready_made != 'undefined' ){ bouquet = await db.query(`INSERT INTO bouquets (title,ready_made,price,"wrapperIdRecord",description,img) values ($1, $2,$3,$4,$5,'pink_image.png') RETURNING *`, [title, ready_made,price,wrapperIdRecord,description])}
+                else bouquet = await db.query('INSERT INTO bouquets (title,price,"wrapperIdRecord",description,ready_made,img) values ($1, $2,$3,$4) RETURNING *', [title, price,wrapperIdRecord,description])
 			}
 		}
-		res.json(bouquet.rows[0])
+		console.log(bouquet.rows[0])
+		return res.json(bouquet.rows[0])
 	}
 	async getBouquets(req, res) {
 		const bouquet = await db.query('SELECT * FROM bouquets ORDER BY arc')
@@ -180,10 +182,10 @@ class BouquetController {
 		const int_arc = parseInt(arc);
 		let bouquet;
 		if(arc === int_arc.toString()){
-		 bouquet = await db.query('SELECT * FROM bouquets WHERE arc = ($1)',[arc])}
+		 bouquet = await db.query('SELECT * FROM bouquets WHERE arc = ($1) and ready_made=true',[arc])}
 		else{
              bouquet = await db.query
-		    ('SELECT * FROM bouquets WHERE title = ($1)',[arc])
+		    ('SELECT * FROM bouquets WHERE title = ($1) and ready_made=true',[arc])
 		}
 		if (bouquet){
 		res.json(bouquet.rows[0])}

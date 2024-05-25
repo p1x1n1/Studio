@@ -185,7 +185,12 @@ const OneBouquetPage = () => {
                                 <Accordion.Body>
                                  <ul>
                                     {composition.map((item,index) => {
-                                        return <li key={index}>{item.flower_name}</li>
+                                        return <li key={index}>
+                                            <div>
+                                                <Image src={process.env.REACT_APP_API_URL +item.img} height={50} width={50} roundedCircle />
+                                                <p>{item.flower_name} : {item.cnt} шт. </p>
+                                            </div>
+                                            </li>
                                     })}
                                  </ul>
                                 </Accordion.Body>

@@ -19,7 +19,7 @@ class BouquetCompositionController {
 	async getBouquetComposition(req, res) {
 		const bouquetArc = req.params.bouquetArc
 		const bouquet = await db.query(`
-		SELECT "bouquetArc","flowerIdRecord", flowers.title as flower_name,composition_bouquets.cnt
+		SELECT "bouquetArc","flowerIdRecord", flowers.title as flower_name,flowers.img as img,composition_bouquets.cnt
 		FROM composition_bouquets INNER JOIN flowers on flowers.id_record = composition_bouquets."flowerIdRecord" 
 		WHERE "bouquetArc" = ($1) ORDER BY "flowerIdRecord";
 		 `

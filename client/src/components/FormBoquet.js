@@ -62,7 +62,6 @@ const FormBoquet = (props) => {
     function saveToBouquet() {
 		console.log('saveItemBouquetandComposition');
         const formData = new FormData();
-		
 		formData.append('title', bouquet.title);
 		formData.append('img', img ); 
 		formData.append('price', totalPrice);
@@ -84,8 +83,11 @@ const FormBoquet = (props) => {
             .catch(err => {
                 console.log(err.message);
             })
-		})
-        setBouquet({})
+            setBouquet({})
+		}).catch(err => {
+            console.log(err.message);
+        })
+        
 	}
     
     return (
@@ -176,7 +178,7 @@ const FormBoquet = (props) => {
                                         }
                                     }/>
                             </Form.Group>
-                            { (selectedFlowers.length > 0 && bouquet.wrapperIdRecord ) ?
+                            { (selectedFlowers.length > 0 || bouquet.wrapperIdRecord ) ?
                             <div className='d-flex justify-content-between flex-wrap'>
                                 {
                                 selectedFlowers.map((selectedFlower, index) => {
@@ -210,7 +212,7 @@ const FormBoquet = (props) => {
                         <h3>Итог: {calculateTotalPrice()} рублей</h3>
                         <div className='form_line'></div>
                         {/* { (props.post === 'user') ? */}
-                        <Button id='basket'  disabled={!(selectedFlowers.length > 0 && bouquet.wrapperIdRecord)} onClick={() => (login === undefined)  ? setModuleVisible(true) : false} >
+                        <Button id='basket'  disabled={!(selectedFlowers.length > 0 && bouquet.wrapperIdRecord)} onClick={() => (login === undefined)  ? setModuleVisible(true) : saveToBouquet()} >
                                 <Image width={50} height={50}  src={basket}/>
                                 <b style={{color:'blueviolet',marginLeft: 6}}>Добавить в корзину</b>
                         </Button> 
