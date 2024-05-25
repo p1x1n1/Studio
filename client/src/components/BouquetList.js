@@ -21,12 +21,13 @@ const BouquetList = observer((props) => {
             const start_end = (props.start_end.length !== 0) ? props.start_end : undefined;
             apiService.get(`/bouquet/category/${props.category}/${flowers}/${start_end}?offset=${offset}&limit=${bouquetsPerPage}`).then(res => {
                 setBouquet(res.data);
-                setTotalBouquets(res.total); // Предполагается, что сервер возвращает общее количество букетов
+                setTotalBouquets(res.total); 
             });
         } else {
             apiService.get(`/bouquet?offset=${offset}&limit=${bouquetsPerPage}`).then(res => {
-                setBouquet(res.data);
-                setTotalBouquets(res.total); // Предполагается, что сервер возвращает общее количество букетов
+                setBouquet(res.bouquets);
+                console.log(res.bouquets);
+                setTotalBouquets(res.total); 
             });
         }
     }

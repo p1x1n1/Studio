@@ -20,11 +20,12 @@ class WrapperController {
 				wrapper = await db.query('UPDATE wrappers set title = ($1),cnt = ($2), price = ($3),  "wrapperCategoryIdRecord"=($4) where id_record = ($5) RETURNING *', [title, price,cnt ,wrapperCategoryIdRecord,id_record])
 			}
 		} else {
+			let {img} = req.files
 			let fileName = uuid.v4()+".jpg";
 			img.mv(path.resolve(__dirname,'..','static',fileName));
 			wrapper = await db.query('INSERT INTO wrappers (title, price,cnt ,img) values ($1, $2,$3,$4) RETURNING *', [title, price,cnt ,fileName])
 		}
-		res.json(wrapper.rows[0])
+		return res.json(wrapper.rows[0])
 	}
 	async getWrappers(req, res) {
 		const wrapper = await db.query('SELECT * FROM wrappers where wrappers.cnt > 0 ORDER BY id_record')
