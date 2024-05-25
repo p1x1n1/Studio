@@ -17,8 +17,15 @@ class WrapperCategoryController{
     }
 
     async getALL (req,res){
-        const categorys = await WrapperCategory.findAll()
-        return res.json(categorys)
+        try {
+            const categories = await WrapperCategory.findAll({
+                order: [['title', 'ASC']]
+            });
+            return res.json(categories);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
     }
     async getOne (req,res){
         const id = req.params.id

@@ -12,7 +12,7 @@ const BouquetList = observer((props) => {
     const [bouquet, setBouquet] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalBouquets, setTotalBouquets] = useState(0);
-    const bouquetsPerPage = 15;
+    const bouquetsPerPage = 9;
 
     function fetchDataBouquet(page = 1) {
         const offset = (page - 1) * bouquetsPerPage;

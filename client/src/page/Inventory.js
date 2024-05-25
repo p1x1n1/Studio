@@ -34,11 +34,6 @@ const wrapper_columns = [
 	{
 		title: 'Изображение',
 		dataIndex: 'img',
-		key: 'img'
-	},
-	{
-		title: 'Изображение',
-		dataIndex: 'img',
 		key: 'img',
 		render: (_,{img})=>(
 			<img src={process.env.REACT_APP_API_URL + img} alt={img} width={100}/>
@@ -140,9 +135,9 @@ const bouquet_columns = [
 			(_, { category }) => (
 				<>
 				  { category ? category.map((tag) => {
-					let color = tag.categories_name.length > 5 ? 'geekblue' : 'green';
+					let color = tag.categories_name.length > 12 ? 'geekblue' :  tag.categories_name.length > 9 ? 'pink': 'green';
 					if (tag.categories_name === 'Монобукеты') {
-					  color = 'volcano';
+					  color = 'yellow';
 					}
 					return (
 					  <Tag color={color} key={tag}>
@@ -290,6 +285,7 @@ function Inventory() {
 		formData.append('price', WrapperRecord.price);
 		formData.append('cnt', WrapperRecord.cnt);
 		formData.append('wrapperCategoryIdRecord', WrapperRecord.wrapperCategoryIdRecord);
+		console.log('wrapp',WrapperRecord,'form',formData)
 		apiService.postformData('/wrapper', formData).then(() => {
 			closeWrapper()
 			fetchDataWrapper()
@@ -421,7 +417,6 @@ function Inventory() {
 	const filteredFlowers = flower.filter(fw => !bouquetCompositionRecord.some(composition => composition.flowerIdRecord === fw.id_record));
 	const filteredCategory = category.filter(c => !bouquetCategoryRecord.some(categories => categories.categoryIdRecord === c.id_record));
 
-
 	const addFlower = () => {
 		const newCompositionRecord = [...bouquetCompositionRecord];
 		newCompositionRecord.push({ flowerIdRecord: null, cnt: 1 });
@@ -529,7 +524,7 @@ function Inventory() {
 				}}
 			></Table>
 			<Modal
-				title={bouquetRecord.arc ? 'Изменение сущности с артикулом =' + bouquetRecord.arc : 'Добавление новой сущности'}
+				title={bouquetRecord.arc ? 'Изменение букета с артикулом = ' + bouquetRecord.arc : 'Добавление нового букета'}
 				open={modalVisibleBouquet}
 				okText='Сохранить'
 				cancelText='Отмена'
@@ -597,7 +592,7 @@ function Inventory() {
 										{fw.title}
 									</Select.Option>
 								))}
-								{console.log('filteredFlowers',filteredFlowers,flower)}
+								{/* {console.log('filteredFlowers',filteredFlowers,flower)} */}
 								</Select>
 							</Col>
 						<Col md={6}>
@@ -702,7 +697,7 @@ function Inventory() {
 					}}
 				></Table>
 				<Modal
-					title={FlowerRecord.id_record ? 'Изменение сущности с id=' + FlowerRecord.id_record : 'Добавление новой сущности'}
+					title={FlowerRecord.id_record ? 'Изменение цветка с артикулом = ' + FlowerRecord.id_record : 'Добавление нового цветка '}
 					open={modalVisibleFlower}
 					okText='Сохранить'
 					cancelText='Отмена'
@@ -808,7 +803,7 @@ function Inventory() {
 						}}
 					></Table>
 					<Modal
-						title={WrapperRecord.id_record ? 'Изменение сущности с id=' + WrapperRecord.id_record : 'Добавление новой сущности'}
+						title={WrapperRecord.id_record ? 'Изменение упаковки с id = ' + WrapperRecord.id_record : 'Добавление новой упаковки'}
 						open={modalVisibleWrapper}
 						okText='Сохранить'
 						cancelText='Отмена'
@@ -960,7 +955,7 @@ function Inventory() {
 					}}
 				></Table>
 				<Modal
-					title={CategoryRecord.id_record ? 'Изменение сущности с id=' + CategoryRecord.id_record : 'Добавление новой сущности'}
+					title={CategoryRecord.id_record ? 'Изменение категории с id = ' + CategoryRecord.id_record : 'Добавление новой категории'}
 					open={modalVisibleCategory}
 					okText='Сохранить'
 					cancelText='Отмена'

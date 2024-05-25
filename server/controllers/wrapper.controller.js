@@ -23,7 +23,7 @@ class WrapperController {
 			let {img} = req.files
 			let fileName = uuid.v4()+".jpg";
 			img.mv(path.resolve(__dirname,'..','static',fileName));
-			wrapper = await db.query('INSERT INTO wrappers (title, price,cnt ,img) values ($1, $2,$3,$4) RETURNING *', [title, price,cnt ,fileName])
+			wrapper = await db.query('INSERT INTO wrappers (title, price,cnt ,img,"wrapperCategoryIdRecord") values ($1, $2,$3,$4,$5) RETURNING *', [title, price,cnt ,fileName,wrapperCategoryIdRecord])
 		}
 		return res.json(wrapper.rows[0])
 	}
