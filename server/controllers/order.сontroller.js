@@ -19,8 +19,8 @@ class OrderController{
     }
 
     async getALL (req,res){
-        const { offset = 0, limit = 10 } = req.query;
-        const s  = `SELECT 
+        const { offset = 0, limit = 10, number_order} = req.query;
+        let ordersQuery  = `SELECT 
         *,
         status_orders.title as status_order_title,
         deliveries.title as type_order_title,deliveries.price as deliveries_price_deliveries,
@@ -33,9 +33,11 @@ class OrderController{
         inner join localities on localities.id_record = orders."localityIdRecord"
         inner join streets on streets.id_record = orders."streetIdRecord"
         inner join discounts on discounts.id_record = users."discountIdRecord"
-        LIMIT ${limit} OFFSET ${offset}
-        ;`
-        const orders = await db.query(s)
+        `
+        if (number_order) 
+            ordersQuery += ` where orders.number_order = ${number_order}`;
+        ordersQuery += ` ORDER BY orders.number_order LIMIT ${limit} OFFSET ${offset}`;
+        const orders = await db.query(ordersQuery)
         const ordersWithComposition = await Promise.all(orders.rows.map(async order => {
             const compositionQuery = `
             SELECT arc,composition_orders.cnt,postcard_comment,postcard,bouquets.title as title, ready_made,bouquets.img as img, bouquets.price as price,
@@ -139,68 +141,62 @@ class OrderController{
         return res.json(orders.rows)
     }
     async getFlorist(req,res){
-        try {const status = req.params.status;
-        const login = req.params.login;
-        const { number_order, offset = 0, limit = 10 } = req.query;
-        let params = [login, status];
-        let ordersQuery  = `SELECT 
-        *,
-        status_orders.title as status_order_title,
-        deliveries.title as type_order_title,deliveries.price as delivery_price_delivery,
-        users.phone as users_phone,users.name_ as users_name, users.surname as users_surname, users.lastname as users_lastname, 
-        streets.title as streets_name, localities.title as localities_name
-        from orders
-        inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
-        inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
-        inner join users on users.login = orders."userLogin"
-        inner join localities on localities.id_record = orders."localityIdRecord"
-        inner join streets on streets.id_record = orders."streetIdRecord"
-        where "statusOrderIdRecord" = ($2) and "floristLogin" = ($1)
-        `
-        if (number_order) {
-            ordersQuery += ' AND orders.number_order = ($3) ORDER BY orders.number_order LIMIT ($4) OFFSET ($5)';
-            params.push(number_order);
-            params.push(limit, offset);
-        } else{
-        ordersQuery += ' ORDER BY orders.number_order LIMIT ($3) OFFSET ($4)';
-        params.push(limit, offset);}
-
-        const orders = await db.query(ordersQuery, params);
-
-        const totalCountQuery = `
-            SELECT COUNT(orders.number_order) AS total
-            FROM orders
-            WHERE "statusOrderIdRecord" = ($2) and "floristLogin" = ($1)
-        `;
-        
-        const totalCountParams = [login, status];
-        if (number_order) {
-            totalCountQuery += ' AND orders.number_order = $3';
-            totalCountParams.push(number_order);
-        }
-
-        const totalCountResult = await db.query(totalCountQuery, totalCountParams);
-        const totalCount = totalCountResult.rows[0].total;
-        
-        const ordersWithComposition = await Promise.all(orders.rows.map(async order => {
-            const compositionQuery = `
-            SELECT arc,composition_orders.cnt,postcard_comment,postcard,bouquets.title as title, ready_made,bouquets.img as img, bouquets.price as price,
-            wrappers.title as wrapper_name
-            FROM composition_orders 
-            INNER JOIN bouquets on bouquets.arc = composition_orders."bouquetArc" 
-            Inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record
-            WHERE "orderNumberOrder" =($1)	
+        try {
+            const status = req.params.status;
+            const login = req.params.login;
+            const { offset = 0, limit = 10, number_order} = req.query;
+            let params = [status,login];
+            let ordersQuery  = `SELECT 
+            *,
+            status_orders.title as status_order_title,
+            deliveries.title as type_order_title,deliveries.price as delivery_price_delivery,
+            users.phone as users_phone,users.name_ as users_name, users.surname as users_surname, users.lastname as users_lastname, 
+            streets.title as streets_name, localities.title as localities_name
+            from orders
+            inner join status_orders on status_orders.id_record = orders."statusOrderIdRecord"
+            inner join deliveries on deliveries.id_record = orders."deliveryIdRecord"
+            inner join users on users.login = orders."userLogin"
+            inner join localities on localities.id_record = orders."localityIdRecord"
+            inner join streets on streets.id_record = orders."streetIdRecord"
+            where "statusOrderIdRecord" = ($1) and "floristLogin" = ($2)
+            `
+            if (number_order) {
+                ordersQuery += ' AND orders.number_order = ($3) ORDER BY orders.number_order LIMIT ($4) OFFSET ($5)';
+                params.push(number_order);
+                params.push(limit, offset);
+            } else{
+            ordersQuery += ' ORDER BY orders.number_order LIMIT ($3) OFFSET ($4)';
+            params.push(limit, offset);}
+    
+            const orders = await db.query(ordersQuery, params);
+    
+            const totalCountQuery = `
+                SELECT COUNT(*) AS total
+                FROM orders
+                where "statusOrderIdRecord" = ($1)
             `;
-            const composition = await db.query(compositionQuery, [order.number_order]);
-            return {
-                ...order,
-                composition: composition.rows
-            };
-        }));
-        res.json({
-            total: totalCount,
-            orders: ordersWithComposition
-        });
+            console.log('orders',orders.rows)
+            const totalCountResult = await db.query(totalCountQuery, [status]);
+            const totalCount = totalCountResult.rows[0].total;
+            const ordersWithComposition = await Promise.all(orders.rows.map(async order => {
+                const compositionQuery = `
+                SELECT arc,composition_orders.cnt,postcard_comment,postcard,bouquets.title as title, ready_made,bouquets.img as img, bouquets.price as price,
+                wrappers.title as wrapper_name
+                FROM composition_orders 
+                INNER JOIN bouquets on bouquets.arc = composition_orders."bouquetArc" 
+                Inner join wrappers on bouquets."wrapperIdRecord" = wrappers.id_record
+                WHERE "orderNumberOrder" =($1)	
+                `;
+                const composition = await db.query(compositionQuery, [order.number_order]);
+                return {
+                    ...order,
+                    composition: composition.rows
+                };
+            }));
+            res.json({
+                total: totalCount,
+                orders: ordersWithComposition
+            });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Internal Server Error" });

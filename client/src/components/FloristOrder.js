@@ -53,7 +53,7 @@ const FloristOrder = () => {
 
     useEffect(() => {
         fetchDataOrder();
-    }, [status, searchOrderNumber, currentPage]);
+    }, [orders]);
 
     const success = (number_order) => {
         messageApi.open({
@@ -82,6 +82,7 @@ const FloristOrder = () => {
             <Segmented options={options} className='mb-3'
                 onChange={(value) => {
                     setStatus(value);
+                    fetchDataOrder();
                 }} />
             <Form.Control
                 type="text"
@@ -90,7 +91,8 @@ const FloristOrder = () => {
                 onChange={(e) => setSearchOrderNumber(e.target.value)}
                 className='mb-3'
             />
-            {orders.map((order) =>
+            { (orders && orders.length > 0) ?
+            orders.map((order) =>
                 <Accordion className='mb-0 mt-0' key={order.number_order}>
                     <Accordion.Item onClick={() => setSelectOrder({ number_order: order.number_order, status: order.status_order_id_record })}>
                         <Accordion.Header>
@@ -111,7 +113,10 @@ const FloristOrder = () => {
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>
-            )}
+            )
+            :
+            <h3>Заказы не найдены</h3>
+            }
             <Pagination className='mt-3'>
                 <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1} />
                 <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />

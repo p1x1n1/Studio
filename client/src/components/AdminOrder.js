@@ -48,7 +48,7 @@ const options = [
     },
     {
         label: 'Отменен',
-        value: 2
+        value: 3
     },
     {
         label: 'Все',
@@ -81,6 +81,7 @@ const AdminOrder = () => {
     const offset = (currentPage - 1) * ordersPerPage;
 
     function fetchDataOrder() {
+        console.log(status);
         let url = `/order/admin/${status}?offset=${offset}&limit=${ordersPerPage}`;
         if (searchQuery) {
             url += `&number_order=${searchQuery}`;
@@ -142,6 +143,7 @@ const AdminOrder = () => {
     function cancelOrder(number_order) {
         apiService.post('/order', {
             number_order: number_order,
+            statusOrderIdRecord: 3,
             employeeLogin: user.user.login,
         }).then(() => {
             messageApi.open({
@@ -200,7 +202,8 @@ const AdminOrder = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className='mb-3'
             />
-            {orders.map((order) =>
+            {(orders && orders.length > 0) ?
+            orders.map((order) =>
                 <Accordion key={order.number_order} className='mb-0 mt-0'>
                     <Accordion.Item onClick={() => setSelectOrder({ number_order: order.number_order, floristLogin: order.floristLogin, courierLogin: order.courierLogin, status: order.statusOrderIdRecord })}>
                         <Accordion.Header>
@@ -347,7 +350,10 @@ const AdminOrder = () => {
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>
-            )}
+            )
+            :
+            <h3>Заказы не найдены</h3>
+            }
             <Pagination
                 current={currentPage}
                 total={totalOrders}
@@ -451,7 +457,7 @@ const AdminOrder = () => {
                 footer={[
                     <Button className='mb-3 greenButton' variant='outlined-light'
                         onClick={() => {
-                            const next_status = (selectOrder.status === 1) ? 3 : 6;
+                            const next_status = (selectOrder.status === 1) ? 2 : 6;
                             saveStatus(selectOrder.number_order, next_status);
                         }}
                         disabled={!selectOrder.floristLogin && !selectOrder.courierLogin}>
