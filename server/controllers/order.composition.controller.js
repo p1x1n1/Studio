@@ -20,16 +20,24 @@ class OrderCompositionController {
 	async getAdminSales(req, res) {
 		const start = req.params.start_date
 		const end = req.params.end_date
-		const order = await db.query(
+		const { login} = req.query;
+		let params = [start,end]
+		let orderS = 
 			`
 			SELECT bouquets.title as title, sum(cnt) as cnt, sum(cnt*bouquets.price) as all_sum,
 			ROUND(sum(cnt*bouquets.price)/sum(cnt),2) as one_sum
 			FROM composition_orders
 			INNER JOIN bouquets on bouquets.arc = composition_orders."bouquetArc"
 			INNER JOIN orders on orders.number_order = composition_orders."orderNumberOrder"
-			WHERE date_order BETWEEN ($1) AND ($2)
-			GROUP BY  title;
-			`,[start,end])
+			WHERE date_order BETWEEN ($1) AND ($2)	
+					
+		`
+        if(login){
+            orderS += ` AND ("floristLogin"=($3) OR "courierLogin"=($3) ) `
+            params.push(login)
+        }
+		orderS += `GROUP BY  title`
+        let order = await db.query(orderS,params)
 		res.json(order.rows)
 	}
 	async getOrderComposition(req, res) {

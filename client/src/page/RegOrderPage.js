@@ -401,7 +401,7 @@ const RegOrderPage = () => {
                 </Col>
             </Row>
             : 
-            <div className='d-glex justify-content-center'>
+            <div className='d-glex justify-content-center' style={{minHeight:'50vh'}}>
                 <h1>Заявка на заказ отправлена</h1>
                 <Progress type="circle" percent={100} />
                 <h3>Ваш заказ будет обработан в ближайшее время</h3>

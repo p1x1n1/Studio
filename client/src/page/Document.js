@@ -8,6 +8,8 @@ import { saveAs } from 'file-saver';
 import { Button } from 'react-bootstrap';
 import AdminDocumnet from '../components/AdminDocument';
 import UserOrderDocument from '../components/UserOrderDocument';
+import FloristDocumnet from '../components/FloristDocument';
+import CourierDocumnet from '../components/CourierDocument';
 
 const apiService = new ApiService();
 const Document = () => {
@@ -27,8 +29,8 @@ const Document = () => {
             :(user.user.post ==='Администратор') ?
             <AdminDocumnet getDocument={getDocument}/>
             : (user.user.post ==='Курьер') ?
-            <CourierOrder />:
-            <FloristOrder />}
+            <CourierDocumnet getDocument={getDocument} />:
+            <FloristDocumnet getDocument={getDocument} />}
         </div>
     );
 };

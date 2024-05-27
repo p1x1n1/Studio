@@ -246,11 +246,18 @@ class OrderController{
     async getAllSum (req,res){
         const start = req.params.start_date
 		const end = req.params.end_date
-        const order = await db.query(`
+        const { login} = req.query;
+        let params = [start,end]
+        let orderS = `
 		SELECT sum(price) FROM orders
 		WHERE date_order BETWEEN ($1) AND ($2)				
 		`
-		,[start,end])
+        if(login){
+            orderS += ` AND ("floristLogin"=($3) OR "courierLogin"=($3) ) `
+            params.push(login)
+        }
+
+        let order = await db.query(orderS,params)
         return res.json(order.rows[0])
     }
 }

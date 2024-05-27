@@ -96,12 +96,14 @@ const OneBouquetPage = () => {
     }
     const [messageApi, contextHolder] = message.useMessage();
 
-    const success = (number_order) => {
-        messageApi.open({
-        type: 'success',
-        content: 'Добавлено в корзину',
-        duration: 5,
-        });
+    const [openItems, setOpenItems] = useState([]);
+
+    const handleToggle = (eventKey) => {
+        if (openItems.includes(eventKey)) {
+            setOpenItems(openItems.filter(key => key !== eventKey));
+        } else {
+            setOpenItems([...openItems, eventKey]);
+        }
     };
     return (
         <>
@@ -172,7 +174,7 @@ const OneBouquetPage = () => {
                         :<></>
                         }
                         <Row>
-                        <Accordion className="mt-3" defaultActiveKey="0" flush>
+                        <Accordion className="mt-3" activeKey={openItems} onSelect={handleToggle}>
                             <Accordion.Item eventKey="0" >
                                 <Accordion.Header  >Описание</Accordion.Header>
                                 <Accordion.Body >

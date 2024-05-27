@@ -78,7 +78,7 @@ const Cabinet = () => {
                     {(user.user.post==='user')? 
 						<>
 							<Button className='greenButton' onClick={()=>navigate(DOCUMENT)}>Заказы</Button>
-							<h1>Персональная скидка: {user.user.procent} {' процентов'}</h1>
+							<h1>Персональная скидка: {user.user.procent|5} {' %'}</h1>
 							<h1>Сумма заказов: {user.user.order_sum} {' руб.'}</h1>
 						</>
 						: <EmployerPanel post={user.user.post}/> }
