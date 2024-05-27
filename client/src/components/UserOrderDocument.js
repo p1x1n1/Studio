@@ -1,17 +1,29 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ApiService } from '../http/api.service';
 import { Context } from '../index';
-import { Accordion, Button, Stack, Table } from 'react-bootstrap';
-import { message } from 'antd';
+import { Accordion, Button, Form, Stack, Table } from 'react-bootstrap';
+import { Segmented, message } from 'antd';
 import BoquetItemOrder from './BouquetItemOrder';
 
 const apiService = new ApiService();
+
+const options = [
+    { label: 'В обработке', value: 1 },
+    { label: 'Приняты', value: 2 },
+    { label: 'Отменены', value: 3 },
+    { label: 'Изготавливаются', value: 4 },
+    { label: 'Переданы в доставку', value: 6 },
+    { label: 'Доставлены', value: 7 },
+    { label: 'Все', value: 0 },
+];
 
 const UserOrderDocument = (props) => {
     const {user} = useContext(Context);
     const [orders, setOrders] = useState([]);
     const [composition, setComposition] = useState([]);
-
+    const [status, setStatus] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [modalVisibleChooseDate,setModalChooseDate]= useState(false);
     const createAndDownloadPdf = (Order) => {
         console.log(user.user.name_, Order);
         apiService.get('/ordercomposition/' + Order.number_order)
@@ -29,9 +41,33 @@ const UserOrderDocument = (props) => {
                 console.log(err, 'error');
             });
     }
+    const repeatOrder = (order) => {
+        const { number_order, ...orderWithoutNumber } = order;
+        apiService.post('/order/', orderWithoutNumber).then((res) => {
+            const newNumberOrder = res.number_order;
+            apiService.get('/ordercomposition/' + number_order)
+                .then((orderCompositions) => {
+                    orderCompositions.forEach((composition) => {
+                        console.log(composition);
+                        apiService.post('/ordercomposition/create?num='+newNumberOrder, composition);
+                    });
+                    messageApi.open({
+                        type: 'success',
+                        content: `Заказ ${number_order} повторён.`,
+                        duration: 5,
+                    });
+                    setStatus(status);
+                })
+                .catch((err) => {
+                    console.log(err, 'error');
+                });
+        }).catch((err) => {
+            console.log(err, 'error');
+        });
+    };
 
     function fetchDataOrder() {
-        apiService.get('/order/user/' + user.user.login)
+        apiService.get('/order/user/' + user.user.login+'?status='+status+`&number_order=${searchQuery}`)
             .then((response) => {
                 console.log(response, 'response');
                 const updatedOrders = response.map((order) => {
@@ -52,13 +88,25 @@ const UserOrderDocument = (props) => {
 
     useEffect(() => {
         fetchDataOrder();
-    }, [])
+    }, [status, searchQuery])
 
     const [messageApi, contextHolder] = message.useMessage();
 
 
     return (
         <>
+        {contextHolder}
+        <Segmented options={options} className='mb-3'
+                onChange={(value) => {
+                    setStatus(value);
+                }} />
+        <Form.Control
+                type="text"
+                placeholder="Поиск по номеру заказа"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className='mb-3'
+            />
         <Accordion className='mb-0 mt-0' flush>
             {orders.map((order) =>
                         <Accordion.Item eventKey={order.number_order}>
@@ -67,6 +115,7 @@ const UserOrderDocument = (props) => {
                                     <h5>Номер заказа: {order.number_order} </h5>
                                     <h5 style={{ color: 'green' }} className="p-2 ms-auto">Статус: {order.status_order_title}</h5>
                                     {(order.statusOrderIdRecord === 7) ? <Button className='pupleButton' onClick={() => createAndDownloadPdf(order)}>Получить Чек</Button> : <></>}
+                                    {(order.statusOrderIdRecord > 3) ? <Button className='greenButton' onClick={() =>{ repeatOrder(order); setModalChooseDate(true)}}>Повторить заказ</Button> : <></>}
                                 </Stack>
                             </Accordion.Header>
                             <Accordion.Body>

@@ -15,6 +15,8 @@ import Inventory from "./page/Inventory";
 import Users from "./page/Users";
 import Selected from "./page/Selected";
 import Document from "./page/Document";
+import Delivery from "./page/Delivery";
+import Contacts from "./page/Contact";
 
  
 export const authRoutes = [
@@ -88,6 +90,13 @@ export const publicRoutes = [
         path: IndBoquet_ROUTE,
         Component: <IndBoquetPage/>,
     },
-
+    {
+        path: '/delivery',
+        Component: <Delivery/>,
+    },
+    {
+        path: '/contact',
+        Component: <Contacts/>,
+    }
 
 ]

@@ -56,8 +56,8 @@ const NavBar = () => {
                     <NavLink className= "navlink" to={IndBoquet_ROUTE}>Индивидуальные букеты</NavLink>
                   </NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link  style={{ color: "white", margin:"1%"}}> Доставка </Nav.Link>
-              <Nav.Link  style={{ color: "white", margin:"1%" }}> Контакты </Nav.Link>
+              <NavLink  style={{ color: "white", margin:"1%"}} to={'/delivery'}> Доставка </NavLink>
+              <NavLink  style={{ color: "white", margin:"1%" }} to={'/contact'}> Контакты </NavLink>
               <Form className="d-flex">
                 <Form.Control
                   type="search"

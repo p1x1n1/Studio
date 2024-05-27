@@ -197,7 +197,7 @@ const AdminOrder = () => {
                 }} />
             <Form.Control
                 type="text"
-                placeholder="Поиск по номеру букета"
+                placeholder="Поиск по номеру заказа"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className='mb-3'

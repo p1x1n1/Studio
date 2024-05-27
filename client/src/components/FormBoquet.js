@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Image} from 'react-bootstrap';
 import basket from '../base_img/icons/pink_basket.png';
 import img_input from "../base_img/icons/pink_image.png";
-import { Col, InputNumber, Modal, Row, Select } from 'antd';
+import { Col, InputNumber, Modal, Row, Select, message } from 'antd';
 import { ApiService } from '../http/api.service'
 import Reg from '../page/Reg';
 import Auth from '../page/Log';
@@ -78,7 +78,11 @@ const FormBoquet = (props) => {
 			)}
             let cnt = 1;
             apiService.post('/basket',{login,arc,cnt}).then(() => {
-                alert('Добавлено в корзину');
+                messageApi.open({
+                    type: 'success',
+                    content: 'Добавлено в корзину',
+                    duration: 5,
+                    });
             })
             .catch(err => {
                 console.log(err.message);
@@ -89,10 +93,10 @@ const FormBoquet = (props) => {
         })
         
 	}
-    
+    const [messageApi, contextHolder] = message.useMessage();
     return (
         <div className='form'>
-            {console.log('key',props)}
+            {contextHolder}
                     <Form >
                         <Row>
                             <Col md = {16} >

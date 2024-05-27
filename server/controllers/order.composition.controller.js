@@ -3,8 +3,13 @@ const db = require('../db.pool')
 class OrderCompositionController {
 	async createOrderComposition(req, res) {
 		const { orderNumberOrder, bouquetArc,cnt,postcard,postcard_comment } = req.body
+		const {num} = req.query
 		let order
-		order = await db.query('INSERT INTO composition_orders ("orderNumberOrder","bouquetArc",cnt,postcard,postcard_comment) values ($1, $2,$3,$4,$5) RETURNING *', [ orderNumberOrder ,bouquetArc,cnt,postcard,postcard_comment])
+		console.log(req.body,req.query,num)
+		if (!orderNumberOrder) {
+			const {arc} = req.body
+			order = await db.query('INSERT INTO composition_orders ("orderNumberOrder","bouquetArc",cnt,postcard,postcard_comment) values ($1, $2,$3,$4,$5) RETURNING *', [ num, arc,cnt,postcard,postcard_comment])}
+		else order = await db.query('INSERT INTO composition_orders ("orderNumberOrder","bouquetArc",cnt,postcard,postcard_comment) values ($1, $2,$3,$4,$5) RETURNING *', [ orderNumberOrder ,bouquetArc,cnt,postcard,postcard_comment])
 		res.json(order.rows[0])
 	}
 	async updateOrderComposition(req, res) {

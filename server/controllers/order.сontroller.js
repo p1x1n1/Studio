@@ -3,8 +3,8 @@ const db = require('../db.pool')
 
 class OrderController{
     async create (req,res){
-        const {number_order, statusOrderIdRecord, deliveryIdRecord, localityIdRecord, streetIdRecord, house_number, adress_comment, date_order, time_order, anonymized, comment, price, userLogin, employeeLogin, courierLogin, floristLogin } = req.body
-		console.log(JSON.stringify(req.body));
+        let {number_order, statusOrderIdRecord, deliveryIdRecord, localityIdRecord, streetIdRecord, house_number, adress_comment, date_order, time_order, anonymized, comment, price, userLogin, employeeLogin, courierLogin, floristLogin } = req.body
+        console.log(JSON.stringify(req.body));
         let order
 		if (number_order) {
             if (floristLogin){ order = await db.query('UPDATE orders set "floristLogin"  = ($1) where number_order = ($2) RETURNING *', [floristLogin,number_order])}
@@ -12,7 +12,7 @@ class OrderController{
 			if (employeeLogin){ order = await db.query('UPDATE orders set "statusOrderIdRecord" = ($1),"employeeLogin"  = ($2) where number_order = ($3) RETURNING *', [statusOrderIdRecord,employeeLogin,number_order])}  
             if (statusOrderIdRecord){ order = await db.query('UPDATE orders set "statusOrderIdRecord" = ($1) where number_order = ($2) RETURNING *', [statusOrderIdRecord,number_order])}
 		} else {
-			order = await db.query('INSERT INTO orders ("statusOrderIdRecord", "deliveryIdRecord", "localityIdRecord", "streetIdRecord", "house_number", adress_comment, date_order, time_order, anonymized, comment, price, "userLogin") values ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *', [statusOrderIdRecord, deliveryIdRecord, localityIdRecord, streetIdRecord, house_number, adress_comment, date_order, time_order, anonymized, comment, price, userLogin])
+			order = await db.query('INSERT INTO orders ("statusOrderIdRecord", "deliveryIdRecord", "localityIdRecord", "streetIdRecord", "house_number", adress_comment, date_order, time_order, anonymized, comment, price, "userLogin") values ($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *', [1, deliveryIdRecord, localityIdRecord, streetIdRecord, house_number, adress_comment, date_order, time_order, anonymized, comment, price, userLogin])
 		}
         res.json(order.rows[0])
 
@@ -121,7 +121,9 @@ class OrderController{
     }
     async getUser(req,res){
         const login = req.params.login;
-        const s  = `SELECT 
+        const {status,number_order} = req.query;
+        console.log(status,req.query);
+        let s  = `SELECT 
         *,
         status_orders.title as status_order_title,
         deliveries.title as type_order_title,deliveries.price as delivery_price_delivery,
@@ -137,6 +139,13 @@ class OrderController{
         inner join streets on streets.id_record = orders."streetIdRecord"
         where "userLogin" = ($1)
         `
+        if(status != 0){
+            s+= ` AND "statusOrderIdRecord" = ${status}`
+        }
+        if (number_order){
+            s+= ` AND "number_order" = ${number_order}`
+        }
+        s+= ` ORDER BY orders."createdAt" DESC`
         const orders = await db.query(s,[login])
         return res.json(orders.rows)
     }
