@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # Сервис для клиентской части (React)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+    environment:
+      - REACT_APP_API_URL=$(REACT_APP_API_URL)
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+
+  # Сервис для серверной части (Node.js)
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    hostname: server-1
+    environment:
+      PORT: ${PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+    depends_on:
+      - db
+
+  # Сервис для базы данных PostgreSQL
+  db:
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:

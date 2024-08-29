@@ -25,10 +25,10 @@ const Basket = observer (() => {
         apiService.get('/discount/'+user.user.discountIdRecord).then(res => {
             setDisProcent(res.procent);
         })
-        console.log('bouquet',bouquet,'dis',disProcent);
+        // console.log('bouquet',bouquet,'dis',disProcent);
 	}
     useEffect(() => {
-        console.log('bouquet',bouquet);
+        // console.log('bouquet',bouquet);
         fetchDataBouquet();
 	}, [])
     
@@ -39,14 +39,14 @@ const Basket = observer (() => {
     }
     function DeleteOne(arc){
         apiService.delete('/basket/'+login+'/'+arc).then(res => {
-            setBouquet([]);
+            fetchDataBouquet();
             messageApi.open({
                 type: 'error',
                 content: 'Удаленно из корзины',
                 duration: 5,
                 });
         })
-        fetchDataBouquet();
+        
     }
     let price;
     function calculatePrice(){
@@ -77,7 +77,7 @@ const Basket = observer (() => {
                         <Button className='banner_button' variant='outlined-light'  onClick={()=>{DeleteAll()}}> Удалить всё </Button>
                     </Col>
                 </Row>             
-                {console.log(bouquet)}
+                {/* {console.log(bouquet)} */}
                 { (bouquet.length > 0) ?
                     bouquet.map(bouquet =>  
                         <BouquetBasketItem key={bouquet.arc} bouquet={bouquet} DeleteOne={DeleteOne} fetch={fetchDataBouquet}/>

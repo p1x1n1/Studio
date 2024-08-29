@@ -1,11 +1,12 @@
 export class ApiService {
-	#apiPath = 'http://localhost:5000/api'//приватное поле #
+	#apiPath = `${process.env.REACT_APP_API_URL}api`;//приватное поле #
 
 	#makeRequest(url, options) {
 		return fetch(this.#apiPath + url, options).then(res => res.json())//fetch js отправка запроса
 	}
 
 	get(url) {
+		console.log(this.#apiPath);
 		return this.#makeRequest(url, { 
 			method: 'GET' 
 		})

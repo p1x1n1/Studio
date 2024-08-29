@@ -7,6 +7,7 @@ const authRoutes=require('./routes/auth.routes')
 const fileUpload = require('express-fileupload')
 const errorHandler = require('./middleware/ErrorHandingMiddleWare')
 const path = require('path')
+const initData = require('./initData.js');
 
 const PORT = process.env.PORT 
 
@@ -21,11 +22,13 @@ app.use('/api',[ router,authRoutes])
 // Обработка ошибок, последний Middleware
 app.use(errorHandler)
 
+
 const start = async() =>{
     try{
-        await sequelize.authenticate()
-        await sequelize.sync()
-        app.listen(PORT,() => console.log(`Server started on port ${PORT}`))
+        await sequelize.authenticate();
+        await sequelize.sync();
+        initData;
+        app.listen(PORT,() => console.log(`Server started on port ${PORT}`));
     }
     catch(elem){
         console.log(elem)
