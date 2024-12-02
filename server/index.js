@@ -8,6 +8,8 @@ const fileUpload = require('express-fileupload')
 const errorHandler = require('./middleware/ErrorHandingMiddleWare')
 const path = require('path')
 const initData = require('./initData.js');
+const initFunctionAndTriggers = require('./InitTriggerAndFunction.js');
+const apicache = require('apicache');//кэширование запросов
 
 const PORT = process.env.PORT 
 
@@ -28,6 +30,7 @@ const start = async() =>{
         await sequelize.authenticate();
         await sequelize.sync();
         initData;
+        initFunctionAndTriggers;  // Инициализация триггеров и функций базы данных
         app.listen(PORT,() => console.log(`Server started on port ${PORT}`));
     }
     catch(elem){
